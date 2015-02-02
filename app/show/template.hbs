@@ -1,0 +1,15 @@
+<h2>Shows</h2>
+
+<ul>
+  {{#each show in model}}
+    <li>
+      <h3>{{show.display_name}}</h3>
+
+      <ul>
+        {{#each episode in show.episodes}}
+          <li>{{episode.displayDate}} | {{episode.shortEpisodeNumber}} - {{episode.title}}</li>
+        {{/each}}
+      </ul>
+    </li>
+  {{/each}}
+</ul>
