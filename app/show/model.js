@@ -11,5 +11,10 @@ export default DS.Model.extend({
   episodes: DS.hasMany('episode'),
 
   recentEpisodes: Ember.computed.filterBy('episodes', 'isRecent'),
-  upcomingEpisodes: Ember.computed.filterBy('episodes', 'isUpcoming')
+  hasRecent: Ember.computed.notEmpty('recentEpisodes'),
+
+  upcomingEpisodes: Ember.computed.filterBy('episodes', 'isUpcoming'),
+  hasUpcoming: Ember.computed.notEmpty('upcomingEpisodes'),
+
+  isOffAir: Ember.computed.empty('upcomingEpisodes')
 });

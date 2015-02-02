@@ -2,14 +2,8 @@ import Ember from 'ember';
 
 export default Ember.ArrayController.extend({
 
-  recent: Ember.computed.filter('model', function (show) {
-    return show.get('episodes').isAny('isRecent');
-  }),
-
-  upcoming: Ember.computed.filter('model', function (show) {
-    return show.get('episodes').isAny('isUpcoming');
-  }),
-
-  offair: Ember.computed.setDiff('model', 'upcoming')
+  recent: Ember.computed.filterBy('model', 'hasRecent'),
+  upcoming: Ember.computed.filterBy('model', 'hasUpcoming'),
+  offAir: Ember.computed.filterBy('model', 'isOffAir')
 
 });
