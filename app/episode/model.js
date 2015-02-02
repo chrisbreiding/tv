@@ -4,7 +4,7 @@ let attr = DS.attr;
 
 export default DS.Model.extend({
   season: attr('number'),
-  episode_number: attr('number'),
+  episodeNumber: attr('number'),
   title: attr('string'),
   airdate: attr('date'),
 
@@ -12,9 +12,9 @@ export default DS.Model.extend({
 
   longEpisodeNumber: function () {
     let season = this._toTwoDigits(this.get('season'));
-    let episodeNumber = this._toTwoDigits(this.get('episode_number'));
+    let episodeNumber = this._toTwoDigits(this.get('episodeNumber'));
     return `s${season}e${episodeNumber}`;
-  }.property('season', 'episode_number'),
+  }.property('season', 'episodeNumber'),
 
   shortEpisodeNumber: function () {
     return this.get('longEpisodeNumber')
