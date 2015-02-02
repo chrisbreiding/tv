@@ -24,6 +24,13 @@ module.exports = function(app) {
     file_name: 'Show 3 File',
     tvsource_id: 'show-3-source',
     episodes: [6, 7, 8, 9]
+  },{
+    id: 4,
+    display_name: 'Show 4',
+    search_name: 'Show 4 Search',
+    file_name: 'Show 4 File',
+    tvsource_id: 'show-4-source',
+    episodes: [10, 11, 12]
   }];
 
   var episodes = [{
@@ -80,6 +87,24 @@ module.exports = function(app) {
     episode_number: 4,
     title: 'Third Show Fourth Episode',
     airdate: moment().subtract(5, 'weeks')
+  },{
+    id: 10,
+    season: 5,
+    episode_number: 3,
+    title: 'Fourth Show Third Episode',
+    airdate: moment().subtract(8, 'days')
+  },{
+    id: 11,
+    season: 5,
+    episode_number: 4,
+    title: 'Fourth Show Fourth Episode',
+    airdate: moment().subtract(1, 'days')
+  },{
+    id: 12,
+    season: 5,
+    episode_number: 5,
+    title: 'Fourth Show Fifth Episode',
+    airdate: moment().add(6, 'days')
   }];
 
   showsRouter.get('/', function(req, res) {
