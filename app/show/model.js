@@ -8,5 +8,8 @@ export default DS.Model.extend({
   fileName: attr('string'),
   tvsourceId: attr('string'),
 
-  episodes: DS.hasMany('episode')
+  episodes: DS.hasMany('episode'),
+
+  recentEpisodes: Ember.computed.filterBy('episodes', 'isRecent'),
+  upcomingEpisodes: Ember.computed.filterBy('episodes', 'isUpcoming')
 });

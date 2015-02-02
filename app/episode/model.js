@@ -10,6 +10,19 @@ export default DS.Model.extend({
 
   show: DS.belongsTo('show'),
 
+  isRecent: function () {
+    let airdate = this.get('airdate');
+    let startOfiveDaysAgo = moment().subtract(5, 'days').startOf('day');
+    let startOfToday = moment().startOf('day');
+    return moment(airdate).isBetween(startOfiveDaysAgo, startOfToday);
+  }.property('airdate'),
+
+  isUpcoming: function () {
+    let airdate = this.get('airdate');
+    let startOfToday = moment().startOf('day');
+    return moment(airdate).isAfter(startOfToday);
+  }.property('airdate'),
+
   longEpisodeNumber: function () {
     let season = this._toTwoDigits(this.get('season'));
     let episodeNumber = this._toTwoDigits(this.get('episodeNumber'));

@@ -6,7 +6,7 @@
       <h3>{{show.displayName}}</h3>
 
       <ul>
-        {{#each episode in show.episodes}}
+        {{#each episode in show.recentEpisodes}}
           <li>{{episode.displayDate}} | {{episode.shortEpisodeNumber}} - {{episode.title}}</li>
         {{/each}}
       </ul>
@@ -22,7 +22,7 @@
       <h3>{{show.displayName}}</h3>
 
       <ul>
-        {{#each episode in show.episodes}}
+        {{#each episode in show.upcomingEpisodes}}
           <li>{{episode.displayDate}} | {{episode.shortEpisodeNumber}} - {{episode.title}}</li>
         {{/each}}
       </ul>
@@ -36,12 +36,6 @@
   {{#each show in offair}}
     <li>
       <h3>{{show.displayName}}</h3>
-
-      <ul>
-        {{#each episode in show.episodes}}
-          <li>{{episode.displayDate}} | {{episode.shortEpisodeNumber}} - {{episode.title}}</li>
-        {{/each}}
-      </ul>
     </li>
   {{/each}}
 </ul>
