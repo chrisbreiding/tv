@@ -1,41 +1,9 @@
-<h2>Recent</h2>
+{{#shows-list heading="Recent" shows=recent as |show|}}
+  {{episodes-list episodes=show.recentEpisodes}}
+{{/shows-list}}
 
-<ul>
-  {{#each show in recent}}
-    <li>
-      <h3>{{show.displayName}}</h3>
+{{#shows-list heading="Upcoming" shows=upcoming as |show|}}
+  {{episodes-list episodes=show.upcomingEpisodes}}
+{{/shows-list}}
 
-      <ul>
-        {{#each episode in show.recentEpisodes}}
-          <li>{{episode.displayDate}} | {{episode.shortEpisodeNumber}} - {{episode.title}}</li>
-        {{/each}}
-      </ul>
-    </li>
-  {{/each}}
-</ul>
-
-<h2>Upcoming</h2>
-
-<ul>
-  {{#each show in upcoming}}
-    <li>
-      <h3>{{show.displayName}}</h3>
-
-      <ul>
-        {{#each episode in show.upcomingEpisodes}}
-          <li>{{episode.displayDate}} | {{episode.shortEpisodeNumber}} - {{episode.title}}</li>
-        {{/each}}
-      </ul>
-    </li>
-  {{/each}}
-</ul>
-
-<h2>Off Air</h2>
-
-<ul>
-  {{#each show in offAir}}
-    <li>
-      <h3>{{show.displayName}}</h3>
-    </li>
-  {{/each}}
-</ul>
+{{shows-list heading="Off Air" shows=offAir}}
