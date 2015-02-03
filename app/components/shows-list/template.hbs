@@ -3,7 +3,12 @@
 <ul>
   {{#each shows as |show|}}
     <li>
-      <h3>{{show.displayName}}</h3>
+      <h3>
+        {{show.displayName}}
+        <ul>
+          <li>{{#link-to 'show' show}}All Episodes{{/link-to}}</li>
+        </ul>
+      </h3>
       {{yield show}}
     </li>
   {{/each}}
