@@ -9,7 +9,7 @@ module.exports = function(app) {
   var showsRouter = express.Router();
 
   var episodes = [];
-  var shows = _.map(_.range(4), function () {
+  var shows = _.map(_.range(8), function () {
     var generation = generator.show(generator.incShowId());
     episodes = episodes.concat(generation.episodes);
     return generation.show;
@@ -24,7 +24,7 @@ module.exports = function(app) {
 
   showsRouter.post('/', function(req, res) {
     var show = _.extend(req.body.show, { id: '' + generator.incShowId() });
-    var episodes = generator.episodes(_.random(1, 8));
+    var episodes = generator.seasons(_.random(1, 8));
     show.episodes = _.pluck(episodes, 'id');
     shows.push(show);
     res

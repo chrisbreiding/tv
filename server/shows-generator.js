@@ -15,7 +15,7 @@ module.exports = {
   },
 
   show: function (id) {
-    var episodes = this.episodes(_.random(1, 8));
+    var episodes = this.seasons(_.random(2, 8));
     var name = textGen(1, 3);
     return {
       show: {
@@ -30,20 +30,41 @@ module.exports = {
     }
   },
 
-  episodes: function (num) {
-    var season = _.random(1, 8);
+  seasons: function (num) {
+    var startDate = this._quarterChance() ? this._offAirStartDate() : this._randomStartDate();
+    return _.flatten(_.map(_.range(1, num), function (season) {
+      return this._episodes(_.random(1, 8), season, startDate);
+    }.bind(this)));
+  },
+
+  _coinFlip: function () {
+    return !!_.random(0, 1);
+  },
+
+  _quarterChance: function () {
+    return !_.random(0, 3);
+  },
+
+  _randomStartDate: function () {
+    var method = this._coinFlip() ? 'add' : 'subtract';
+    return moment()[method](_.random(0, 50), 'days').subtract(1, 'week');
+  },
+
+  _offAirStartDate: function () {
+    return moment().subtract(2, 'years');
+  },
+
+  _episodes: function (num, season, airdate) {
     var epNum = _.random(1, 5);
-    var method = _.random(0, 1) ? 'add' : 'subtract';
-    var airdate =  moment()[method](_.random(0, 50), 'days').subtract(1, 'week');
     return _.map(_.range(num), function () {
-      return this.episode(this.incEpisodeId(),
+      return this._episode(this.incEpisodeId(),
                           season,
                           epNum++,
                           airdate.add(1, 'week'));
     }.bind(this));
   },
 
-  episode: function (id, season, epNum, airdate) {
+  _episode: function (id, season, epNum, airdate) {
     return {
       id: '' + id,
       season: season,
