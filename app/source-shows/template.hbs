@@ -1,0 +1,11 @@
+<h2>Search Shows</h2>
+{{#link-to 'shows'}}Close{{/link-to}}
+
+{{#modal-dialog}}
+  <form {{action 'search' on='submit'}}>
+    {{input value=query}}
+    <button>Search</button>
+  </form>
+
+  {{outlet}}
+{{/modal-dialog}}

@@ -11,6 +11,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "baconipsum": "^0.1.2",
     "body-parser": "^1.11.0",
     "broccoli-asset-rev": "^2.0.0",
     "connect-restreamer": "^1.0.1",

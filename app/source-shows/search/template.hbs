@@ -1,0 +1,16 @@
+<ul>
+  {{#each model as |show|}}
+    <li>
+      <dd>
+        <dt>Name</dt>
+        <dd>{{show.name}}</dd>
+        <dt>First Aired</dt>
+        <dd>{{show.firstAired}}</dd>
+        <dt>Network</dt>
+        <dd>{{show.network}}</dd>
+        <dt>Description</dt>
+        <dd>{{show.description}}</dd>
+      </dd>
+    </li>
+  {{/each}}
+</ul>
