@@ -10,28 +10,28 @@ module.exports = function(app) {
     display_name: 'Show 1',
     search_name: 'Show 1 Search',
     file_name: 'Show 1 File',
-    tvsource_id: 'show-1-source',
+    source_id: 'show-1-source',
     episodes: [1, 2, 3]
   },{
     id: '2',
     display_name: 'Show 2',
     search_name: 'Show 2 Search',
     file_name: 'Show 2 File',
-    tvsource_id: 'show-2-source',
+    source_id: 'show-2-source',
     episodes: [4, 5]
   },{
     id: '3',
     display_name: 'Show 3',
     search_name: 'Show 3 Search',
     file_name: 'Show 3 File',
-    tvsource_id: 'show-3-source',
+    source_id: 'show-3-source',
     episodes: [6, 7, 8, 9]
   },{
     id: '4',
     display_name: 'Show 4',
     search_name: 'Show 4 Search',
     file_name: 'Show 4 File',
-    tvsource_id: 'show-4-source',
+    source_id: 'show-4-source',
     episodes: [10, 11, 12]
   }];
 
