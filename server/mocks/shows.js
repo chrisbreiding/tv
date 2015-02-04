@@ -11,28 +11,28 @@ module.exports = function(app) {
     search_name: 'Show 1 Search',
     file_name: 'Show 1 File',
     source_id: 'show-1-source',
-    episodes: [1, 2, 3]
+    episodes: ['1', '2', '3']
   },{
     id: '2',
     display_name: 'Show 2',
     search_name: 'Show 2 Search',
     file_name: 'Show 2 File',
     source_id: 'show-2-source',
-    episodes: [4, 5]
+    episodes: ['4', '5']
   },{
     id: '3',
     display_name: 'Show 3',
     search_name: 'Show 3 Search',
     file_name: 'Show 3 File',
     source_id: 'show-3-source',
-    episodes: [6, 7, 8, 9]
+    episodes: ['6', '7', '8', '9']
   },{
     id: '4',
     display_name: 'Show 4',
     search_name: 'Show 4 Search',
     file_name: 'Show 4 File',
     source_id: 'show-4-source',
-    episodes: [10, 11, 12]
+    episodes: ['10', '11', '12']
   }];
 
   var episodes = [{
@@ -109,6 +109,46 @@ module.exports = function(app) {
     airdate: moment().add(6, 'days')
   }];
 
+  var newEpisodes = [
+    [{
+      id: '13',
+      season: 2,
+      episode_number: 7,
+      title: 'Fifth Show Seventh Episode',
+      airdate: moment().add(20, 'days')
+    },{
+      id: '14',
+      season: 2,
+      episode_number: 8,
+      title: 'Fifth Show Eighth Episode',
+      airdate: moment().add(27, 'days')
+    }],[{
+      id: '15',
+      season: 1,
+      episode_number: 1,
+      title: 'Sixth Show First Episode',
+      airdate: moment().subtract(3, 'days')
+    },{
+      id: '16',
+      season: 1,
+      episode_number: 2,
+      title: 'Sixth Show Second Episode',
+      airdate: moment().add(4, 'days')
+    },{
+      id: '17',
+      season: 1,
+      episode_number: 3,
+      title: 'Sixth Show Third Episode',
+      airdate: moment().add(11, 'days')
+    }],[{
+      id: '18',
+      season: 8,
+      episode_number: 1,
+      title: 'Seventh Show First Episode',
+      airdate: moment().add(30, 'days')
+    }]
+  ];
+
   showsRouter.get('/', function(req, res) {
     res.send({
       'shows': shows,
@@ -116,15 +156,21 @@ module.exports = function(app) {
     });
   });
 
+  var newEpisodeIndex = 0;
+
   showsRouter.post('/', function(req, res) {
     var ids = _.map(_.pluck(shows, 'id'), Number);
     var highestId = Math.max.apply(null, ids);
-    var show = _.extend(req.body.show, { id: highestId + 1 });
+    var show = _.extend(req.body.show, { id: '' + (highestId + 1) });
+    var episodes = newEpisodes[newEpisodeIndex];
+    show.episodes = _.pluck(episodes, 'id');
+    newEpisodeIndex = (newEpisodeIndex + 1) > 2 ? 0 : newEpisodeIndex + 1;
     shows.push(show);
     res
       .status(201)
       .send({
-        'show': show
+        'show': show,
+        'episodes': episodes
       });
   });
 
