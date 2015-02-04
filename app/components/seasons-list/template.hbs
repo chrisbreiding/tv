@@ -1,0 +1,8 @@
+<ul>
+  <li>
+    {{#each seasons as |season|}}
+      <h3>Season {{season.season}}</h3>
+      {{episodes-list episodes=season.episodes}}
+    {{/each}}
+  </li>
+</ul>

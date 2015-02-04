@@ -55,7 +55,7 @@ module.exports = {
   },
 
   _episodes: function (num, season, airdate) {
-    var epNum = _.random(1, 5);
+    var epNum = 1;
     return _.map(_.range(num), function () {
       return this._episode(this.incEpisodeId(),
                           season,
