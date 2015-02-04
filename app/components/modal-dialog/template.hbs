@@ -1,0 +1,13 @@
+<div class="overlay">
+  <div class="modal">
+    {{yield}}
+
+    {{#if cancel}}
+      <button {{action 'cancel'}}>Cancel</button>
+    {{/if}}
+
+    {{#if ok}}
+      <button {{action 'ok'}}>OK</button>
+    {{/if}}
+  </div>
+</div>

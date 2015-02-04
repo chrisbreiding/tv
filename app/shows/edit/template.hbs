@@ -1,4 +1,4 @@
-<form>
+<form {{action 'save' on='submit'}}>
   <label>Display Name</label>
   {{input value=displayName}}
 
@@ -8,5 +8,10 @@
   <label>File Name</label>
   {{input value=fileName}}
 
-  <p>{{#link-to 'shows' tagName='button'}}Cancel{{/link-to}}</p>
+  <button {{action 'destroy'}}>Delete show</button>
+
+  <footer>
+    {{#link-to 'shows' tagName='button'}}Cancel{{/link-to}}
+    <button type="submit">Save</button>
+  </footer>
 </form>
