@@ -1,13 +1,11 @@
-{{#link-to 'source_shows'}}Add Show{{/link-to}}
-
-{{#shows-list heading="Recent" shows=recent as |show|}}
+{{#shows-list class="shows-list" heading="Recent" shows=recent as |show|}}
   {{episodes-list episodes=show.recentEpisodes}}
 {{/shows-list}}
 
-{{#shows-list heading="Upcoming" shows=upcoming as |show|}}
+{{#shows-list class="shows-list" heading="Upcoming" shows=upcoming as |show|}}
   {{episodes-list episodes=show.upcomingEpisodes}}
 {{/shows-list}}
 
-{{shows-list heading="Off Air" shows=offAir}}
+{{shows-list class="shows-list" heading="Off Air" shows=offAir}}
 
 {{outlet}}

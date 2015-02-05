@@ -9,7 +9,7 @@ Router.map(function() {
   this.resource('shows', { path: '/' }, function () {
     this.resource('show', { path: ':id' });
     this.route('edit', { path: ':id/edit' });
-    this.resource('source_shows', { path: 'search'}, function () {
+    this.resource('source-shows', { path: 'search'}, function () {
       this.route('search', { path: ':query' });
     });
   });

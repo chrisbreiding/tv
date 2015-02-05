@@ -1,0 +1,52 @@
+.source-shows {
+  .modal-dialog {
+    display: flex;
+    flex-direction: column;
+  }
+
+  form {
+    text-align: center;
+
+    h3 {
+      margin: 0 0 1em;
+    }
+
+    input {
+      border-radius: 3px 0 0 3px;
+      border-right: none;
+    }
+
+    button {
+      border-radius: 0 3px 3px 0;
+    }
+  }
+
+  .results {
+    margin-top: 2em;
+    max-width: 50em;
+
+    li {
+      display: flex;
+      margin: 2em 0;
+
+      button {
+        min-width: 2.5em;
+      }
+
+      div {
+        margin-left: 1em;
+      }
+
+      dt {
+        color: darken(light-color, 20%);
+        float: left;
+        width: 7em;
+      }
+
+      dd {
+        margin-bottom: 0.5em;
+        margin-left: 7em;
+      }
+    }
+  }
+}

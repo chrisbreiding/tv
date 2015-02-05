@@ -1,16 +1,23 @@
-<form {{action 'save' on='submit'}}>
-  <label>Display Name</label>
-  {{input value=displayName}}
+{{#modal-dialog close='close'}}
+  <form {{action 'save' on='submit'}} class="show-edit">
+    <fieldset>
+      <label>Display Name</label>
+      {{input value=displayName}}
+    </fieldset>
 
-  <label>Search Name</label>
-  {{input value=searchName}}
+    <fieldset>
+      <label>Search Name</label>
+      {{input value=searchName}}
+    </fieldset>
 
-  <label>File Name</label>
-  {{input value=fileName}}
+    <fieldset>
+      <label>File Name</label>
+      {{input value=fileName}}
+    </fieldset>
 
-  <footer>
-    <button type="submit">Save</button>
-    {{#link-to 'shows' tagName='button'}}Cancel{{/link-to}}
-    <button {{action 'destroy'}}>Delete show</button>
-  </footer>
-</form>
+    <footer>
+      <button type="submit">Save</button>
+      <a {{action 'destroy'}} href="#">Delete show</a>
+    </footer>
+  </form>
+{{/modal-dialog}}

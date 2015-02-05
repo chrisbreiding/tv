@@ -1,17 +1,26 @@
-<ul>
+<ul class="results">
   {{#each model as |show|}}
     <li>
-      <dd>
-        <dt>Name</dt>
-        <dd>{{show.name}}</dd>
-        <dt>First Aired</dt>
-        <dd>{{show.firstAired}}</dd>
-        <dt>Network</dt>
-        <dd>{{show.network}}</dd>
-        <dt>Description</dt>
-        <dd>{{show.description}}</dd>
-      </dd>
-      <button {{action 'add' show}}>Add</button>
+      <button {{action 'add' show}} title="Add Show">
+        <i class="fa fa-plus"></i>
+      </button>
+      <div>
+        <h4>{{show.name}}</h4>
+        <dl>
+          {{#if show.firstAired}}
+            <dt>First Aired</dt>
+            <dd>{{display-date show.firstAired}}</dd>
+          {{/if}}
+          {{#if show.network}}
+            <dt>Network</dt>
+            <dd>{{show.network}}</dd>
+          {{/if}}
+          {{#if show.description}}
+            <dt>Description</dt>
+            <dd>{{show.description}}</dd>
+          {{/if}}
+        </dl>
+      </div>
     </li>
   {{/each}}
 </ul>

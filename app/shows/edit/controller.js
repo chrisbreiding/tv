@@ -11,6 +11,10 @@ export default Ember.ObjectController.extend({
 
     destroy () {
       this.send('openModal', 'destroy-show-modal', this.get('model'));
+    },
+
+    close () {
+      this.transitionToRoute('shows');
     }
   }
 

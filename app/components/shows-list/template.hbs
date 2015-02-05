@@ -4,11 +4,23 @@
   {{#each shows as |show|}}
     <li>
       <h3>
-        {{show.displayName}}
-        <ul>
-          <li>{{#link-to 'show' show}}All Episodes{{/link-to}}</li>
-          <li>{{#link-to 'shows.edit' show}}Edit{{/link-to}}</li>
-        </ul>
+        <span>
+          {{show.displayName}}
+          <div class="options">
+            <ul>
+              <li>
+                {{#link-to 'show' show title="Show All Episodes"}}
+                  <i class="fa fa-list-ul"></i>
+                {{/link-to}}
+              </li>
+              <li>
+                {{#link-to 'shows.edit' show title="Edit Show"}}
+                  <i class="fa fa-edit"></i>
+                {{/link-to}}
+              </li>
+            </ul>
+          </div>
+        </span>
       </h3>
       {{yield show}}
     </li>

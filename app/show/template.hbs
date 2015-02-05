@@ -1,5 +1,7 @@
-<h2>{{displayName}}</h2>
+{{#modal-dialog close='close'}}
 
-{{seasons-list episodes=episodes}}
+  <h2>{{displayName}}</h2>
 
-<p>{{#link-to 'shows'}}Close{{/link-to}}</p>
+  {{seasons-list episodes=episodes}}
+
+{{/modal-dialog}}

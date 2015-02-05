@@ -1,0 +1,62 @@
+body.modal-dialog-present {
+  overflow: hidden;
+}
+
+.modal-dialog-overlay {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  bottom: 0;
+  left: 0;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.modal-dialog {
+  background: dark-color;
+  border: solid 1px #000;
+  border-radius: 3px;
+  margin: 20px;
+  max-height: 90%;
+  overflow-y: scroll;
+  padding: 2em 3em;
+  position: relative;
+
+  p {
+    margin-bottom: 1.2em;
+  }
+
+  footer {
+    text-align: right;
+
+    button {
+      margin-left: 0.6em;
+    }
+  }
+
+  .cancel {
+    background: neutral-color;
+    color: dark-color;
+
+    +hover() {
+      background: darken(neutral-color, 20%);
+    }
+  }
+
+  .close {
+    @extends .icon-button;
+    background: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.2em;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    +hover() {
+      background: #000;
+      color: light-color;
+    }
+  }
+}

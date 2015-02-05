@@ -1,13 +1,21 @@
-<div class="overlay">
-  <div class="modal">
+<div class="modal-dialog-overlay">
+  <div class="modal-dialog">
     {{yield}}
 
-    {{#if cancel}}
-      <button {{action 'cancel'}}>Cancel</button>
-    {{/if}}
+    <footer>
+      {{#if cancel}}
+        <button {{action 'cancel'}} class="cancel">Cancel</button>
+      {{/if}}
 
-    {{#if ok}}
-      <button {{action 'ok'}}>OK</button>
+      {{#if ok}}
+        <button {{action 'ok'}} class="ok">OK</button>
+      {{/if}}
+    </footer>
+
+    {{#if close}}
+      <button {{action 'close'}} class="close" title="Close">
+        <i class="fa fa-times"></i>
+      </button>
     {{/if}}
   </div>
 </div>
