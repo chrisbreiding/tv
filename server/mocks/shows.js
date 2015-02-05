@@ -24,14 +24,15 @@ module.exports = function(app) {
 
   showsRouter.post('/', function(req, res) {
     var show = _.extend(req.body.show, { id: '' + generator.incShowId() });
-    var episodes = generator.seasons(_.random(1, 8));
-    show.episodes = _.pluck(episodes, 'id');
+    var newEpisodes = generator.seasons(_.random(1, 8));
+    show.episodes = _.pluck(newEpisodes, 'id');
     shows.push(show);
+    episodes = episodes.concat(newEpisodes);
     res
       .status(201)
       .send({
         'show': show,
-        'episodes': episodes
+        'episodes': newEpisodes
       });
   });
 

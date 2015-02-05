@@ -56,12 +56,12 @@ module.exports = {
 
   _episodes: function (num, season, airdate) {
     var epNum = 1;
-    return _.map(_.range(num), function () {
+    return _.shuffle(_.map(_.range(num), function () {
       return this._episode(this.incEpisodeId(),
                           season,
                           epNum++,
                           airdate.add(1, 'week'));
-    }.bind(this));
+    }.bind(this)));
   },
 
   _episode: function (id, season, epNum, airdate) {

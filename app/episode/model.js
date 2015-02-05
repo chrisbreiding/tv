@@ -35,10 +35,6 @@ export default DS.Model.extend({
              .replace(/[se]/g, '');
   }.property('longEpisodeNumber'),
 
-  displayDate: function () {
-    return moment(this.get('airdate')).format('MM-DD-YY');
-  }.property('airdate'),
-
   _toTwoDigits: function (num) {
     return num < 10 ? `0${num}` : num;
   }
