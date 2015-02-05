@@ -1,9 +1,5 @@
 <ul class="episodes-list">
   {{#each episodes as |episode|}}
-    <li>
-      <span class="episode-number">{{episode.shortEpisodeNumber}}</span>
-      <span class="airdate">{{display-date episode.airdate}}</span>
-      <span class="title">{{episode.title}}</span>
-    </li>
+    {{episode-single episode=episode}}
   {{/each}}
 </ul>
