@@ -12,6 +12,7 @@ Router.map(function() {
     this.resource('source-shows', { path: 'search'}, function () {
       this.route('search', { path: ':query' });
     });
+    this.resource('settings');
   });
 });
 

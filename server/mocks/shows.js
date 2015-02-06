@@ -56,5 +56,5 @@ module.exports = function(app) {
   });
 
   app.use(bodyParser.json());
-  app.use('/shows', showsRouter);
+  app.use('/api/shows', showsRouter);
 };

@@ -26,5 +26,5 @@ module.exports = function(app) {
     });
   });
 
-  app.use('/source_shows', sourceShowsRouter);
+  app.use('/api/source_shows', sourceShowsRouter);
 };

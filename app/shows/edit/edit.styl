@@ -1,27 +1,8 @@
 .show-edit {
-  min-width: 25em;
-
-  fieldset {
-    margin: 0.8em 0;
-  }
-
-  label {
-    display: block;
-    margin-bottom: 0.4em;
-  }
-
-  input {
-    box-sizing: border-box;
-    display: block;
-    width: 100%;
-  }
+  @extends $form;
 
   footer {
-    @extend .clearfix;
-  }
-
-  button {
-    float: right;
+    @extends $clearfix;
   }
 
   a {
