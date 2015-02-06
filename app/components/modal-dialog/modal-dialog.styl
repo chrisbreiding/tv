@@ -1,3 +1,7 @@
+body.modal-dialog-present {
+  overflow: hidden;
+}
+
 .modal-dialog-overlay {
   align-items: center;
   background: rgba(0, 0, 0, 0.8);
@@ -8,11 +12,12 @@
   position: fixed;
   right: 0;
   top: 0;
+  z-index: 10;
 }
 
 .modal-dialog {
   background: dark-color;
-  border: solid 1px #000;
+  border: solid 1px lighten(dark-color, 10%);
   border-radius: 3px;
   margin: 20px;
   max-height: 90%;
