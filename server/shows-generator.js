@@ -31,9 +31,12 @@ module.exports = {
   },
 
   seasons: function (num) {
-    var startDate = this._quarterChance() ? this._offAirStartDate() : this._randomStartDate();
+    var startDate = this._eighthChance()  ? this._offAirStartDate() :
+                    this._quarterChance() ? this._todayStartDate()  :
+                    this._quarterChance() ? this._recentStartDate() :
+                    this._randomStartDate();
     return _.flatten(_.map(_.range(1, num), function (season) {
-      return this._episodes(_.random(1, 8), season, startDate);
+      return this._episodes(_.random(1, 8), season, startDate.subtract(1, 'week'));
     }.bind(this)));
   },
 
@@ -45,9 +48,20 @@ module.exports = {
     return !_.random(0, 3);
   },
 
+  _eighthChance: function () {
+    return !_.random(0, 7);
+  },
+
   _randomStartDate: function () {
-    var method = this._coinFlip() ? 'add' : 'subtract';
-    return moment()[method](_.random(0, 50), 'days').subtract(1, 'week');
+    return moment().subtract(_.random(0, 100), 'days');
+  },
+
+  _todayStartDate: function () {
+    return moment();
+  },
+
+  _recentStartDate: function () {
+    return moment().subtract(2, 'days');
   },
 
   _offAirStartDate: function () {
