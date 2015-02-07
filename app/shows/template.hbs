@@ -1,17 +1,30 @@
-{{#shows-list class="shows-list" heading="Recent" shows=recent as |show|}}
+{{#shows-list class="shows-list recent" heading="Recent" shows=recent as |show|}}
   {{#show-single show=show settings=settings}}
     {{episodes-list episodes=show.recentEpisodes}}
   {{/show-single}}
 {{/shows-list}}
 
-{{#shows-list class="shows-list" heading="Upcoming" shows=upcoming as |show|}}
+{{#shows-list class="shows-list upcoming" heading="Upcoming" shows=upcoming as |show|}}
   {{#show-single show=show settings=settings}}
     {{episodes-list episodes=show.upcomingEpisodes}}
   {{/show-single}}
 {{/shows-list}}
 
-{{#shows-list class="shows-list" heading="Off Air" shows=offAir as |show|}}
+{{#shows-list class="shows-list off-air" heading="Off Air" shows=offAir as |show|}}
   {{show-single show=show settings=settings}}
 {{/shows-list}}
+
+<ul class="app-options">
+  <li>
+    {{#link-to 'source-shows' title="Add Show"}}
+      <i class="fa fa-plus"></i>
+    {{/link-to}}
+  </li>
+  <li>
+    {{#link-to 'settings' title="Settings"}}
+      <i class="fa fa-cog"></i>
+    {{/link-to}}
+  </li>
+</ul>
 
 {{outlet}}

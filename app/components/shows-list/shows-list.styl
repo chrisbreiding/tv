@@ -2,6 +2,31 @@
   box-sizing: border-box;
   float: left;
   padding: 1.5em;
+  transition: all 1s ease;
+
+  &.recent,
+  &.upcoming {
+    width: 40%;
+
+    @media all and (max-width: 1120px) {
+      width: 50%;
+    }
+
+    @media all and (max-width: 800px) {
+      float: none;
+      width: 100%;
+    }
+  }
+
+  &.off-air {
+    width: 20%;
+
+    @media all and (max-width: 1120px) {
+      clear: both;
+      float: none;
+      width: 100%;
+    }
+  }
 
   h3 {
     span {
