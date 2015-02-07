@@ -9,6 +9,19 @@ module.exports = function(app) {
   app.use(morgan('dev'));
   app.use(bodyParser.json());
 
+  var API_KEY = 'apikey';
+  var express = require('express');
+  var router = express.Router();
+
+  router.use(function (req, res, next) {
+    if (req.headers.api_key !== API_KEY) {
+      return res.status(401).end();
+    }
+
+    next();
+  });
+  app.use('/api', router);
+
   mocks.forEach(function(route) { route(app); });
   proxies.forEach(function(route) { route(app); });
 };

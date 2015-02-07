@@ -1,0 +1,14 @@
+{{#modal-dialog class="auth"}}
+  <p>Your API key is missing or invalid. Please authenticate.</p>
+
+  <form {{action 'authenticate' apiKey on="submit"}}>
+    <fieldset>
+      <label>API Key</label>
+      {{focus-input value=apiKey}}
+    </fieldset>
+
+    <footer>
+      <button type="submit">Authenticate</button>
+    </footer>
+  </form>
+{{/modal-dialog}}

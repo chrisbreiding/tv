@@ -1,6 +1,13 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+
+  beforeModel: function () {
+    this.authService.onDeAuth(() => {
+      this.transitionTo('auth');
+    });
+  },
+
   actions: {
     openModal (name, model) {
       return this.render(name, {
