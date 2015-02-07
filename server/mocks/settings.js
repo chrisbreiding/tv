@@ -11,9 +11,9 @@ module.exports = function(app) {
     last_updated: moment().subtract(5, 'hours').toISOString()
   };
 
-  router.get('/', function(req, res) {
+  router.get('/:id', function(req, res) {
     res.send({
-      'settings': [settings]
+      'settings': settings
     });
   });
 

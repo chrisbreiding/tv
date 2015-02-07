@@ -1,0 +1,27 @@
+<li>
+  <h3>
+    <span>
+      {{show.displayName}}
+      <div class="options">
+        <ul>
+          <li>
+            {{#link-to 'show' show title="All Episodes"}}
+              <i class="fa fa-list-ul"></i>
+            {{/link-to}}
+          </li>
+          <li>
+            {{#link-to 'shows.edit' show title="Edit"}}
+              <i class="fa fa-edit"></i>
+            {{/link-to}}
+          </li>
+          <li>
+            <a {{bind-attr href=viewLink}} title="View" target="_blank">
+              <i class="fa fa-eye"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </span>
+  </h3>
+  {{yield}}
+</li>

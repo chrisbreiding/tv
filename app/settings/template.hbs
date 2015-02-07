@@ -2,13 +2,13 @@
   <form {{action 'save' on='submit'}} class="settings">
     <fieldset>
       <label>View Link</label>
-      {{focus-input value=data.viewLink}}
+      {{focus-input value=viewLink}}
     </fieldset>
 
     <footer>
       <button type="submit">Save</button>
     </footer>
 
-    <p>Last updated: {{date-long data.lastUpdated}}</p>
+    <p>Last updated: {{date-long lastUpdated}}</p>
   </form>
 {{/modal-dialog}}
