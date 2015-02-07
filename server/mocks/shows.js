@@ -2,7 +2,6 @@ module.exports = function(app) {
   var express = require('express');
   var moment = require('moment');
   var _ = require('lodash');
-  var bodyParser = require('body-parser');
 
   var generator = require('../shows-generator');
 
@@ -55,6 +54,5 @@ module.exports = function(app) {
     res.status(204).end();
   });
 
-  app.use(bodyParser.json());
   app.use('/api/shows', showsRouter);
 };
