@@ -1,5 +1,5 @@
 {{#modal-dialog close='close'}}
-  <form {{action 'save' this on='submit'}} class="show-edit">
+  <form {{action 'save' this on='submit'}} class="form show-edit">
     <fieldset>
       <label>Display Name</label>
       {{focus-input value=displayName}}
@@ -15,7 +15,7 @@
       {{input value=fileName}}
     </fieldset>
 
-    <footer>
+    <footer class="clearfix">
       <button type="submit">Save</button>
       <a {{action 'destroy'}} href="#">Delete show</a>
     </footer>
