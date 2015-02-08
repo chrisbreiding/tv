@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import date from '../../utils/date';
 
 export default Ember.Component.extend({
 
@@ -8,37 +9,13 @@ export default Ember.Component.extend({
 
   airdateStatus: function () {
     let airdate = moment(this.get('episode.airdate'));
-    return this._isToday(airdate)     ? 'today upcoming' :
-           this._isFarPast(airdate)   ? 'far-past' :
-           this._isPast(airdate)      ? 'past' :
-           this._isRecent(airdate)    ? 'recent' :
-           this._isFarFuture(airdate) ? 'far-future' :
-           this._isFuture(airdate)    ? 'future' :
+    return date.isToday(airdate)     ? 'today upcoming' :
+           date.isFarPast(airdate)   ? 'far-past' :
+           date.isPast(airdate)      ? 'past' :
+           date.isRecent(airdate)    ? 'recent' :
+           date.isFarFuture(airdate) ? 'far-future' :
+           date.isFuture(airdate)    ? 'future' :
                                         'upcoming';
-  }.property('episode.airdate'),
-
-  _isToday(date) {
-    return date.isSame(moment(), 'day');
-  },
-
-  _isFarPast(date) {
-    return date.isBefore(moment().subtract(2, 'months'), 'day');
-  },
-
-  _isPast(date) {
-    return date.isBefore(moment().subtract(5, 'days'), 'day');
-  },
-
-  _isRecent(date) {
-    return date.isBefore(moment(), 'day');
-  },
-
-  _isFarFuture(date) {
-    return date.isAfter(moment().add(2, 'months'), 'day');
-  },
-
-  _isFuture(date) {
-    return date.isAfter(moment().add(1, 'month'), 'day');
-  }
+  }.property('episode.airdate')
 
 });
