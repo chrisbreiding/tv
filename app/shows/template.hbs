@@ -1,12 +1,12 @@
 {{#shows-list class="shows-list recent" heading="Recent" shows=recent as |show|}}
   {{#show-single show=show settings=settings}}
-    {{episodes-list episodes=show.recentEpisodes}}
+    {{episodes-list episodes=show.recentEpisodes threshold="3"}}
   {{/show-single}}
 {{/shows-list}}
 
 {{#shows-list class="shows-list upcoming" heading="Upcoming" shows=upcoming as |show|}}
   {{#show-single show=show settings=settings}}
-    {{episodes-list episodes=show.upcomingEpisodes}}
+    {{episodes-list episodes=show.upcomingEpisodes threshold="3"}}
   {{/show-single}}
 {{/shows-list}}
 

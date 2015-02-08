@@ -1,5 +1,3 @@
-<ul class="episodes-list">
-  {{#each episodes as |episode|}}
-    {{episode-single episode=episode}}
-  {{/each}}
-</ul>
+{{#more-less threshold=threshold class="episodes-list" items=episodes as |episode|}}
+  {{episode-single episode=episode}}
+{{/more-less}}
