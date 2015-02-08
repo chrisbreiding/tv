@@ -8,21 +8,13 @@ export default Ember.Component.extend({
 
   airdateStatus: function () {
     let airdate = moment(this.get('episode.airdate'));
-    if (this._isToday(airdate)) {
-      return 'today upcoming';
-    } else if (this._isFarPast(airdate)) {
-      return 'far-past';
-    } else if (this._isPast(airdate)) {
-      return 'past';
-    } else if (this._isRecent(airdate)) {
-      return 'recent';
-    } else if (this._isFarFuture(airdate)) {
-      return 'far-future';
-    } else if (this._isFuture(airdate)) {
-      return 'future';
-    } else {
-      return 'upcoming';
-    }
+    return this._isToday(airdate)     ? 'today upcoming' :
+           this._isFarPast(airdate)   ? 'far-past' :
+           this._isPast(airdate)      ? 'past' :
+           this._isRecent(airdate)    ? 'recent' :
+           this._isFarFuture(airdate) ? 'far-future' :
+           this._isFuture(airdate)    ? 'future' :
+                                        'upcoming';
   }.property('episode.airdate'),
 
   _isToday(date) {

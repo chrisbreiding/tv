@@ -1,5 +1,5 @@
 airdate-status(color, opacity = 1.0) {
-  .episode-number {
+  .episode-number span {
     background: color;
     opacity: opacity;
   }
@@ -11,23 +11,61 @@ airdate-status(color, opacity = 1.0) {
 }
 
 .episode-single {
+  align-content: space-between;
+  display: flex;
   border-radius: 3px;
   font-size: .9em;
   padding: 0.5em;
 
   span {
-    display: inline-block;
-    margin-left: 0.6em;
+    display: block;
+  }
+
+  & > span {
+    margin-left: 0.8em;
+  }
+
+  .episode-number span,
+  .airdate,
+  .title,
+  .file-name {
+    padding: 0.3em 0;
   }
 
   .episode-number {
-    background: darken(neutral-color, 40%);
-    border-radius: 3px;
-    color: light-color;
     margin-left: 0;
-    padding: 0.2em 0;
-    text-align: center;
-    width: 3em;
+
+    span {
+      background: darken(neutral-color, 40%);
+      border-radius: 3px;
+      color: light-color;
+      text-align: center;
+      width: 3em;
+    }
+  }
+
+  .episode-number,
+  .airdate {
+    flex-shrink: 0;
+  }
+
+  .file-name {
+    display: none;
+  }
+
+  .title,
+  .file-name {
+    // margin-left: 10em;
+  }
+
+  &:hover {
+    .title {
+      display: none;
+    }
+
+    .file-name {
+      display: block;
+    }
   }
 
   &.today {
