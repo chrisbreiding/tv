@@ -2,7 +2,7 @@
   <span>{{episode.shortEpisodeNumber}}</span>
 </span>
 <span class="airdate">{{date-short episode.airdate}}</span>
-<span class="title">{{episode.title}}</span>
-{{#text-select class="file-name" tagName="span"}}
+<span class="title" {{action 'showFileName'}}>{{episode.title}}</span>
+<span class="file-name">
   {{episode.show.fileName}} - {{episode.longEpisodeNumber}} - {{episode.title}}
-{{/text-select}}
+</span>

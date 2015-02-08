@@ -49,16 +49,20 @@ airdate-status(color, opacity = 1.0) {
     flex-shrink: 0;
   }
 
+  .title,
+  .file-name {
+    cursor: pointer;
+
+    &:hover {
+      color: #FFF;
+    }
+  }
+
   .file-name {
     display: none;
   }
 
-  .title,
-  .file-name {
-    // margin-left: 10em;
-  }
-
-  &:hover {
+  &.show-file-name {
     .title {
       display: none;
     }
