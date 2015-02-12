@@ -26,8 +26,8 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.host = '';
-    ENV.namespace = 'api';
+    ENV.host = process.env.host || '';
+    ENV.namespace = process.env.host ? '' : 'api';
   }
 
   if (environment === 'production') {
