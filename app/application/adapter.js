@@ -1,5 +1,4 @@
 import DS from 'ember-data';
-import Ember from 'ember';
 import ENV from 'tv/config/environment';
 
 export default DS.ActiveModelAdapter.extend({
