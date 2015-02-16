@@ -15,6 +15,7 @@ module.exports = function(app) {
       firstAired: moment()
                     .subtract(_.random(1, 10), 'years')
                     .subtract(_.random(1, 20), 'days')
+                    .startOf('day')
                     .toISOString(),
       network: textGen(1).substr(0, 3).toUpperCase()
     };

@@ -14,13 +14,13 @@ export default DS.Model.extend({
     let airdate = this.get('airdate');
     let startOfiveDaysAgo = moment().subtract(5, 'days').startOf('day');
     let startOfToday = moment().startOf('day');
-    return moment(airdate).isBetween(startOfiveDaysAgo, startOfToday);
+    return moment(airdate).isBetween(startOfiveDaysAgo.subtract(1, 'second'), startOfToday);
   }.property('airdate'),
 
   isUpcoming: function () {
     let airdate = this.get('airdate');
     let startOfToday = moment().startOf('day');
-    return moment(airdate).isAfter(startOfToday);
+    return moment(airdate).isAfter(startOfToday.subtract(1, 'second'));
   }.property('airdate'),
 
   longEpisodeNumber: function () {
