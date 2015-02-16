@@ -23,7 +23,7 @@ module.exports = function(app) {
 
   sourceShowsRouter.get('/', function(req, res) {
     res.send({
-      'source_shows': _.sample(shows, _.random(2, 10))
+      'source_shows': req.query.query === '' ? [] : _.sample(shows, _.random(2, 10))
     });
   });
 
