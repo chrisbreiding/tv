@@ -84,7 +84,7 @@ module.exports = {
       season: season,
       episode_number: epNum,
       title: textGen(1, 5),
-      airdate: airdate.toISOString()
+      airdate: airdate.startOf('day').toISOString()
     }
   }
 }
