@@ -4,12 +4,20 @@
   "private": true,
   "scripts": {
     "start": "ember server",
-    "build": "ember build"
+    "build": "ember build",
+    "build-production": "rm -rf dist; ember build --environment=production",
+    "deploy": "gh-pages-deploy"
   },
   "engines": {
     "node": ">= 0.10.0"
   },
   "license": "MIT",
+  "gh-pages-deploy": {
+    "staticpath": "dist",
+    "cname": "tv.crbapps.com",
+    "prep": ["build-production"],
+    "noprompt": false
+  },
   "devDependencies": {
     "baconipsum": "^0.1.2",
     "body-parser": "^1.11.0",
@@ -28,6 +36,7 @@
     "ember-data": "1.0.0-beta.12",
     "ember-export-application-global": "^1.0.0",
     "express": "^4.8.5",
+    "gh-pages-deploy": "^0.3.0",
     "glob": "^4.0.5",
     "lodash": "^3.1.0",
     "moment": "^2.9.0",
