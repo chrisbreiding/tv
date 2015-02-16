@@ -79,11 +79,13 @@ module.exports = {
   },
 
   _episode: function (id, season, epNum, airdate) {
+    var oddChars = '.!?@#$%^*:-&\\/'.split('');
+    var title = this._eighthChance() ? textGen(3, 5).replace(' ', ' ' + oddChars[_.random(0, oddChars.length)] + ' ') : textGen(1, 5);
     return {
       id: '' + id,
       season: season,
       episode_number: epNum,
-      title: textGen(1, 5),
+      title: title,
       airdate: airdate.startOf('day').toISOString()
     }
   }

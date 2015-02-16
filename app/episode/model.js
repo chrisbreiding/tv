@@ -10,6 +10,14 @@ export default DS.Model.extend({
 
   show: DS.belongsTo('show'),
 
+  fileSafeTitle: function () {
+    return this.get('title')
+      .replace(/[\/]/g, '-')
+      .replace(/\:\s+/g, ' - ')
+      .replace(/\&/g, 'and')
+      .replace(/[\.\!\?\@\#\$\%\^\*\:]/g, '');
+  }.property('title'),
+
   isRecent: function () {
     let airdate = this.get('airdate');
     let startOfiveDaysAgo = moment().subtract(5, 'days').startOf('day');
