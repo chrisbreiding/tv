@@ -7,6 +7,6 @@ export default Ember.Route.extend({
 
   setupController (controller, model) {
     this._super(controller, model);
-    controller.set('settings', this.store.find('settings', 1));
+    controller.set('settings', this.store.find('setting', 1));
   }
 });

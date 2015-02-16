@@ -5,7 +5,7 @@ module.exports = function(app) {
 
   var router = express.Router();
 
-  var settings = {
+  var setting = {
     id: '1',
     view_link: 'http://example.com/q=%s',
     last_updated: moment().subtract(5, 'hours').toISOString()
@@ -13,13 +13,13 @@ module.exports = function(app) {
 
   router.get('/:id', function(req, res) {
     res.send({
-      'settings': settings
+      'setting': setting
     });
   });
 
   router.put('/:id', function(req, res) {
     res.send({
-      'settings': _.extend(settings, req.body.settings)
+      'setting': _.extend(setting, req.body.setting)
     })
   });
 
