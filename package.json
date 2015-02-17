@@ -16,7 +16,7 @@
     "staticpath": "dist",
     "cname": "tv.crbapps.com",
     "prep": ["build-production"],
-    "noprompt": false
+    "noprompt": true
   },
   "devDependencies": {
     "baconipsum": "^0.1.2",
