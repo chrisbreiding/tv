@@ -80,7 +80,10 @@ module.exports = {
 
   _episode: function (id, season, epNum, airdate) {
     var oddChars = '.!?@#$%^*:-&\\/'.split('');
-    var title = this._eighthChance() ? textGen(3, 5).replace(' ', ' ' + oddChars[_.random(0, oddChars.length)] + ' ') : textGen(1, 5);
+    var withOddChars = textGen(3, 5).replace(' ', ' ' + oddChars[_.random(0, oddChars.length)] + ' ');
+    var title = this._eighthChance() ? withOddChars :
+                this._eighthChance() ? null         :
+                textGen(1, 5);
     return {
       id: '' + id,
       season: season,

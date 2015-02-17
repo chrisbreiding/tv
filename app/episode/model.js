@@ -11,7 +11,12 @@ export default DS.Model.extend({
   show: DS.belongsTo('show'),
 
   fileSafeTitle: function () {
-    return this.get('title')
+    var title = this.get('title');
+    if (title == null) {
+      return '';
+    }
+
+    return title
       .replace(/[\/]/g, '-')
       .replace(/\:\s+/g, ' - ')
       .replace(/\&/g, 'and')
