@@ -7,14 +7,22 @@ export default Ember.Route.extend({
 
   actions: {
     add (show) {
-      let name = show.get('name');
+      this.store.filter('show', (aShow) => {
+        return aShow.get('sourceId') === show.get('id');
+      }).then((shows) => {
+        const name = show.get('name');
 
-      this.store.createRecord('show', {
-        displayName: name,
-        searchName: name,
-        fileName: name,
-        sourceId: show.get('id')
-      }).save().then(() => {
+        if (shows.get('length')) {
+          return shows;
+        } else {
+          return this.store.createRecord('show', {
+            displayName: name,
+            searchName: name,
+            fileName: name,
+            sourceId: show.get('id')
+          }).save();
+        }
+      }).then(() => {
         this.transitionTo('shows');
       });
     }
