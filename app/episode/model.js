@@ -1,6 +1,7 @@
 import DS from 'ember-data';
 
 let attr = DS.attr;
+let recentDaysCutoff = localStorage.recentDaysCutoff || 5;
 
 export default DS.Model.extend({
   season: attr('number'),
@@ -25,7 +26,7 @@ export default DS.Model.extend({
 
   isRecent: function () {
     let airdate = this.get('airdate');
-    let startOfiveDaysAgo = moment().subtract(5, 'days').startOf('day');
+    let startOfiveDaysAgo = moment().subtract(recentDaysCutoff, 'days').startOf('day');
     let startOfToday = moment().startOf('day');
     return moment(airdate).isBetween(startOfiveDaysAgo.subtract(1, 'second'), startOfToday);
   }.property('airdate'),
