@@ -2,13 +2,16 @@ import UIKit
 
 class MainViewController: UIViewController {
     @IBOutlet var textView: UITextView!
+    @IBOutlet var loadingIndicator: UIActivityIndicatorView!
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 
         Data.loadShows({ shows in
+            self.loadingIndicator.stopAnimating()
             self.textView.text = shows.map({ show in show["display_name"].stringValue }).joinWithSeparator("\n")
         }, onFail: { (errorTitle, errorMessage) in
+            self.loadingIndicator.stopAnimating()
             self.showErrorAlert(errorTitle, message: errorMessage)
         })
     }

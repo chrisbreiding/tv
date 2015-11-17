@@ -16,18 +16,32 @@
                         <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ezC-Di-DDT">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ezC-Di-DDT">
                                 <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
                                 <animations/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Ixh-O5-sKB">
+                                <rect key="frame" x="940" y="520" width="40" height="40"/>
+                                <animations/>
+                            </activityIndicatorView>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ezC-Di-DDT" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="6Tt-O2-z08"/>
+                            <constraint firstItem="Ixh-O5-sKB" firstAttribute="centerY" secondItem="ezC-Di-DDT" secondAttribute="centerY" id="AwZ-1w-1qw"/>
+                            <constraint firstItem="ezC-Di-DDT" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="HFA-CC-fIr"/>
+                            <constraint firstAttribute="trailing" secondItem="ezC-Di-DDT" secondAttribute="trailing" id="Mg1-tI-A3o"/>
+                            <constraint firstItem="ezC-Di-DDT" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="OzY-sq-25R"/>
+                            <constraint firstItem="ezC-Di-DDT" firstAttribute="centerX" secondItem="Ixh-O5-sKB" secondAttribute="centerX" id="omV-YO-pVl"/>
+                        </constraints>
                     </view>
                     <connections>
+                        <outlet property="loadingIndicator" destination="Ixh-O5-sKB" id="0qD-9V-j47"/>
                         <outlet property="textView" destination="ezC-Di-DDT" id="ctk-Uv-xh7"/>
                     </connections>
                 </viewController>
