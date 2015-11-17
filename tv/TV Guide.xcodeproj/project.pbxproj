@@ -8,18 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		4BE2B3791BF8D2190028F25B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE2B3781BF8D2190028F25B /* AppDelegate.swift */; };
-		4BE2B37B1BF8D2190028F25B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE2B37A1BF8D2190028F25B /* ViewController.swift */; };
 		4BE2B37E1BF8D2190028F25B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4BE2B37C1BF8D2190028F25B /* Main.storyboard */; };
 		4BE2B3801BF8D2190028F25B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4BE2B37F1BF8D2190028F25B /* Assets.xcassets */; };
+		4BE2B3881BF8DF320028F25B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE2B3871BF8DF320028F25B /* MainViewController.swift */; };
+		4BE2B38A1BFAB1710028F25B /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE2B3891BFAB1710028F25B /* Alamofire.framework */; };
+		4BE2B38D1BFAC1CE0028F25B /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE2B38C1BFAC1CE0028F25B /* SwiftyJSON.framework */; };
+		4BE2B3901BFAC3EF0028F25B /* secrets.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4BE2B38F1BFAC3EF0028F25B /* secrets.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4BE2B3751BF8D2190028F25B /* TV Guide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TV Guide.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BE2B3781BF8D2190028F25B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		4BE2B37A1BF8D2190028F25B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		4BE2B37D1BF8D2190028F25B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4BE2B37F1BF8D2190028F25B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4BE2B3811BF8D2190028F25B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4BE2B3871BF8DF320028F25B /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		4BE2B3891BFAB1710028F25B /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/tvOS/Alamofire.framework; sourceTree = "<group>"; };
+		4BE2B38C1BFAC1CE0028F25B /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/tvOS/SwiftyJSON.framework; sourceTree = "<group>"; };
+		4BE2B38F1BFAC3EF0028F25B /* secrets.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = secrets.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +33,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BE2B38A1BFAB1710028F25B /* Alamofire.framework in Frameworks */,
+				4BE2B38D1BFAC1CE0028F25B /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -37,6 +45,7 @@
 			isa = PBXGroup;
 			children = (
 				4BE2B3771BF8D2190028F25B /* TV Guide */,
+				4BE2B38E1BFAC1D80028F25B /* Frameworks */,
 				4BE2B3761BF8D2190028F25B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -53,12 +62,22 @@
 			isa = PBXGroup;
 			children = (
 				4BE2B3781BF8D2190028F25B /* AppDelegate.swift */,
-				4BE2B37A1BF8D2190028F25B /* ViewController.swift */,
-				4BE2B37C1BF8D2190028F25B /* Main.storyboard */,
 				4BE2B37F1BF8D2190028F25B /* Assets.xcassets */,
 				4BE2B3811BF8D2190028F25B /* Info.plist */,
+				4BE2B37C1BF8D2190028F25B /* Main.storyboard */,
+				4BE2B3871BF8DF320028F25B /* MainViewController.swift */,
+				4BE2B38F1BFAC3EF0028F25B /* secrets.txt */,
 			);
 			path = "TV Guide";
+			sourceTree = "<group>";
+		};
+		4BE2B38E1BFAC1D80028F25B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4BE2B38C1BFAC1CE0028F25B /* SwiftyJSON.framework */,
+				4BE2B3891BFAB1710028F25B /* Alamofire.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,6 +90,7 @@
 				4BE2B3711BF8D2190028F25B /* Sources */,
 				4BE2B3721BF8D2190028F25B /* Frameworks */,
 				4BE2B3731BF8D2190028F25B /* Resources */,
+				4BE2B38B1BFAB1E30028F25B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -120,6 +140,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BE2B3901BFAC3EF0028F25B /* secrets.txt in Resources */,
 				4BE2B3801BF8D2190028F25B /* Assets.xcassets in Resources */,
 				4BE2B37E1BF8D2190028F25B /* Main.storyboard in Resources */,
 			);
@@ -127,13 +148,31 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4BE2B38B1BFAB1E30028F25B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/tvOS/Alamofire.framework",
+				"$(SRCROOT)/Carthage/Build/tvOS/SwiftyJSON.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4BE2B3711BF8D2190028F25B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4BE2B37B1BF8D2190028F25B /* ViewController.swift in Sources */,
 				4BE2B3791BF8D2190028F25B /* AppDelegate.swift in Sources */,
+				4BE2B3881BF8DF320028F25B /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +276,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
 				INFOPLIST_FILE = "TV Guide/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.chrisbreiding.TV-Guide";
@@ -249,6 +292,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
 				INFOPLIST_FILE = "TV Guide/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.chrisbreiding.TV-Guide";
@@ -275,6 +322,7 @@
 				4BE2B3861BF8D2190028F25B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
