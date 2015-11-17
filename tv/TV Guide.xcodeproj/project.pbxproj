@@ -14,6 +14,7 @@
 		4BE2B38A1BFAB1710028F25B /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE2B3891BFAB1710028F25B /* Alamofire.framework */; };
 		4BE2B38D1BFAC1CE0028F25B /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE2B38C1BFAC1CE0028F25B /* SwiftyJSON.framework */; };
 		4BE2B3901BFAC3EF0028F25B /* secrets.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4BE2B38F1BFAC3EF0028F25B /* secrets.txt */; };
+		4BE2B3941BFBF2B30028F25B /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE2B3931BFBF2B30028F25B /* Data.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		4BE2B3891BFAB1710028F25B /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/tvOS/Alamofire.framework; sourceTree = "<group>"; };
 		4BE2B38C1BFAC1CE0028F25B /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/tvOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		4BE2B38F1BFAC3EF0028F25B /* secrets.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = secrets.txt; sourceTree = "<group>"; };
+		4BE2B3931BFBF2B30028F25B /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				4BE2B37C1BF8D2190028F25B /* Main.storyboard */,
 				4BE2B3871BF8DF320028F25B /* MainViewController.swift */,
 				4BE2B38F1BFAC3EF0028F25B /* secrets.txt */,
+				4BE2B3931BFBF2B30028F25B /* Data.swift */,
 			);
 			path = "TV Guide";
 			sourceTree = "<group>";
@@ -172,6 +175,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BE2B3791BF8D2190028F25B /* AppDelegate.swift in Sources */,
+				4BE2B3941BFBF2B30028F25B /* Data.swift in Sources */,
 				4BE2B3881BF8DF320028F25B /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
