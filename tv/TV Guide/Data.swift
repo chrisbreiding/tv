@@ -1,8 +1,10 @@
+import Foundation
 import Alamofire
 import SwiftyJSON
 
+
 class Data {
-    class func loadShows(onLoad: ([JSON] -> ()), onFail: ((String, String) -> ())) {
+    func loadShows(onLoad: ([ShowModel] -> ()), onFail: ((String, String) -> ())) {
         guard let apiKey = loadApiKey(onFail) else { return }
 
         Alamofire
@@ -15,12 +17,36 @@ class Data {
             }
             .responseData { response in
                 if let data = response.result.value {
-                    onLoad(JSON(data: data)["shows"].arrayValue)
+                    let json = JSON(data: data)
+                    onLoad(self.showModels(json["shows"].arrayValue, episodes: json["episodes"].arrayValue))
                 }
         }
     }
 
-    class func loadApiKey(onFail: ((String, String) -> ())) -> String? {
+    class func shows(shows: [ShowModel], forDate date: Date) -> [ShowModel] {
+        return shows.reduce([ShowModel]()) { (var coll, show) in
+            let airedOnDate = show.episodes.filter { episode in episode.airdate == date }
+            if airedOnDate.count > 0 {
+                coll.append(ShowModel(name: show.name, episodes: airedOnDate))
+            }
+            return coll
+        }
+    }
+
+    func showModels(shows: [JSON], episodes: [JSON]) -> [ShowModel] {
+        let episodeModels = EpisodeModel.deserialize(episodes).indexBy { $0.id }
+
+        return shows.map { show in
+            ShowModel(
+                name: show["display_name"].stringValue,
+                episodes: show["episode_ids"].arrayValue.map { episodeId in
+                    episodeModels[episodeId.intValue] ?? EpisodeModel.emptyModel()
+                }
+            )
+        }
+    }
+
+    func loadApiKey(onFail: ((String, String) -> ())) -> String? {
         var apiKey: String?
         if let path = NSBundle.mainBundle().pathForResource("secrets", ofType: "txt") {
             do {

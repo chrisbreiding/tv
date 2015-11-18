@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4BA8A2BB1BFCD3E00054D1A6 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA8A2BA1BFCD3E00054D1A6 /* Date.swift */; };
+		4BA8A2BD1BFCF9810054D1A6 /* TimePeriodModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA8A2BC1BFCF9810054D1A6 /* TimePeriodModel.swift */; };
+		4BA8A2BF1BFCFA1D0054D1A6 /* TimePeriodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA8A2BE1BFCFA1D0054D1A6 /* TimePeriodCell.swift */; };
+		4BA8A2C11BFCFD200054D1A6 /* ShowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA8A2C01BFCFD200054D1A6 /* ShowCell.swift */; };
+		4BCEB1A71BFD097000420116 /* Reveal-tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BCEB1A61BFD097000420116 /* Reveal-tvOS.framework */; };
 		4BE2B3791BF8D2190028F25B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE2B3781BF8D2190028F25B /* AppDelegate.swift */; };
 		4BE2B37E1BF8D2190028F25B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4BE2B37C1BF8D2190028F25B /* Main.storyboard */; };
 		4BE2B3801BF8D2190028F25B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4BE2B37F1BF8D2190028F25B /* Assets.xcassets */; };
@@ -15,9 +20,17 @@
 		4BE2B38D1BFAC1CE0028F25B /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE2B38C1BFAC1CE0028F25B /* SwiftyJSON.framework */; };
 		4BE2B3901BFAC3EF0028F25B /* secrets.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4BE2B38F1BFAC3EF0028F25B /* secrets.txt */; };
 		4BE2B3941BFBF2B30028F25B /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE2B3931BFBF2B30028F25B /* Data.swift */; };
+		4BE2B3961BFBF7C00028F25B /* ShowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE2B3951BFBF7C00028F25B /* ShowModel.swift */; };
+		4BE2B3981BFBF7EB0028F25B /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE2B3971BFBF7EB0028F25B /* EpisodeModel.swift */; };
+		4BE2B39A1BFBFAAE0028F25B /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE2B3991BFBFAAE0028F25B /* Util.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4BA8A2BA1BFCD3E00054D1A6 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		4BA8A2BC1BFCF9810054D1A6 /* TimePeriodModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimePeriodModel.swift; sourceTree = "<group>"; };
+		4BA8A2BE1BFCFA1D0054D1A6 /* TimePeriodCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimePeriodCell.swift; sourceTree = "<group>"; };
+		4BA8A2C01BFCFD200054D1A6 /* ShowCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowCell.swift; sourceTree = "<group>"; };
+		4BCEB1A61BFD097000420116 /* Reveal-tvOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Reveal-tvOS.framework"; path = "TV Guide/Frameworks/Reveal-tvOS.framework"; sourceTree = "<group>"; };
 		4BE2B3751BF8D2190028F25B /* TV Guide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TV Guide.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BE2B3781BF8D2190028F25B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4BE2B37D1BF8D2190028F25B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -28,6 +41,9 @@
 		4BE2B38C1BFAC1CE0028F25B /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/tvOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		4BE2B38F1BFAC3EF0028F25B /* secrets.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = secrets.txt; sourceTree = "<group>"; };
 		4BE2B3931BFBF2B30028F25B /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		4BE2B3951BFBF7C00028F25B /* ShowModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowModel.swift; sourceTree = "<group>"; };
+		4BE2B3971BFBF7EB0028F25B /* EpisodeModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
+		4BE2B3991BFBFAAE0028F25B /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +53,7 @@
 			files = (
 				4BE2B38A1BFAB1710028F25B /* Alamofire.framework in Frameworks */,
 				4BE2B38D1BFAC1CE0028F25B /* SwiftyJSON.framework in Frameworks */,
+				4BCEB1A71BFD097000420116 /* Reveal-tvOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,11 +82,18 @@
 			children = (
 				4BE2B3781BF8D2190028F25B /* AppDelegate.swift */,
 				4BE2B37F1BF8D2190028F25B /* Assets.xcassets */,
+				4BE2B3931BFBF2B30028F25B /* Data.swift */,
+				4BA8A2BA1BFCD3E00054D1A6 /* Date.swift */,
+				4BE2B3971BFBF7EB0028F25B /* EpisodeModel.swift */,
 				4BE2B3811BF8D2190028F25B /* Info.plist */,
 				4BE2B37C1BF8D2190028F25B /* Main.storyboard */,
 				4BE2B3871BF8DF320028F25B /* MainViewController.swift */,
 				4BE2B38F1BFAC3EF0028F25B /* secrets.txt */,
-				4BE2B3931BFBF2B30028F25B /* Data.swift */,
+				4BE2B3951BFBF7C00028F25B /* ShowModel.swift */,
+				4BA8A2BE1BFCFA1D0054D1A6 /* TimePeriodCell.swift */,
+				4BA8A2BC1BFCF9810054D1A6 /* TimePeriodModel.swift */,
+				4BE2B3991BFBFAAE0028F25B /* Util.swift */,
+				4BA8A2C01BFCFD200054D1A6 /* ShowCell.swift */,
 			);
 			path = "TV Guide";
 			sourceTree = "<group>";
@@ -77,6 +101,7 @@
 		4BE2B38E1BFAC1D80028F25B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4BCEB1A61BFD097000420116 /* Reveal-tvOS.framework */,
 				4BE2B38C1BFAC1CE0028F25B /* SwiftyJSON.framework */,
 				4BE2B3891BFAB1710028F25B /* Alamofire.framework */,
 			);
@@ -174,9 +199,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BE2B3961BFBF7C00028F25B /* ShowModel.swift in Sources */,
+				4BE2B39A1BFBFAAE0028F25B /* Util.swift in Sources */,
+				4BA8A2BB1BFCD3E00054D1A6 /* Date.swift in Sources */,
+				4BA8A2BD1BFCF9810054D1A6 /* TimePeriodModel.swift in Sources */,
 				4BE2B3791BF8D2190028F25B /* AppDelegate.swift in Sources */,
 				4BE2B3941BFBF2B30028F25B /* Data.swift in Sources */,
+				4BA8A2C11BFCFD200054D1A6 /* ShowCell.swift in Sources */,
+				4BA8A2BF1BFCFA1D0054D1A6 /* TimePeriodCell.swift in Sources */,
 				4BE2B3881BF8DF320028F25B /* MainViewController.swift in Sources */,
+				4BE2B3981BFBF7EB0028F25B /* EpisodeModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,9 +315,17 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+					"$(PROJECT_DIR)/TV",
+					Guide/Frameworks,
 				);
 				INFOPLIST_FILE = "TV Guide/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				"OTHER_LDFLAGS[arch=*]" = (
+					"-ObjC",
+					"-lz",
+					"-framework",
+					"Reveal-tvOS",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.chrisbreiding.TV-Guide";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -299,6 +339,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+					"$(PROJECT_DIR)/TV",
+					Guide/Frameworks,
 				);
 				INFOPLIST_FILE = "TV Guide/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
