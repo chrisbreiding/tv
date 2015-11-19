@@ -1,14 +1,22 @@
 import UIKit
 
-class MainViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDataSource {
+class MainViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet var timePeriodsView: UICollectionView!
     @IBOutlet var loadingIndicator: UIActivityIndicatorView!
+
+    var showsViewController: ShowsViewController = ShowsViewController()
 
     let timePeriods = [
         TimePeriodModel(name: "Aired Yesterday", shows: []),
         TimePeriodModel(name: "Airing Tonight", shows: []),
         TimePeriodModel(name: "Airing Tomorrow", shows: [])
     ]
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        showsViewController.timePeriods = timePeriods
+    }
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -52,16 +60,6 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
 
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         guard let timePeriodCell = cell as? TimePeriodCell else { return }
-        timePeriodCell.setShowsViewDataSource(self, forRow: indexPath.row)
-    }
-
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return timePeriods[tableView.tag].shows.count
-    }
-
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ShowCell", forIndexPath: indexPath) as! ShowCell
-        cell.setProps(timePeriods[tableView.tag].shows[indexPath.row].name)
-        return cell
+        timePeriodCell.setShowsViewDataSource(showsViewController, delegate: showsViewController, forRow: indexPath.row)
     }
 }

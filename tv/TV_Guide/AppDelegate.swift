@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  TV Guide
+//  TV_Guide
 //
 //  Created by Chris Breiding on 11/15/15.
 //  Copyright © 2015 Chris Breiding. All rights reserved.

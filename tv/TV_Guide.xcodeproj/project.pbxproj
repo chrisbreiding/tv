@@ -12,6 +12,9 @@
 		4BA8A2BF1BFCFA1D0054D1A6 /* TimePeriodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA8A2BE1BFCFA1D0054D1A6 /* TimePeriodCell.swift */; };
 		4BA8A2C11BFCFD200054D1A6 /* ShowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA8A2C01BFCFD200054D1A6 /* ShowCell.swift */; };
 		4BCEB1A71BFD097000420116 /* Reveal-tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BCEB1A61BFD097000420116 /* Reveal-tvOS.framework */; };
+		4BCEB1A91BFD458D00420116 /* EpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCEB1A81BFD458D00420116 /* EpisodeCell.swift */; };
+		4BCEB1AB1BFD47B300420116 /* ShowsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCEB1AA1BFD47B300420116 /* ShowsViewController.swift */; };
+		4BCEB1AD1BFD5AD100420116 /* EpisodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCEB1AC1BFD5AD100420116 /* EpisodesViewController.swift */; };
 		4BE2B3791BF8D2190028F25B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE2B3781BF8D2190028F25B /* AppDelegate.swift */; };
 		4BE2B37E1BF8D2190028F25B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4BE2B37C1BF8D2190028F25B /* Main.storyboard */; };
 		4BE2B3801BF8D2190028F25B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4BE2B37F1BF8D2190028F25B /* Assets.xcassets */; };
@@ -30,8 +33,11 @@
 		4BA8A2BC1BFCF9810054D1A6 /* TimePeriodModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimePeriodModel.swift; sourceTree = "<group>"; };
 		4BA8A2BE1BFCFA1D0054D1A6 /* TimePeriodCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimePeriodCell.swift; sourceTree = "<group>"; };
 		4BA8A2C01BFCFD200054D1A6 /* ShowCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowCell.swift; sourceTree = "<group>"; };
-		4BCEB1A61BFD097000420116 /* Reveal-tvOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Reveal-tvOS.framework"; path = "TV Guide/Frameworks/Reveal-tvOS.framework"; sourceTree = "<group>"; };
-		4BE2B3751BF8D2190028F25B /* TV Guide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TV Guide.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BCEB1A61BFD097000420116 /* Reveal-tvOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Reveal-tvOS.framework"; path = "TV_Guide/Frameworks/Reveal-tvOS.framework"; sourceTree = "<group>"; };
+		4BCEB1A81BFD458D00420116 /* EpisodeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeCell.swift; sourceTree = "<group>"; };
+		4BCEB1AA1BFD47B300420116 /* ShowsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowsViewController.swift; sourceTree = "<group>"; };
+		4BCEB1AC1BFD5AD100420116 /* EpisodesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodesViewController.swift; sourceTree = "<group>"; };
+		4BE2B3751BF8D2190028F25B /* TV_Guide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TV_Guide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BE2B3781BF8D2190028F25B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4BE2B37D1BF8D2190028F25B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4BE2B37F1BF8D2190028F25B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -63,7 +69,7 @@
 		4BE2B36C1BF8D2190028F25B = {
 			isa = PBXGroup;
 			children = (
-				4BE2B3771BF8D2190028F25B /* TV Guide */,
+				4BE2B3771BF8D2190028F25B /* TV_Guide */,
 				4BE2B38E1BFAC1D80028F25B /* Frameworks */,
 				4BE2B3761BF8D2190028F25B /* Products */,
 			);
@@ -72,30 +78,33 @@
 		4BE2B3761BF8D2190028F25B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4BE2B3751BF8D2190028F25B /* TV Guide.app */,
+				4BE2B3751BF8D2190028F25B /* TV_Guide.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4BE2B3771BF8D2190028F25B /* TV Guide */ = {
+		4BE2B3771BF8D2190028F25B /* TV_Guide */ = {
 			isa = PBXGroup;
 			children = (
 				4BE2B3781BF8D2190028F25B /* AppDelegate.swift */,
 				4BE2B37F1BF8D2190028F25B /* Assets.xcassets */,
 				4BE2B3931BFBF2B30028F25B /* Data.swift */,
 				4BA8A2BA1BFCD3E00054D1A6 /* Date.swift */,
+				4BCEB1A81BFD458D00420116 /* EpisodeCell.swift */,
 				4BE2B3971BFBF7EB0028F25B /* EpisodeModel.swift */,
+				4BCEB1AC1BFD5AD100420116 /* EpisodesViewController.swift */,
 				4BE2B3811BF8D2190028F25B /* Info.plist */,
 				4BE2B37C1BF8D2190028F25B /* Main.storyboard */,
 				4BE2B3871BF8DF320028F25B /* MainViewController.swift */,
 				4BE2B38F1BFAC3EF0028F25B /* secrets.txt */,
+				4BA8A2C01BFCFD200054D1A6 /* ShowCell.swift */,
 				4BE2B3951BFBF7C00028F25B /* ShowModel.swift */,
+				4BCEB1AA1BFD47B300420116 /* ShowsViewController.swift */,
 				4BA8A2BE1BFCFA1D0054D1A6 /* TimePeriodCell.swift */,
 				4BA8A2BC1BFCF9810054D1A6 /* TimePeriodModel.swift */,
 				4BE2B3991BFBFAAE0028F25B /* Util.swift */,
-				4BA8A2C01BFCFD200054D1A6 /* ShowCell.swift */,
 			);
-			path = "TV Guide";
+			path = TV_Guide;
 			sourceTree = "<group>";
 		};
 		4BE2B38E1BFAC1D80028F25B /* Frameworks */ = {
@@ -111,22 +120,22 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4BE2B3741BF8D2190028F25B /* TV Guide */ = {
+		4BE2B3741BF8D2190028F25B /* TV_Guide */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4BE2B3841BF8D2190028F25B /* Build configuration list for PBXNativeTarget "TV Guide" */;
+			buildConfigurationList = 4BE2B3841BF8D2190028F25B /* Build configuration list for PBXNativeTarget "TV_Guide" */;
 			buildPhases = (
 				4BE2B3711BF8D2190028F25B /* Sources */,
 				4BE2B3721BF8D2190028F25B /* Frameworks */,
 				4BE2B3731BF8D2190028F25B /* Resources */,
-				4BE2B38B1BFAB1E30028F25B /* ShellScript */,
+				4BE2B38B1BFAB1E30028F25B /* Copy Carthage Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "TV Guide";
-			productName = "TV Guide";
-			productReference = 4BE2B3751BF8D2190028F25B /* TV Guide.app */;
+			name = TV_Guide;
+			productName = TV_Guide;
+			productReference = 4BE2B3751BF8D2190028F25B /* TV_Guide.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -145,7 +154,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 4BE2B3701BF8D2190028F25B /* Build configuration list for PBXProject "TV Guide" */;
+			buildConfigurationList = 4BE2B3701BF8D2190028F25B /* Build configuration list for PBXProject "TV_Guide" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -158,7 +167,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4BE2B3741BF8D2190028F25B /* TV Guide */,
+				4BE2B3741BF8D2190028F25B /* TV_Guide */,
 			);
 		};
 /* End PBXProject section */
@@ -177,7 +186,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4BE2B38B1BFAB1E30028F25B /* ShellScript */ = {
+		4BE2B38B1BFAB1E30028F25B /* Copy Carthage Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -186,6 +195,7 @@
 				"$(SRCROOT)/Carthage/Build/tvOS/Alamofire.framework",
 				"$(SRCROOT)/Carthage/Build/tvOS/SwiftyJSON.framework",
 			);
+			name = "Copy Carthage Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -202,12 +212,15 @@
 				4BE2B3961BFBF7C00028F25B /* ShowModel.swift in Sources */,
 				4BE2B39A1BFBFAAE0028F25B /* Util.swift in Sources */,
 				4BA8A2BB1BFCD3E00054D1A6 /* Date.swift in Sources */,
+				4BCEB1AB1BFD47B300420116 /* ShowsViewController.swift in Sources */,
+				4BCEB1A91BFD458D00420116 /* EpisodeCell.swift in Sources */,
 				4BA8A2BD1BFCF9810054D1A6 /* TimePeriodModel.swift in Sources */,
 				4BE2B3791BF8D2190028F25B /* AppDelegate.swift in Sources */,
 				4BE2B3941BFBF2B30028F25B /* Data.swift in Sources */,
 				4BA8A2C11BFCFD200054D1A6 /* ShowCell.swift in Sources */,
 				4BA8A2BF1BFCFA1D0054D1A6 /* TimePeriodCell.swift in Sources */,
 				4BE2B3881BF8DF320028F25B /* MainViewController.swift in Sources */,
+				4BCEB1AD1BFD5AD100420116 /* EpisodesViewController.swift in Sources */,
 				4BE2B3981BFBF7EB0028F25B /* EpisodeModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -315,10 +328,9 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/TV",
-					Guide/Frameworks,
+					"$(PROJECT_DIR)/TV_Guide/Frameworks",
 				);
-				INFOPLIST_FILE = "TV Guide/Info.plist";
+				INFOPLIST_FILE = TV_Guide/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"OTHER_LDFLAGS[arch=*]" = (
 					"-ObjC",
@@ -339,10 +351,9 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/tvOS",
-					"$(PROJECT_DIR)/TV",
-					Guide/Frameworks,
+					"$(PROJECT_DIR)/TV_Guide/Frameworks",
 				);
-				INFOPLIST_FILE = "TV Guide/Info.plist";
+				INFOPLIST_FILE = TV_Guide/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.chrisbreiding.TV-Guide";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -352,7 +363,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4BE2B3701BF8D2190028F25B /* Build configuration list for PBXProject "TV Guide" */ = {
+		4BE2B3701BF8D2190028F25B /* Build configuration list for PBXProject "TV_Guide" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4BE2B3821BF8D2190028F25B /* Debug */,
@@ -361,7 +372,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4BE2B3841BF8D2190028F25B /* Build configuration list for PBXNativeTarget "TV Guide" */ = {
+		4BE2B3841BF8D2190028F25B /* Build configuration list for PBXNativeTarget "TV_Guide" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4BE2B3851BF8D2190028F25B /* Debug */,

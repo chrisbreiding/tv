@@ -6,6 +6,10 @@ class EpisodeModel {
     let airdate: Date
     let season: Int
     let episodeNumber: Int
+    var fullEpisodeNumber: String {
+        let epNum = episodeNumber < 10 ? "0\(episodeNumber)" : "\(episodeNumber)"
+        return "\(season)\(epNum)"
+    }
 
     init(id: Int, title: String, airdate: Date, season: Int, episodeNumber: Int) {
         self.id = id
