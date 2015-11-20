@@ -14,8 +14,10 @@ extension Array {
 
 extension String {
     func substring(start: Int, end: Int) -> String {
-        let range = Range<String.Index>(start: self.startIndex.advancedBy(start), end: self.startIndex.advancedBy(end + 1))
+        let range = Range<String.Index>(
+            start: self.startIndex.advancedBy(start),
+            end: self.startIndex.advancedBy(end + 1)
+        )
         return self.substringWithRange(range)
-
     }
 }

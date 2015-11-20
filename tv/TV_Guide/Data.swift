@@ -2,9 +2,16 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
+let localStorage = NSUserDefaults.standardUserDefaults()
+let DATA_KEY = "dataKey"
 
 class Data {
-    func loadShows(onLoad: ([ShowModel] -> ()), onFail: ((String, String) -> ())) {
+    func load(onLoad: ([TimePeriodModel] -> ()), onFail: ((String, String) -> ())) {
+        if let timePeriods = loadFromLocalStorage() {
+            onLoad(timePeriods)
+            return
+        }
+
         guard let apiKey = loadApiKey(onFail) else { return }
 
         Alamofire
@@ -17,33 +24,48 @@ class Data {
             }
             .responseData { response in
                 if let data = response.result.value {
-                    let json = JSON(data: data)
-                    onLoad(self.showModels(json["shows"].arrayValue, episodes: json["episodes"].arrayValue))
+                    let timePeriods = self.deserializeFromNetwork(data)
+                    self.saveToLocalStorage(timePeriods)
+                    onLoad(timePeriods)
                 }
         }
     }
 
-    class func shows(shows: [ShowModel], forDate date: Date) -> [ShowModel] {
-        return shows.reduce([ShowModel]()) { (var coll, show) in
-            let airedOnDate = show.episodes.filter { episode in episode.airdate == date }
-            if airedOnDate.count > 0 {
-                coll.append(ShowModel(name: show.name, episodes: airedOnDate))
-            }
-            return coll
+    func loadFromLocalStorage() -> [TimePeriodModel]? {
+        if let data = localStorage.stringForKey(DATA_KEY)?.dataUsingEncoding(NSUTF8StringEncoding) {
+            let json = JSON(data: data)
+            if notTodaysData(json) { return nil }
+            
+            return deserialize(json)
         }
+        return nil
     }
 
-    func showModels(shows: [JSON], episodes: [JSON]) -> [ShowModel] {
-        let episodeModels = EpisodeModel.deserialize(episodes).indexBy { $0.id }
+    func deserializeFromNetwork(jsonData: NSData) -> [TimePeriodModel] {
+        let json = JSON(data: jsonData)
+        let shows = ShowModel.deserializeAndJoin(json["shows"].arrayValue, episodes: json["episodes"].arrayValue)
+        return TimePeriodModel.periods(shows)
+    }
 
-        return shows.map { show in
-            ShowModel(
-                name: show["display_name"].stringValue,
-                episodes: show["episode_ids"].arrayValue.map { episodeId in
-                    episodeModels[episodeId.intValue] ?? EpisodeModel.emptyModel()
-                }
-            )
-        }
+    func deserialize(json: JSON) -> [TimePeriodModel] {
+        return TimePeriodModel.deserialize(json["timePeriods"].arrayValue)
+    }
+
+    func notTodaysData(json: JSON) -> Bool {
+        let date = Date(dateString: json["date"].stringValue)
+        return date != Date.today()
+    }
+
+    func saveToLocalStorage(timePeriods: [TimePeriodModel]) {
+        localStorage.setObject(serialize(timePeriods), forKey: DATA_KEY)
+    }
+
+    func serialize(timePeriods: [TimePeriodModel]) -> String {
+        let json: JSON = [
+            "timePeriods": TimePeriodModel.serialize(timePeriods),
+            "date": Date.today().serialize()
+        ]
+        return json.rawString() ?? ""
     }
 
     func loadApiKey(onFail: ((String, String) -> ())) -> String? {

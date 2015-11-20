@@ -5,12 +5,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     @IBOutlet var loadingIndicator: UIActivityIndicatorView!
 
     var showsViewController: ShowsViewController = ShowsViewController()
-
-    let timePeriods = [
-        TimePeriodModel(name: "Aired Yesterday", shows: []),
-        TimePeriodModel(name: "Airing Tonight", shows: []),
-        TimePeriodModel(name: "Airing Tomorrow", shows: [])
-    ]
+    var timePeriods: [TimePeriodModel] = TimePeriodModel.periods([])
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,18 +16,12 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 
-        Data().loadShows({ shows in
+        Data().load({ timePeriods in
+            self.timePeriods = timePeriods
             self.loadingIndicator.stopAnimating()
-            self.timePeriods[0].shows = Data.shows(shows, forDate: Date.yesterday())
-            self.timePeriods[1].shows = Data.shows(shows, forDate: Date.today())
-            self.timePeriods[2].shows = Data.shows(shows, forDate: Date.tomorrow())
             self.timePeriodsView.hidden = false
+            self.showsViewController.timePeriods = timePeriods
             self.timePeriodsView.reloadData()
-//            self.con
-//            self.airedYesterdayView.text = shows.map { show in
-//                let episodes = show.episodes.map { episode in episode.title }.joinWithSeparator("\n")
-//                return "\(show.name)\n\(episodes)"
-//            }.joinWithSeparator("\n\n")
         }, onFail: { (errorTitle, errorMessage) in
             self.loadingIndicator.stopAnimating()
             self.showErrorAlert(errorTitle, message: errorMessage)

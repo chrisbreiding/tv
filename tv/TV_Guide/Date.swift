@@ -25,10 +25,6 @@ class Date {
         self.init(year: year, month: month, day: day)
     }
 
-    func description() -> String {
-        return "\(year)-\(month)-\(day)"
-    }
-
     class func yesterday() -> Date {
         return dateFromNSDate(NSDate().dateByAddingTimeInterval(-dayInSeconds))
     }
@@ -47,8 +43,20 @@ class Date {
             .components([NSCalendarUnit.Year, NSCalendarUnit.Month, NSCalendarUnit.Day], fromDate: date)
         return Date(year: day.year, month: day.month, day: day.day)
     }
+
+    func serialize() -> String {
+        return "\(year)-\(padded(month))-\(padded(day))"
+    }
+
+    func padded(num: Int) -> String {
+        return num < 10 ? "0\(num)" : "\(num)"
+    }
 }
 
 func ==(lhs: Date, rhs: Date) -> Bool {
     return lhs.year == rhs.year && lhs.month == rhs.month && lhs.day == rhs.day
+}
+
+func !=(lhs: Date, rhs: Date) -> Bool {
+    return !(lhs == rhs)
 }

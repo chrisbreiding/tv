@@ -1,3 +1,5 @@
+import SwiftyJSON
+
 class ShowModel {
     let name: String
     let episodes: [EpisodeModel]
@@ -5,5 +7,46 @@ class ShowModel {
     init(name: String, episodes: [EpisodeModel]) {
         self.name = name
         self.episodes = episodes
+    }
+
+    class func deserializeAndJoin(shows: [JSON], episodes: [JSON]) -> [ShowModel] {
+        let episodeModels = EpisodeModel.deserialize(episodes).indexBy { $0.id }
+
+        return shows.map { show in
+            ShowModel(
+                name: show["display_name"].stringValue,
+                episodes: show["episode_ids"].arrayValue.map { episodeId in
+                    episodeModels[episodeId.intValue] ?? EpisodeModel.emptyModel()
+                }
+            )
+        }
+    }
+
+    class func shows(shows: [ShowModel], forDate date: Date) -> [ShowModel] {
+        return shows.reduce([ShowModel]()) { (var coll, show) in
+            let airedOnDate = show.episodes.filter { episode in episode.airdate == date }
+            if airedOnDate.count > 0 {
+                coll.append(ShowModel(name: show.name, episodes: airedOnDate))
+            }
+            return coll
+        }
+    }
+
+    class func deserialize(shows: [JSON]) -> [ShowModel] {
+        return shows.map { show in
+            ShowModel(
+                name: show["name"].stringValue,
+                episodes: EpisodeModel.deserialize(show["episodes"].arrayValue)
+            )
+        }
+    }
+
+    class func serialize(shows: [ShowModel]) -> [AnyObject] {
+        return shows.map { show in
+            [
+                "name": show.name,
+                "episodes": EpisodeModel.serialize(show.episodes)
+            ]
+        }
     }
 }

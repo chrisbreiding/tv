@@ -31,6 +31,18 @@ class EpisodeModel {
         }
     }
 
+    class func serialize(episodes: [EpisodeModel]) -> [AnyObject] {
+        return episodes.map { episode in
+            [
+                "id": episode.id,
+                "title": episode.title,
+                "airdate": episode.airdate.serialize(),
+                "season": episode.season,
+                "episode_number": episode.episodeNumber
+            ]
+        }
+    }
+
     class func emptyModel() -> EpisodeModel {
         return EpisodeModel(id: 0, title: "", airdate: Date(), season: 1, episodeNumber: 1)
     }
