@@ -11,7 +11,6 @@
 		4BA8A2BD1BFCF9810054D1A6 /* TimePeriodModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA8A2BC1BFCF9810054D1A6 /* TimePeriodModel.swift */; };
 		4BA8A2BF1BFCFA1D0054D1A6 /* TimePeriodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA8A2BE1BFCFA1D0054D1A6 /* TimePeriodCell.swift */; };
 		4BA8A2C11BFCFD200054D1A6 /* ShowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA8A2C01BFCFD200054D1A6 /* ShowCell.swift */; };
-		4BCEB1A71BFD097000420116 /* Reveal-tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BCEB1A61BFD097000420116 /* Reveal-tvOS.framework */; };
 		4BCEB1A91BFD458D00420116 /* EpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCEB1A81BFD458D00420116 /* EpisodeCell.swift */; };
 		4BCEB1AB1BFD47B300420116 /* ShowsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCEB1AA1BFD47B300420116 /* ShowsViewController.swift */; };
 		4BCEB1AD1BFD5AD100420116 /* EpisodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCEB1AC1BFD5AD100420116 /* EpisodesViewController.swift */; };
@@ -59,7 +58,6 @@
 			files = (
 				4BE2B38A1BFAB1710028F25B /* Alamofire.framework in Frameworks */,
 				4BE2B38D1BFAC1CE0028F25B /* SwiftyJSON.framework in Frameworks */,
-				4BCEB1A71BFD097000420116 /* Reveal-tvOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
