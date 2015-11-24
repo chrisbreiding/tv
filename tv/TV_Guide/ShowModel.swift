@@ -2,10 +2,12 @@ import SwiftyJSON
 
 class ShowModel {
     let name: String
+    let poster: String
     let episodes: [EpisodeModel]
 
-    init(name: String, episodes: [EpisodeModel]) {
+    init(name: String, poster: String, episodes: [EpisodeModel]) {
         self.name = name
+        self.poster = poster
         self.episodes = episodes
     }
 
@@ -15,6 +17,7 @@ class ShowModel {
         return shows.map { show in
             ShowModel(
                 name: show["display_name"].stringValue,
+                poster: show["poster"].stringValue,
                 episodes: show["episode_ids"].arrayValue.map { episodeId in
                     episodeModels[episodeId.intValue] ?? EpisodeModel.emptyModel()
                 }
@@ -26,7 +29,7 @@ class ShowModel {
         return shows.reduce([ShowModel]()) { (var coll, show) in
             let airedOnDate = show.episodes.filter { episode in episode.airdate == date }
             if airedOnDate.count > 0 {
-                coll.append(ShowModel(name: show.name, episodes: airedOnDate))
+                coll.append(ShowModel(name: show.name, poster: show.poster, episodes: airedOnDate))
             }
             return coll
         }
@@ -36,6 +39,7 @@ class ShowModel {
         return shows.map { show in
             ShowModel(
                 name: show["name"].stringValue,
+                poster: show["poster"].stringValue,
                 episodes: EpisodeModel.deserialize(show["episodes"].arrayValue)
             )
         }
@@ -45,6 +49,7 @@ class ShowModel {
         return shows.map { show in
             [
                 "name": show.name,
+                "poster": show.poster,
                 "episodes": EpisodeModel.serialize(show.episodes)
             ]
         }

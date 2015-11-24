@@ -31,6 +31,10 @@ class Data {
         }
     }
 
+    func load(onLoad: ([TimePeriodModel] -> ())) {
+        return load(onLoad, onFail: { _,_ in })
+    }
+
     func loadFromLocalStorage() -> [TimePeriodModel]? {
         if let data = localStorage.stringForKey(DATA_KEY)?.dataUsingEncoding(NSUTF8StringEncoding) {
             let json = JSON(data: data)
