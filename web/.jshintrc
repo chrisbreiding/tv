@@ -2,8 +2,9 @@
   "predef": [
     "document",
     "window",
-    "-Promise",
-    "moment"
+    "module",
+    "require",
+    "__dirname"
   ],
   "browser": true,
   "boss": true,
