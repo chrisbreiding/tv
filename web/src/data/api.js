@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl =  'http://tvapi.crbapps.com';
+const baseUrl = localStorage.apiUrl || 'http://tvapi.crbapps.com';
 
 export function getApiKey () {
   return localStorage.apiKey;

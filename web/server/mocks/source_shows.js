@@ -1,10 +1,8 @@
-module.exports = function(app) {
-  var express = require('express');
-  var moment = require('moment');
-  var _ = require('lodash');
+var moment = require('moment');
+var _ = require('lodash');
+var textGen = require('../text-generator');
 
-  var textGen = require('../text-generator');
-
+module.exports = function(app, express) {
   var sourceShowsRouter = express.Router();
 
   var shows = _.map(_.range(10, 20), function (id) {

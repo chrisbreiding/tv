@@ -27,7 +27,7 @@ module.exports = {
         episodes: _.pluck(episodes, 'id')
       },
       episodes: episodes
-    }
+    };
   },
 
   seasons: function (num) {
@@ -90,6 +90,6 @@ module.exports = {
       episode_number: epNum,
       title: title,
       airdate: airdate.startOf('day').toISOString()
-    }
+    };
   }
-}
+};

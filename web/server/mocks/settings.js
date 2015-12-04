@@ -1,8 +1,7 @@
-module.exports = function(app) {
-  var express = require('express');
-  var moment = require('moment');
-  var _ = require('lodash');
+var moment = require('moment');
+var _ = require('lodash');
 
+module.exports = function(app, express) {
   var router = express.Router();
 
   var setting = {
@@ -20,7 +19,7 @@ module.exports = function(app) {
   router.put('/:id', function(req, res) {
     res.send({
       'setting': _.extend(setting, req.body.setting)
-    })
+    });
   });
 
   app.use('/api/settings', router);
