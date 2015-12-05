@@ -1,32 +1,36 @@
 import moment from 'moment';
 
-export default {
+const dateUtils = {
   compare (a, b) {
     return moment(a) - moment(b);
   },
 
-  isToday (date) {
-    return date.isSame(moment(), 'day');
+  isFarPast (momentDate) {
+    return momentDate.isBefore(moment().subtract(2, 'months'), 'day');
   },
 
-  isFarPast (date) {
-    return date.isBefore(moment().subtract(2, 'months'), 'day');
+  isPast (momentDate) {
+    return momentDate.isBefore(moment().subtract(5, 'days'), 'day');
   },
 
-  isPast (date) {
-    return date.isBefore(moment().subtract(5, 'days'), 'day');
+  isRecent (momentDate) {
+    return momentDate.isBefore(moment(), 'day');
   },
 
-  isRecent (date) {
-    return date.isBefore(moment(), 'day');
+  isToday (momentDate) {
+    return momentDate.isSame(moment(), 'day');
   },
 
-  isFarFuture (date) {
-    return date.isAfter(moment().add(2, 'months'), 'day');
+  isUpcoming (momentDate) {
+    return momentDate.isAfter(moment().subtract(1, 'day'), 'day');
   },
 
-  isFuture (date) {
-    return date.isAfter(moment().add(1, 'month'), 'day');
+  isFuture (momentDate) {
+    return momentDate.isAfter(moment().add(1, 'month'), 'day');
+  },
+
+  isFarFuture (momentDate) {
+    return momentDate.isAfter(moment().add(2, 'months'), 'day');
   },
 
   shortString (date) {
@@ -36,4 +40,17 @@ export default {
   longString (date) {
     return moment(date).format('MMM D, YYYY h:mma');
   },
+
+  status (date) {
+    date = moment(date);
+    return dateUtils.isToday(date)     ? 'today upcoming' :
+           dateUtils.isFarPast(date)   ? 'far-past' :
+           dateUtils.isPast(date)      ? 'past' :
+           dateUtils.isRecent(date)    ? 'recent' :
+           dateUtils.isFarFuture(date) ? 'far-future' :
+           dateUtils.isFuture(date)    ? 'future' :
+                                         'upcoming';
+  },
 };
+
+export default dateUtils;
