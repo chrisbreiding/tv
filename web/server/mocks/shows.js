@@ -6,7 +6,7 @@ module.exports = function(app, express) {
   var showsRouter = express.Router();
 
   var episodes = [];
-  var shows = _.map(_.range(8), function () {
+  var shows = _.map(_.range(30), function () {
     var generation = generator.show(generator.incShowId());
     episodes = episodes.concat(generation.episodes);
     return generation.show;

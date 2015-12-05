@@ -8,10 +8,18 @@ export function requestShows () {
 }
 
 export const RECEIVE_SHOWS = 'RECEIVE_SHOWS';
-export function receiveShows (data) {
+export function receiveShows (shows) {
   return {
     type: RECEIVE_SHOWS,
-    data
+    shows
+  };
+}
+
+export const RECEIVE_EPISODES = 'RECEIVE_EPISODES';
+export function receiveEpisodes (episodes) {
+  return {
+    type: RECEIVE_EPISODES,
+    episodes
   };
 }
 
@@ -20,7 +28,8 @@ export function fetchShows () {
     dispatch(requestShows());
 
     api.getShows().then((data) => {
-      dispatch(receiveShows(data));
+      dispatch(receiveEpisodes(data.episodes));
+      dispatch(receiveShows(data.shows));
     });
   };
 }

@@ -3,7 +3,8 @@ import Immutable from 'immutable';
 import { routeReducer } from 'redux-simple-router';
 import {
   REQUEST_SHOWS,
-  RECEIVE_SHOWS
+  RECEIVE_SHOWS,
+  RECEIVE_EPISODES
 } from './actions';
 
 export default {
@@ -21,10 +22,19 @@ export default {
       case RECEIVE_SHOWS:
         return _.extend({}, state, {
           isFetching: false,
-          items: action.data.shows
+          items: action.shows
         });
       default:
         return state;
     }
-  }
+  },
+
+  episodes (state = Immutable.Map(), action) {
+    switch (action.type) {
+      case RECEIVE_EPISODES:
+        return action.episodes;
+      default:
+        return state;
+    }
+  },
 };

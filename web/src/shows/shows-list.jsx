@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { createClass } from 'react';
+import Show from './show';
 
 export default createClass({
   render () {
@@ -8,11 +9,7 @@ export default createClass({
       <div className={`shows-list ${_.kebabCase(type)}`}>
         <h2>{type}</h2>
         <ul>
-          {
-            shows.map((show) => {
-              return <li key={show.get('id')}><h3>{show.get('display_name')}</h3></li>;
-            })
-          }
+          { shows.map((show) => <Show key={show.get('id')} show={show} /> ) }
         </ul>
       </div>
     );

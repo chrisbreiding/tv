@@ -2,18 +2,7 @@ import React, { createClass } from 'react';
 import { connect } from 'react-redux';
 import { fetchShows } from '../data/actions';
 import ShowsList from './shows-list';
-
-function recentShows (shows) {
-  return shows;
-}
-
-function upcomingShows (shows) {
-  return shows;
-}
-
-function offAirShows (shows) {
-  return shows;
-}
+import { withEpisodes, recentShows, upcomingShows, offAirShows } from '../lib/shows';
 
 const Shows = createClass({
   componentWillMount () {
@@ -21,7 +10,7 @@ const Shows = createClass({
   },
 
   render () {
-    const shows = this.props.shows.items;
+    const shows = withEpisodes(this.props.shows.items, this.props.episodes);
 
     if (this.props.shows.isFetching) {
       return <p>Loading shows...</p>;
@@ -37,8 +26,8 @@ const Shows = createClass({
   },
 });
 
-function stateToProps ({ shows }) {
-  return { shows };
+function stateToProps ({ shows, episodes }) {
+  return { shows, episodes };
 }
 
 export default connect(stateToProps)(Shows);
