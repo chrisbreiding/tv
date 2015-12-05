@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Immutable from 'immutable';
 
 const baseUrl = localStorage.apiUrl || 'http://tvapi.crbapps.com';
 
@@ -18,7 +19,11 @@ export default {
       url:`${baseUrl}/shows`,
       headers: headers()
     }).then((response) => {
-      return response && response.data;
+      const { shows, episodes } = response && response.data || { shows: [], episodes: [] };
+      return {
+        shows: Immutable.fromJS(shows),
+        episodes: Immutable.fromJS(episodes)
+      };
     });
   }
 };

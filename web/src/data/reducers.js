@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Immutable from 'immutable';
 import { routeReducer } from 'redux-simple-router';
 import {
   REQUEST_SHOWS,
@@ -10,7 +11,7 @@ export default {
 
   shows (state = {
     isFetching: false,
-    items: []
+    items: Immutable.List()
   }, action) {
     switch (action.type) {
       case REQUEST_SHOWS:

@@ -1,9 +1,18 @@
 import React, { createClass } from 'react';
 import { connect } from 'react-redux';
 import { fetchShows } from '../data/actions';
+import ShowsList from './shows-list';
 
-const stateToProps = ({ shows }) => {
-  return { shows };
+function recentShows (shows) {
+  return shows;
+}
+
+function upcomingShows (shows) {
+  return shows;
+}
+
+function offAirShows (shows) {
+  return shows;
 }
 
 const Shows = createClass({
@@ -14,19 +23,22 @@ const Shows = createClass({
   render () {
     const shows = this.props.shows.items;
 
-    return (
-      <div>
-        { this.props.shows.isFetching ? <p>Loading shows...</p> : null }
-        <ul>
-          {
-            shows.map((show) => {
-              return <li key={show.id}>{show.display_name}</li>;
-            })
-          }
-        </ul>
-      </div>
-    );
+    if (this.props.shows.isFetching) {
+      return <p>Loading shows...</p>;
+    } else {
+      return (
+        <div>
+          <ShowsList type="Recent" shows={recentShows(shows)} />
+          <ShowsList type="Upcoming" shows={upcomingShows(shows)} />
+          <ShowsList type="Off Air" shows={offAirShows(shows)} />
+        </div>
+      );
+    }
   },
 });
+
+function stateToProps ({ shows }) {
+  return { shows };
+}
 
 export default connect(stateToProps)(Shows);

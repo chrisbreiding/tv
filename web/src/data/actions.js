@@ -20,10 +20,7 @@ export function fetchShows () {
     dispatch(requestShows());
 
     api.getShows().then((data) => {
-      if (!data) { return; }
-
       dispatch(receiveShows(data));
     });
-
   };
 }
