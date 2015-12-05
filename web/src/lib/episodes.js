@@ -18,6 +18,10 @@ export function upcomingEpisodes (episodes) {
   return episodes.filter(isUpcoming);
 }
 
+export function offAirEpisodes () {
+  return Immutable.List();
+}
+
 export function sortAscending (a, b) {
   return date.compare(a.get('airdate'), b.get('airdate'));
 }
@@ -50,7 +54,7 @@ function isUpcoming (episode) {
 
 export function longEpisodeNumber (episode) {
   let season = toTwoDigitString(episode.get('season'));
-  let episodeNumber = toTwoDigitString(episode.get('episodeNumber'));
+  let episodeNumber = toTwoDigitString(episode.get('episode_number'));
   return `s${season}e${episodeNumber}`;
 }
 

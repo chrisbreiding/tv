@@ -27,5 +27,13 @@ export default {
 
   isFuture (date) {
     return date.isAfter(moment().add(1, 'month'), 'day');
-  }
+  },
+
+  shortString (date) {
+    return moment(date).format('YYYY-MM-DD');
+  },
+
+  longString (date) {
+    return moment(date).format('MMM D, YYYY h:mma');
+  },
 };

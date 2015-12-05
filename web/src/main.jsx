@@ -8,7 +8,7 @@ import store from './data/store';
 
 import App from './app/app';
 import Auth from './auth/auth';
-import Shows from './shows/shows';
+import TimePeriods from './time-periods/time-periods';
 
 const hashHistory = createHistory();
 syncReduxAndRouter(hashHistory, store);
@@ -23,7 +23,7 @@ render(
   <Provider store={store}>
     <Router history={hashHistory}>
       <Route path="/" component={App}>
-        <IndexRoute component={Shows} />
+        <IndexRoute component={TimePeriods} />
         <Route path="/auth" component={Auth} />
         <Redirect from="*" to="/" />
       </Route>

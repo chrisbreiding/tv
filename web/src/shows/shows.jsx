@@ -1,33 +1,24 @@
+import _ from 'lodash';
 import React, { createClass } from 'react';
-import { connect } from 'react-redux';
-import { fetchShows } from '../data/actions';
-import ShowsList from './shows-list';
-import { withEpisodes, recentShows, upcomingShows, offAirShows } from '../lib/shows';
+import Show from './show';
 
-const Shows = createClass({
-  componentWillMount () {
-    this.props.dispatch(fetchShows());
-  },
-
+export default createClass({
   render () {
-    const shows = withEpisodes(this.props.shows.items, this.props.episodes);
-
-    if (this.props.shows.isFetching) {
-      return <p>Loading shows...</p>;
-    } else {
-      return (
-        <div>
-          <ShowsList type="Recent" shows={recentShows(shows)} />
-          <ShowsList type="Upcoming" shows={upcomingShows(shows)} />
-          <ShowsList type="Off Air" shows={offAirShows(shows)} />
-        </div>
-      );
-    }
-  },
+    const { type, shows } = this.props;
+    return (
+      <div className={`shows-list ${_.kebabCase(type)}`}>
+        <h2>{type}</h2>
+        <ul>
+          {
+            shows.map((show) => {
+              return <Show
+                       key={show.get('id')}
+                       show={show}
+                       episodesFilter={this.props.episodesFilter} />;
+            })
+          }
+        </ul>
+      </div>
+    );
+  }
 });
-
-function stateToProps ({ shows, episodes }) {
-  return { shows, episodes };
-}
-
-export default connect(stateToProps)(Shows);
