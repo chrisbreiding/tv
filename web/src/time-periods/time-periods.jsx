@@ -21,6 +21,7 @@ const TimePeriods = createClass({
           <Shows type="Recent" shows={recentShows(shows)} episodesFilter={recentEpisodes} />
           <Shows type="Upcoming" shows={upcomingShows(shows)} episodesFilter={upcomingEpisodes} />
           <Shows type="Off Air" shows={offAirShows(shows)} episodesFilter={offAirEpisodes} />
+          {this.props.children}
         </div>
       );
     }

@@ -3,12 +3,13 @@ import React from 'react';
 import { render } from 'react-dom';
 import createHistory from 'history/lib/createHashHistory';
 import { syncReduxAndRouter } from 'redux-simple-router';
-import { Router, IndexRoute, Route, Redirect } from 'react-router';
+import { Router, Route, Redirect } from 'react-router';
 import store from './data/store';
 
 import App from './app/app';
 import Auth from './auth/auth';
 import TimePeriods from './time-periods/time-periods';
+import Show from './show/show';
 
 const hashHistory = createHistory();
 syncReduxAndRouter(hashHistory, store);
@@ -23,9 +24,11 @@ render(
   <Provider store={store}>
     <Router history={hashHistory}>
       <Route path="/" component={App}>
-        <IndexRoute component={TimePeriods} />
+        <Route path="/shows" component={TimePeriods}>
+          <Route path=":id" component={Show} />
+        </Route>
         <Route path="/auth" component={Auth} />
-        <Redirect from="*" to="/" />
+        <Redirect from="/" to="/shows" />
       </Route>
     </Router>
   </Provider>,

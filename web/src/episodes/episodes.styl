@@ -77,16 +77,16 @@ airdate-status(color, opacity = 1.0) {
     background: darkest-color;
   }
 
-  &.far-past {
-    airdate-status(primary-color, 0.5);
+  &.recent {
+    airdate-status(primary-color);
   }
 
   &.past {
     airdate-status(primary-color, 0.7);
   }
 
-  &.recent {
-    airdate-status(primary-color);
+  &.far-past {
+    airdate-status(primary-color, 0.5);
   }
 
   &.upcoming {
