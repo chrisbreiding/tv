@@ -1,13 +1,22 @@
 import React, { createClass } from 'react';
 import { connect } from 'react-redux';
-import { fetchShows } from '../data/actions';
+import { fetchShows, fetchSettings } from '../data/actions';
 import Shows from '../shows/shows';
 import { withEpisodes, recentShows, upcomingShows, offAirShows } from '../lib/shows';
 import { recentEpisodes, upcomingEpisodes, offAirEpisodes } from '../lib/episodes';
 
 const TimePeriods = createClass({
+  childContextTypes: {
+    settings: React.PropTypes.any
+  },
+
+  getChildContext () {
+    return { settings: this.props.settings };
+  },
+
   componentWillMount () {
     this.props.dispatch(fetchShows());
+    this.props.dispatch(fetchSettings());
   },
 
   render () {
@@ -28,8 +37,8 @@ const TimePeriods = createClass({
   },
 });
 
-function stateToProps ({ shows, episodes }) {
-  return { shows, episodes };
+function stateToProps ({ shows, episodes, settings }) {
+  return { shows, episodes, settings };
 }
 
 export default connect(stateToProps)(TimePeriods);

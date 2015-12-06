@@ -26,5 +26,15 @@ export default {
         episodes: index(Immutable.fromJS(episodes))
       };
     });
-  }
+  },
+
+  getSettings () {
+    return axios({
+      url: `${baseUrl}/settings/1`,
+      headers: headers()
+    }).then((response) => {
+      const { setting } = response && response.data || { setting: {} };
+      return Immutable.Map(setting);
+    });
+  },
 };

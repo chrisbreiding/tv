@@ -23,13 +23,29 @@ export function receiveEpisodes (episodes) {
   };
 }
 
+export const RECEIVE_SETTINGS = 'RECEIVE_SETTINGS';
+export function receiveSettings (settings) {
+  return {
+    type: RECEIVE_SETTINGS,
+    settings
+  };
+}
+
 export function fetchShows () {
   return (dispatch) => {
     dispatch(requestShows());
 
-    api.getShows().then((data) => {
-      dispatch(receiveEpisodes(data.episodes));
-      dispatch(receiveShows(data.shows));
+    api.getShows().then(({ episodes, shows }) => {
+      dispatch(receiveEpisodes(episodes));
+      dispatch(receiveShows(shows));
+    });
+  };
+}
+
+export function fetchSettings () {
+  return (dispatch) => {
+    api.getSettings().then((settings) => {
+      dispatch(receiveSettings(settings));
     });
   };
 }

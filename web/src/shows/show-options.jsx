@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-export default function ({ show }) {
+function viewLink (link, searchName) {
+  return (link || '').replace('%s', searchName);
+}
+
+const Options = function ({ show }, { settings }) {
   return (
     <div className="options">
       <ul>
@@ -16,11 +20,17 @@ export default function ({ show }) {
           </Link>
         </li>
         <li>
-          <a href="/" title="View" target="_blank">
+          <a href={viewLink(settings.get('view_link'), show.get('search_name'))} title="View" target="_blank">
             <i className="fa fa-eye"></i>
           </a>
         </li>
       </ul>
     </div>
   );
-}
+};
+
+Options.contextTypes = {
+  settings: React.PropTypes.any
+};
+
+export default Options;

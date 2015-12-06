@@ -4,7 +4,8 @@ import { routeReducer } from 'redux-simple-router';
 import {
   REQUEST_SHOWS,
   RECEIVE_SHOWS,
-  RECEIVE_EPISODES
+  RECEIVE_EPISODES,
+  RECEIVE_SETTINGS
 } from './actions';
 
 export default {
@@ -33,6 +34,15 @@ export default {
     switch (action.type) {
       case RECEIVE_EPISODES:
         return action.episodes;
+      default:
+        return state;
+    }
+  },
+
+  settings (state = Immutable.Map(), action) {
+    switch (action.type) {
+      case RECEIVE_SETTINGS:
+        return action.settings;
       default:
         return state;
     }
