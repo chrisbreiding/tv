@@ -33,7 +33,7 @@ export function fileSafeTitle (episode) {
   }
 
   return title
-    .replace(/[\/]/g, '-')
+    .replace(/[\/\\]/g, '-')
     .replace(/\:\s+/g, ' - ')
     .replace(/\&/g, 'and')
     .replace(/[\.\!\?\@\#\$\%\^\*\:]/g, '');
