@@ -48,7 +48,9 @@ module.exports = function(app, express) {
 
   showsRouter.delete('/:id', function(req, res) {
     var index = _.findIndex(shows, { id: req.params.id });
-    shows.splice(index, 1);
+    if (index >= 0) {
+      shows.splice(index, 1);
+    }
     res.status(204).end();
   });
 

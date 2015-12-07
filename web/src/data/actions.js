@@ -31,6 +31,22 @@ export function receiveSettings (settings) {
   };
 }
 
+export const SHOW_UPDATED = 'SHOW_UPDATED';
+export function showUpdated (show) {
+  return {
+    type: SHOW_UPDATED,
+    show
+  };
+}
+
+export const SHOW_DELETED = 'SHOW_DELETED';
+export function showDeleted (show) {
+  return {
+    type: SHOW_DELETED,
+    show
+  };
+}
+
 export function fetchShows () {
   return (dispatch) => {
     dispatch(requestShows());
@@ -38,6 +54,22 @@ export function fetchShows () {
     api.getShows().then(({ episodes, shows }) => {
       dispatch(receiveEpisodes(episodes));
       dispatch(receiveShows(shows));
+    });
+  };
+}
+
+export function updateShow (show) {
+  return (dispatch) => {
+    api.updateShow(show).then(() => {
+      dispatch(showUpdated(show));
+    });
+  };
+}
+
+export function deleteShow (show) {
+  return (dispatch) => {
+    api.deleteShow(show).then(() => {
+      dispatch(showDeleted(show));
     });
   };
 }

@@ -15,7 +15,7 @@ const Options = function ({ show }, { settings }) {
           </Link>
         </li>
         <li>
-          <Link to={`/`} title="Edit">
+          <Link to={`/shows/${show.get('id')}/edit`} title="Edit">
             <i className="fa fa-edit"></i>
           </Link>
         </li>

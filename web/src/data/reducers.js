@@ -4,6 +4,8 @@ import { routeReducer } from 'redux-simple-router';
 import {
   REQUEST_SHOWS,
   RECEIVE_SHOWS,
+  SHOW_DELETED,
+  SHOW_UPDATED,
   RECEIVE_EPISODES,
   RECEIVE_SETTINGS
 } from './actions';
@@ -24,6 +26,22 @@ export default {
         return _.extend({}, state, {
           isFetching: false,
           items: action.shows
+        });
+      case SHOW_UPDATED:
+        const indexToUpdate = state.items.findIndex((show) => {
+          return show.get('id') === action.show.get('id');
+        });
+        if (indexToUpdate < 0) { return state; }
+
+        return _.extend({}, state, {
+          items: state.items.set(indexToUpdate, action.show)
+        });
+      case SHOW_DELETED:
+        const indexToDelete = state.items.indexOf(action.show);
+        if (indexToDelete < 0) { return state; }
+
+        return _.extend({}, state, {
+          items: state.items.delete(indexToDelete)
         });
       default:
         return state;

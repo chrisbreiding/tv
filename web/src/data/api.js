@@ -12,14 +12,22 @@ export function setApiKey (apiKey) {
   localStorage.apiKey = apiKey;
 }
 
-const headers = () => { return { api_key: getApiKey() }; };
+function headers () {
+  return { api_key: getApiKey() };
+}
+
+function request (endpoint, method = 'get', data) {
+  return axios({
+    url: `${baseUrl}/${endpoint}`,
+    headers: headers(),
+    method,
+    data
+  });
+}
 
 export default {
   getShows () {
-    return axios({
-      url:`${baseUrl}/shows`,
-      headers: headers()
-    }).then((response) => {
+    return request('shows').then((response) => {
       const { shows, episodes } = response && response.data || { shows: [], episodes: [] };
       return {
         shows: Immutable.fromJS(shows),
@@ -28,11 +36,18 @@ export default {
     });
   },
 
+  updateShow (show) {
+    return request(`shows/${show.get('id')}`, 'put', {
+      show: show.toObject()
+    });
+  },
+
+  deleteShow (show) {
+    return request(`shows/${show.get('id')}`, 'delete');
+  },
+
   getSettings () {
-    return axios({
-      url: `${baseUrl}/settings/1`,
-      headers: headers()
-    }).then((response) => {
+    return request('settings/1').then((response) => {
       const { setting } = response && response.data || { setting: {} };
       return Immutable.Map(setting);
     });
