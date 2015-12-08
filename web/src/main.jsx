@@ -11,6 +11,7 @@ import Auth from './auth/auth';
 import TimePeriods from './time-periods/time-periods';
 import Show from './show/show';
 import EditShow from './show/edit';
+import Settings from './settings/settings';
 
 const hashHistory = createHistory();
 syncReduxAndRouter(hashHistory, store);
@@ -28,6 +29,7 @@ render(
         <Route path="/shows" component={TimePeriods}>
           <Route path=":id" component={Show} />
           <Route path=":id/edit" component={EditShow} />
+          <Route path="/settings" component={Settings} />
         </Route>
         <Route path="/auth" component={Auth} />
         <Redirect from="/" to="/shows" />

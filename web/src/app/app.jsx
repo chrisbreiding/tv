@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { createClass } from 'react';
+import React, { createClass } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { updatePath } from 'redux-simple-router';
 
 const App = createClass({
@@ -15,7 +16,23 @@ const App = createClass({
   },
 
   render () {
-    return this.props.children;
+    return (
+      <div>
+        <ul className="app-options">
+          <li>
+            <Link to="/" title="Add Show">
+              <i className="fa fa-plus"></i>
+            </Link>
+          </li>
+          <li>
+            <Link to="/settings" title="Settings">
+              <i className="fa fa-cog"></i>
+            </Link>
+          </li>
+        </ul>
+        {this.props.children}
+      </div>
+    );
   },
 });
 

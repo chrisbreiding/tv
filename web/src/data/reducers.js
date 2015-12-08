@@ -7,7 +7,8 @@ import {
   SHOW_DELETED,
   SHOW_UPDATED,
   RECEIVE_EPISODES,
-  RECEIVE_SETTINGS
+  RECEIVE_SETTINGS,
+  SETTINGS_UPDATED
 } from './actions';
 
 export default {
@@ -61,6 +62,8 @@ export default {
     switch (action.type) {
       case RECEIVE_SETTINGS:
         return action.settings;
+      case SETTINGS_UPDATED:
+        return state.merge(action.settings);
       default:
         return state;
     }

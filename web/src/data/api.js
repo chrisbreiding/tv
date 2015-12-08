@@ -52,4 +52,10 @@ export default {
       return Immutable.Map(setting);
     });
   },
+
+  updateSettings (settings) {
+    return request('settings/1', 'put', {
+      setting: settings.toObject()
+    });
+  },
 };

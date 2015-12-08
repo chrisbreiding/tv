@@ -15,6 +15,22 @@ export function receiveShows (shows) {
   };
 }
 
+export const SHOW_UPDATED = 'SHOW_UPDATED';
+export function showUpdated (show) {
+  return {
+    type: SHOW_UPDATED,
+    show
+  };
+}
+
+export const SHOW_DELETED = 'SHOW_DELETED';
+export function showDeleted (show) {
+  return {
+    type: SHOW_DELETED,
+    show
+  };
+}
+
 export const RECEIVE_EPISODES = 'RECEIVE_EPISODES';
 export function receiveEpisodes (episodes) {
   return {
@@ -31,19 +47,11 @@ export function receiveSettings (settings) {
   };
 }
 
-export const SHOW_UPDATED = 'SHOW_UPDATED';
-export function showUpdated (show) {
+export const SETTINGS_UPDATED = 'SETTINGS_UPDATED';
+export function settingsUpdated (settings) {
   return {
-    type: SHOW_UPDATED,
-    show
-  };
-}
-
-export const SHOW_DELETED = 'SHOW_DELETED';
-export function showDeleted (show) {
-  return {
-    type: SHOW_DELETED,
-    show
+    type: SETTINGS_UPDATED,
+    settings
   };
 }
 
@@ -78,6 +86,14 @@ export function fetchSettings () {
   return (dispatch) => {
     api.getSettings().then((settings) => {
       dispatch(receiveSettings(settings));
+    });
+  };
+}
+
+export function updateSettings (settings) {
+  return (dispatch) => {
+    api.updateSettings(settings).then(() => {
+      dispatch(settingsUpdated(settings));
     });
   };
 }
