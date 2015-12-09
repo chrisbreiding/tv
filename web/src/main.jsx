@@ -18,12 +18,6 @@ import SearchResults from './search/results';
 const hashHistory = createHistory();
 syncReduxAndRouter(hashHistory, store);
 
-
-store.subscribe(() => {
-  console.log(store.getState());
-});
-
-
 render(
   <Provider store={store}>
     <Router history={hashHistory}>

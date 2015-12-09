@@ -5,7 +5,7 @@ function viewLink (link, searchName) {
   return (link || '').replace('%s', searchName);
 }
 
-const Options = function ({ show }, { settings }) {
+export default ({ show, settings }) => {
   return (
     <div className="options">
       <ul>
@@ -28,9 +28,3 @@ const Options = function ({ show }, { settings }) {
     </div>
   );
 };
-
-Options.contextTypes = {
-  settings: React.PropTypes.any
-};
-
-export default Options;

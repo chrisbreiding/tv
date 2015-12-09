@@ -3,27 +3,17 @@ import { connect } from 'react-redux';
 import { fetchShows } from '../shows/actions';
 import { fetchSettings } from '../settings/actions';
 import Shows from '../shows/shows';
-import { withEpisodes, recentShows, upcomingShows, offAirShows } from '../lib/shows';
+import { recentShows, upcomingShows, offAirShows } from '../lib/shows';
 import { recentEpisodes, upcomingEpisodes, offAirEpisodes } from '../lib/episodes';
 import Loader from '../loader/loader';
 
 const TimePeriods = createClass({
-  childContextTypes: {
-    settings: React.PropTypes.any
-  },
-
-  getChildContext () {
-    return { settings: this.props.settings };
-  },
-
   componentWillMount () {
     this.props.dispatch(fetchShows());
     this.props.dispatch(fetchSettings());
   },
 
   render () {
-    const shows = withEpisodes(this.props.shows.get('items'), this.props.episodes);
-
     if (this.props.shows.get('isFetching')) {
       return <p className="loading-shows">
        <Loader>Loading shows...</Loader>
@@ -31,9 +21,33 @@ const TimePeriods = createClass({
     } else {
       return (
         <div>
-          <Shows type="recent" label="Recent" shows={recentShows(shows)} episodesFilter={recentEpisodes} />
-          <Shows type="upcoming" label="Upcoming" shows={upcomingShows(shows)} episodesFilter={upcomingEpisodes} />
-          <Shows type="off-air" label="Off Air" shows={offAirShows(shows)} episodesFilter={offAirEpisodes} />
+          <Shows
+            type="recent"
+            label="Recent"
+            shows={this.props.shows.get('items')}
+            filterShows={recentShows}
+            episodes={this.props.episodes}
+            filterEpisodes={recentEpisodes}
+            settings={this.props.settings}
+          />
+          <Shows
+            type="upcoming"
+            label="Upcoming"
+            shows={this.props.shows.get('items')}
+            filterShows={upcomingShows}
+            episodes={this.props.episodes}
+            filterEpisodes={upcomingEpisodes}
+            settings={this.props.settings}
+          />
+          <Shows
+            type="off-air"
+            label="Off Air"
+            shows={this.props.shows.get('items')}
+            filterShows={offAirShows}
+            episodes={this.props.episodes}
+            filterEpisodes={offAirEpisodes}
+            settings={this.props.settings}
+          />
           {this.props.children}
         </div>
       );
