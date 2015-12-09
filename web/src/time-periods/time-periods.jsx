@@ -21,9 +21,9 @@ const TimePeriods = createClass({
   },
 
   render () {
-    const shows = withEpisodes(this.props.shows.items, this.props.episodes);
+    const shows = withEpisodes(this.props.shows.get('items'), this.props.episodes);
 
-    if (this.props.shows.isFetching) {
+    if (this.props.shows.get('isFetching')) {
       return <p className="loading-shows">
        <Loader>Loading shows...</Loader>
       </p>;

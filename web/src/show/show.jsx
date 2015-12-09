@@ -49,7 +49,7 @@ const Show = function ({ show, episodes, dispatch }) {
 
 const stateToProps = ({ shows, episodes }, props) => {
   return {
-    show: shows.items.find((show) => show.get('id') === props.params.id),
+    show: shows.get('items').find((show) => show.get('id') === props.params.id),
     episodes
   };
 };

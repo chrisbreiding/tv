@@ -18,22 +18,22 @@ import {
 export default {
   routing: routeReducer,
 
-  shows (state = {
+  shows (state = Immutable.Map({
     isFetching: false,
     items: Immutable.List()
-  }, action) {
+  }), action) {
     switch (action.type) {
       case REQUEST_SHOWS:
-        return _.extend({}, state, {
+        return state.merge({
           isFetching: true
         });
       case RECEIVE_SHOWS:
-        return {
+        return state.merge({
           isFetching: false,
           items: action.shows
-        };
+        });
       case SHOW_ADDED:
-        return _.extend({}, state, {
+        return state.merge({
           items: state.items.push(action.show)
         });
       case SHOW_UPDATED:
@@ -42,14 +42,14 @@ export default {
         });
         if (indexToUpdate < 0) { return state; }
 
-        return _.extend({}, state, {
+        return state.merge({
           items: state.items.set(indexToUpdate, action.show)
         });
       case SHOW_DELETED:
         const indexToDelete = state.items.indexOf(action.show);
         if (indexToDelete < 0) { return state; }
 
-        return _.extend({}, state, {
+        return state.merge({
           items: state.items.delete(indexToDelete)
         });
       default:
