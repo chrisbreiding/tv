@@ -2,12 +2,9 @@ import React, { createClass } from 'react';
 import { connect } from 'react-redux';
 import { updatePath } from 'redux-simple-router';
 import { getApiKey, setApiKey } from '../data/api';
+import { AutoFocusedInput } from '../lib/form';
 
 const Auth = createClass({
-  componentDidMount () {
-    this.apiKeyInput.focus();
-  },
-
   render () {
     return (
       <div className="auth">
@@ -16,8 +13,8 @@ const Auth = createClass({
 
           <fieldset>
             <label>API Key</label>
-            <input
-              ref={(node) => this.apiKeyInput = node }
+            <AutoFocusedInput
+              ref="apiKey"
               defaultValue={getApiKey()}
             />
           </fieldset>
@@ -32,8 +29,8 @@ const Auth = createClass({
 
   _submit (e) {
     e.preventDefault();
-    setApiKey(this.apiKeyInput.value);
-    this.props.dispatch(updatePath('/'));
+    setApiKey(this.refs.apiKey.getValue());
+    this.props.dispatch(updatePath('/shows'));
   }
 });
 

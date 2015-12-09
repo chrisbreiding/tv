@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { updatePath } from 'redux-simple-router';
 import Modal from '../modal/modal';
 import { updateShow, deleteShow } from '../data/actions';
+import { AutoFocusedInput, Input } from '../lib/form';
 
 const Edit = createClass({
   getInitialState () {
@@ -19,17 +20,17 @@ const Edit = createClass({
           <form className="form show-edit" onSubmit={this._save}>
             <fieldset>
               <label>Display Name</label>
-              <input ref="displayName" defaultValue={show.get('display_name')} />
+              <AutoFocusedInput ref="displayName" defaultValue={show.get('display_name')} />
             </fieldset>
 
             <fieldset>
               <label>Search Name</label>
-              <input ref="searchName" defaultValue={show.get('search_name')} />
+              <Input ref="searchName" defaultValue={show.get('search_name')} />
             </fieldset>
 
             <fieldset>
               <label>File Name</label>
-              <input ref="fileName" defaultValue={show.get('file_name')} />
+              <Input ref="fileName" defaultValue={show.get('file_name')} />
             </fieldset>
 
             <footer className="clearfix">
@@ -71,9 +72,9 @@ const Edit = createClass({
     e.preventDefault();
 
     const show = this.props.show.merge({
-      display_name: this.refs.displayName.value,
-      search_name: this.refs.searchName.value,
-      file_name: this.refs.fileName.value,
+      display_name: this.refs.displayName.getValue(),
+      search_name: this.refs.searchName.getValue(),
+      file_name: this.refs.fileName.getValue(),
     });
 
     this.props.dispatch(updateShow(show));

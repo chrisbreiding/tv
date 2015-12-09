@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import React, { createClass } from 'react';
 import { updatePath } from 'redux-simple-router';
 import Modal from '../modal/modal';
+import { AutoFocusedInput } from '../lib/form';
 
 const Search = createClass({
   render () {
@@ -10,7 +11,7 @@ const Search = createClass({
         <form onSubmit={this._search}>
           <h3>Search Shows</h3>
 
-          <input
+          <AutoFocusedInput
             defaultValue={this.props.params.query}
             ref={(node) => this.queryInput = node}
           />

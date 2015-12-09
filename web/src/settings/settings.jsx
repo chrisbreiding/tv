@@ -4,6 +4,7 @@ import { updatePath } from 'redux-simple-router';
 import Modal from '../modal/modal';
 import date from '../lib/date';
 import { updateSettings } from '../data/actions';
+import { AutoFocusedInput } from '../lib/form';
 
 const Settings = createClass({
   render () {
@@ -28,7 +29,7 @@ const Settings = createClass({
   _viewLinkInput () {
     const viewLink = this.props.settings.get('view_link');
     if (!viewLink) { return null; }
-    return <input ref="viewLink" defaultValue={viewLink} />;
+    return <AutoFocusedInput ref="viewLink" defaultValue={viewLink} />;
   },
 
   _save (e) {
