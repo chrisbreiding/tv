@@ -11,10 +11,7 @@ const Search = createClass({
         <form onSubmit={this._search}>
           <h3>Search Shows</h3>
 
-          <AutoFocusedInput
-            defaultValue={this.props.params.query}
-            ref={(node) => this.queryInput = node}
-          />
+          <AutoFocusedInput ref="query" defaultValue={this.props.params.query} />
           <button type="submit">Search</button>
         </form>
         {this.props.children}
@@ -24,7 +21,7 @@ const Search = createClass({
 
   _search (e) {
     e.preventDefault();
-    this.props.dispatch(updatePath(`/search/${this.queryInput.value}`));
+    this.props.dispatch(updatePath(`/search/${this.refs.query.value}`));
   },
 
   _close () {

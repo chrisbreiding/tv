@@ -45,7 +45,7 @@ export default createClass({
         </span>
         <span className="airdate">{date.shortString(episode.get('airdate'))}</span>
         <span className="title" onClick={this._showFileName}>{episode.get('title')}</span>
-        <span className="file-name" ref={(node) => this.fileName = node}>
+        <span className="file-name" ref="fileName">
           {show.get('file_name')} - {longEpisodeNumber(episode)} - {fileSafeTitle(episode)}
         </span>
       </li>
@@ -54,7 +54,7 @@ export default createClass({
 
   _showFileName () {
     this.setState({ showingFileName: true }, () => {
-      let text = this.fileName;
+      let text = this.refs.fileName;
       let selection = window.getSelection();
       let range = document.createRange();
 
