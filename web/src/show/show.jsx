@@ -1,10 +1,10 @@
 import Immutable from 'immutable';
 import React from 'react';
 import { connect } from 'react-redux';
-import { updatePath } from 'redux-simple-router';
 import Modal from '../modal/modal';
 import Episodes from '../episodes/episodes';
 import { sortAscending } from '../lib/episodes';
+import { navigateHome } from '../lib/navigation';
 
 function seasons (episodeIds, episodes) {
   return episodeIds.reduce(function (coll, episodeId) {
@@ -27,7 +27,7 @@ const Show = function ({ show, episodes, dispatch }) {
   if (!show || !episodes) { return <span></span>; }
 
   return (
-    <Modal className="all-episodes" onClose={() => dispatch(updatePath('/shows'))}>
+    <Modal className="all-episodes" onClose={() => dispatch(navigateHome())}>
       <h2>{show.get('display_name')}</h2>
       <ul>
         <li>

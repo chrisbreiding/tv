@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import React, { createClass } from 'react';
-import { updatePath } from 'redux-simple-router';
 import Modal from '../modal/modal';
 import { AutoFocusedInput } from '../lib/form';
+import { navigateHome, navigateTo } from '../lib/navigation';
 
 const Search = createClass({
   render () {
@@ -21,11 +21,11 @@ const Search = createClass({
 
   _search (e) {
     e.preventDefault();
-    this.props.dispatch(updatePath(`/search/${this.refs.query.value}`));
+    this.props.dispatch(navigateTo(`/search/${this.refs.query.value}`));
   },
 
   _close () {
-    this.props.dispatch(updatePath('/shows'));
+    this.props.dispatch(navigateHome());
   },
 });
 

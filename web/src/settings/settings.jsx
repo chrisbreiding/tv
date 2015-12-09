@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import React, { createClass } from 'react';
-import { updatePath } from 'redux-simple-router';
 import Modal from '../modal/modal';
 import date from '../lib/date';
 import { updateSettings } from '../data/actions';
 import { AutoFocusedInput } from '../lib/form';
+import { navigateHome } from '../lib/navigation';
 
 const Settings = createClass({
   render () {
@@ -41,7 +41,7 @@ const Settings = createClass({
   },
 
   _close () {
-    this.props.dispatch(updatePath('/shows'));
+    this.props.dispatch(navigateHome());
   },
 });
 

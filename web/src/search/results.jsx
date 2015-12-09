@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import React, { createClass } from 'react';
-import { updatePath } from 'redux-simple-router';
 import { searchSourceShows, addShow } from '../data/actions';
 import Result from './result';
 import Loader from '../loader/loader';
+import { navigateHome } from '../lib/navigation';
 
 const Results = createClass({
   componentDidMount () {
@@ -59,7 +59,7 @@ const Results = createClass({
         file_name: name,
         source_id: show.get('id')
       }));
-      this.props.dispatch(updatePath('/shows'));
+      this.props.dispatch(navigateHome());
     };
   }
 });

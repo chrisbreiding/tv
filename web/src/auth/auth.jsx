@@ -1,8 +1,8 @@
 import React, { createClass } from 'react';
 import { connect } from 'react-redux';
-import { updatePath } from 'redux-simple-router';
 import { getApiKey, setApiKey } from '../data/api';
 import { AutoFocusedInput } from '../lib/form';
+import { navigateHome } from '../lib/navigation';
 
 const Auth = createClass({
   render () {
@@ -30,7 +30,7 @@ const Auth = createClass({
   _submit (e) {
     e.preventDefault();
     setApiKey(this.refs.apiKey.getValue());
-    this.props.dispatch(updatePath('/shows'));
+    this.props.dispatch(navigateHome());
   }
 });
 

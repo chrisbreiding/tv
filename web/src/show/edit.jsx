@@ -1,9 +1,9 @@
 import React, { createClass } from 'react';
 import { connect } from 'react-redux';
-import { updatePath } from 'redux-simple-router';
 import Modal from '../modal/modal';
 import { updateShow, deleteShow } from '../data/actions';
 import { AutoFocusedInput, Input } from '../lib/form';
+import { navigateHome } from '../lib/navigation';
 
 const Edit = createClass({
   getInitialState () {
@@ -82,7 +82,7 @@ const Edit = createClass({
   },
 
   _close () {
-    this.props.dispatch(updatePath('/shows'));
+    this.props.dispatch(navigateHome());
   }
 });
 
