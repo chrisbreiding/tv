@@ -35,7 +35,7 @@ const Settings = createClass({
   _save (e) {
     e.preventDefault();
     this.props.dispatch(updateSettings(this.props.settings.merge({
-      view_link: this.refs.viewLink.value
+      view_link: this.refs.viewLink.getValue()
     })));
     this._close();
   },

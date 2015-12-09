@@ -21,7 +21,7 @@ const Search = createClass({
 
   _search (e) {
     e.preventDefault();
-    this.props.dispatch(navigateTo(`/search/${this.refs.query.value}`));
+    this.props.dispatch(navigateTo(`/search/${this.refs.query.getValue()}`));
   },
 
   _close () {
