@@ -2,13 +2,14 @@ import cs from 'classnames';
 import React from 'react';
 import date from '../lib/date';
 
-export default ({ show, onAddShow }) => {
+export default ({ exists, show, onAddShow }) => {
   return (
-    <li>
-      <button title="Add Show" onClick={onAddShow}>
+    <li className={cs({ exists })}>
+      <button title="Add Show" onClick={onAddShow} disabled={exists}>
         <i className="fa fa-plus"></i>
       </button>
       <div>
+        {exists ? <p>Show already added</p> : null}
         <h4>{show.get('name')}</h4>
         <dl>
           <dt className={cs({ 'no-value': !show.get('first_aired') })}>First Aired</dt>

@@ -5,7 +5,7 @@ var textGen = require('../text-generator');
 module.exports = function(app, express) {
   var sourceShowsRouter = express.Router();
 
-  var shows = _.map(_.range(10, 20), function (id) {
+  var shows = _.map(_.range(18, 30), function (id) {
     return {
       id: '' + id,
       name: textGen(1, 4),

@@ -29,8 +29,17 @@
       display: flex;
       margin: 2em 0;
 
+      &.exists {
+        opacity: 0.5;
+      }
+
       button {
         min-width: 2.5em;
+
+        &[disabled] {
+          background: neutral-color;
+          cursor: default;
+        }
       }
 
       div {

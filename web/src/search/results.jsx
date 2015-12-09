@@ -42,12 +42,17 @@ const Results = createClass({
             <Result
               key={show.get('id')}
               show={show}
+              exists={this._exists(show)}
               onAddShow={this._addShow(show)}
             />
           );
         })}
       </ul>
     );
+  },
+
+  _exists (sourceShow) {
+    return !!this.props.shows.get('items').find((show => show.get('source_id') === sourceShow.get('id')));
   },
 
   _addShow (show) {
@@ -64,8 +69,8 @@ const Results = createClass({
   }
 });
 
-const stateToProps = ({ sourceShows }) => {
-  return { sourceShows };
+const stateToProps = ({ shows, sourceShows }) => {
+  return { shows, sourceShows };
 };
 
 export default connect(stateToProps)(Results);
