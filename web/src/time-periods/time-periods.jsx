@@ -31,9 +31,9 @@ const TimePeriods = createClass({
     } else {
       return (
         <div>
-          <Shows type="Recent" shows={recentShows(shows)} episodesFilter={recentEpisodes} />
-          <Shows type="Upcoming" shows={upcomingShows(shows)} episodesFilter={upcomingEpisodes} />
-          <Shows type="Off Air" shows={offAirShows(shows)} episodesFilter={offAirEpisodes} />
+          <Shows type="recent" label="Recent" shows={recentShows(shows)} episodesFilter={recentEpisodes} />
+          <Shows type="upcoming" label="Upcoming" shows={upcomingShows(shows)} episodesFilter={upcomingEpisodes} />
+          <Shows type="off-air" label="Off Air" shows={offAirShows(shows)} episodesFilter={offAirEpisodes} />
           {this.props.children}
         </div>
       );

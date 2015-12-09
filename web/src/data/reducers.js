@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import Immutable from 'immutable';
 import { routeReducer } from 'redux-simple-router';
 import {
