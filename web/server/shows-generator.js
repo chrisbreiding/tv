@@ -35,7 +35,7 @@ module.exports = {
                     this._quarterChance() ? this._todayStartDate()  :
                     this._quarterChance() ? this._recentStartDate() :
                     this._randomStartDate();
-    return _.flatten(_.map(_.range(1, num), function (season) {
+    return _.flatten(_.map(_.shuffle(_.range(1, num)), function (season) {
       return this._episodes(_.random(1, 8), season, startDate.subtract(1, 'week'));
     }.bind(this)));
   },

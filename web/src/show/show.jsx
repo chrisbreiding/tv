@@ -7,7 +7,7 @@ import { sortAscending } from '../lib/episodes';
 import { navigateHome } from '../lib/navigation';
 
 function seasons (episodeIds, episodes) {
-  return episodeIds.reduce(function (coll, episodeId) {
+  return episodeIds.reduce((coll, episodeId) => {
     const episode = episodes.get(episodeId);
     const seasonNumber = episode.get('season');
     const existingSeason = coll.findEntry((season) => season.get('season') === seasonNumber);
@@ -20,7 +20,7 @@ function seasons (episodeIds, episodes) {
         episodes: Immutable.List([episode])
       }));
     }
-  }, Immutable.List());
+  }, Immutable.List()).sortBy(season => season.get('season'));
 }
 
 const Show = function ({ show, episodes, dispatch }) {
