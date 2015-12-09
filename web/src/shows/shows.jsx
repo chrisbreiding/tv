@@ -6,7 +6,7 @@ export default createClass({
   render () {
     const { type, shows } = this.props;
     return (
-      <div className={`shows-list ${_.kebabCase(type)}`}>
+      <div className={`shows ${_.kebabCase(type)}`}>
         <h2>{type}</h2>
         <ul>
           {
