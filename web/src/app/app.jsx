@@ -20,7 +20,7 @@ const App = createClass({
       <div>
         <ul className="app-options">
           <li>
-            <Link to="/" title="Add Show">
+            <Link to="/search" title="Add Show">
               <i className="fa fa-plus"></i>
             </Link>
           </li>

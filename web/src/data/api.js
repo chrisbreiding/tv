@@ -16,13 +16,12 @@ function headers () {
   return { api_key: getApiKey() };
 }
 
-function request (endpoint, method = 'get', data) {
-  return axios({
+function request (endpoint, method = 'get', props = {}) {
+  return axios(Object.assign({
     url: `${baseUrl}/${endpoint}`,
     headers: headers(),
-    method,
-    data
-  });
+    method
+  }, props));
 }
 
 export default {
@@ -36,9 +35,23 @@ export default {
     });
   },
 
+  addShow (show) {
+    return request('shows', 'post', {
+      data: { show }
+    }).then((response) => {
+      const { show, episodes } = response.data;
+      return {
+        show: Immutable.fromJS(show),
+        episodes: index(Immutable.fromJS(episodes))
+      };
+    });
+  },
+
   updateShow (show) {
     return request(`shows/${show.get('id')}`, 'put', {
-      show: show.toObject()
+      data: {
+        show: show.toObject()
+      }
     });
   },
 
@@ -56,6 +69,17 @@ export default {
   updateSettings (settings) {
     return request('settings/1', 'put', {
       setting: settings.toObject()
+    });
+  },
+
+  searchSourceShows (query) {
+    return request('source_shows', 'get', {
+      params: {
+        query: query
+      }
+    }).then((response) => {
+      const { source_shows } = response && response.data || { source_shows: [] };
+      return Immutable.fromJS(source_shows);
     });
   },
 };

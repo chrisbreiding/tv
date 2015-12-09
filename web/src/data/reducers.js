@@ -4,11 +4,15 @@ import { routeReducer } from 'redux-simple-router';
 import {
   REQUEST_SHOWS,
   RECEIVE_SHOWS,
-  SHOW_DELETED,
+  SHOW_ADDED,
   SHOW_UPDATED,
+  SHOW_DELETED,
   RECEIVE_EPISODES,
+  EPISODES_ADDED,
   RECEIVE_SETTINGS,
-  SETTINGS_UPDATED
+  SETTINGS_UPDATED,
+  REQUEST_SOURCE_SHOWS,
+  RECEIVE_SOURCE_SHOWS
 } from './actions';
 
 export default {
@@ -24,9 +28,13 @@ export default {
           isFetching: true
         });
       case RECEIVE_SHOWS:
-        return _.extend({}, state, {
+        return {
           isFetching: false,
           items: action.shows
+        };
+      case SHOW_ADDED:
+        return _.extend({}, state, {
+          items: state.items.push(action.show)
         });
       case SHOW_UPDATED:
         const indexToUpdate = state.items.findIndex((show) => {
@@ -53,6 +61,8 @@ export default {
     switch (action.type) {
       case RECEIVE_EPISODES:
         return action.episodes;
+      case EPISODES_ADDED:
+        return state.merge(action.episodes);
       default:
         return state;
     }
@@ -64,6 +74,25 @@ export default {
         return action.settings;
       case SETTINGS_UPDATED:
         return state.merge(action.settings);
+      default:
+        return state;
+    }
+  },
+
+  sourceShows (state = Immutable.Map({
+    isFetching: false,
+    items: Immutable.List()
+  }), action) {
+    switch (action.type) {
+      case REQUEST_SOURCE_SHOWS:
+        return state.merge({
+          isFetching: true
+        });
+      case RECEIVE_SOURCE_SHOWS:
+        return state.merge({
+          isFetching: false,
+          items: action.shows
+        });
       default:
         return state;
     }

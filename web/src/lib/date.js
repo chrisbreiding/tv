@@ -34,10 +34,12 @@ const dateUtils = {
   },
 
   shortString (date) {
+    if (!date) { return ''; }
     return moment(date).format('YYYY-MM-DD');
   },
 
   longString (date) {
+    if (!date) { return ''; }
     return moment(date).format('MMM D, YYYY h:mma');
   },
 

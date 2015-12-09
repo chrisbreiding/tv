@@ -21,7 +21,7 @@ module.exports = function(app, express) {
 
   sourceShowsRouter.get('/', function(req, res) {
     res.send({
-      'source_shows': req.query.query === '' ? [] : _.sample(shows, _.random(2, 10))
+      'source_shows': req.query.query === 'none' ? [] : _.sample(shows, _.random(2, 10))
     });
   });
 

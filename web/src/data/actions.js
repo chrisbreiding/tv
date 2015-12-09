@@ -15,6 +15,14 @@ export function receiveShows (shows) {
   };
 }
 
+export const SHOW_ADDED = 'SHOW_ADDED';
+export function showAdded (show) {
+  return {
+    type: SHOW_ADDED,
+    show
+  };
+}
+
 export const SHOW_UPDATED = 'SHOW_UPDATED';
 export function showUpdated (show) {
   return {
@@ -39,6 +47,14 @@ export function receiveEpisodes (episodes) {
   };
 }
 
+export const EPISODES_ADDED = 'EPISODES_ADDED';
+export function episodesAdded (episodes) {
+  return {
+    type: EPISODES_ADDED,
+    episodes
+  };
+}
+
 export const RECEIVE_SETTINGS = 'RECEIVE_SETTINGS';
 export function receiveSettings (settings) {
   return {
@@ -55,6 +71,21 @@ export function settingsUpdated (settings) {
   };
 }
 
+export const REQUEST_SOURCE_SHOWS = 'REQUEST_SOURCE_SHOWS';
+export function requestSourceShows () {
+  return {
+    type: REQUEST_SOURCE_SHOWS
+  };
+}
+
+export const RECEIVE_SOURCE_SHOWS = 'RECEIVE_SOURCE_SHOWS';
+export function receiveSourceShows (shows) {
+  return {
+    type: RECEIVE_SOURCE_SHOWS,
+    shows
+  };
+}
+
 export function fetchShows () {
   return (dispatch) => {
     dispatch(requestShows());
@@ -62,6 +93,15 @@ export function fetchShows () {
     api.getShows().then(({ episodes, shows }) => {
       dispatch(receiveEpisodes(episodes));
       dispatch(receiveShows(shows));
+    });
+  };
+}
+
+export function addShow (showToAdd) {
+  return (dispatch) => {
+    api.addShow(showToAdd).then(({ show, episodes }) => {
+      dispatch(episodesAdded(episodes));
+      dispatch(showAdded(show));
     });
   };
 }
@@ -94,6 +134,16 @@ export function updateSettings (settings) {
   return (dispatch) => {
     api.updateSettings(settings).then(() => {
       dispatch(settingsUpdated(settings));
+    });
+  };
+}
+
+export function searchSourceShows (query) {
+  return (dispatch) => {
+    dispatch(requestSourceShows());
+
+    api.searchSourceShows(query).then((shows) => {
+      dispatch(receiveSourceShows(shows));
     });
   };
 }
