@@ -21,6 +21,7 @@ syncReduxAndRouter(hashHistory, store);
 render(
   <Provider store={store}>
     <Router history={hashHistory}>
+      <Redirect from="/" to="/shows" />
       <Route path="/" component={App}>
         <Route path="/shows" component={TimePeriods}>
           <Route path=":id" component={Show} />
@@ -32,7 +33,7 @@ render(
           </Route>
         </Route>
         <Route path="/auth" component={Auth} />
-        <Redirect from="/" to="/shows" />
+        <Redirect from="/*" to="/shows" />
       </Route>
     </Router>
   </Provider>,
