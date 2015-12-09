@@ -19,12 +19,12 @@ module.exports = {
     var name = textGen(1, 3);
     return {
       show: {
-        id: '' + id,
+        id: id,
         display_name: name,
         search_name: name + ' s',
         file_name: name + ' f',
         source_id: '' + _.random(20),
-        episodes: _.pluck(episodes, 'id')
+        episode_ids: _.pluck(episodes, 'id')
       },
       episodes: episodes
     };
@@ -85,7 +85,7 @@ module.exports = {
                 this._eighthChance() ? null         :
                 textGen(1, 5);
     return {
-      id: '' + id,
+      id: id,
       season: season,
       episode_number: epNum,
       title: title,

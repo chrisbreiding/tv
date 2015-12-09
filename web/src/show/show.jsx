@@ -32,7 +32,7 @@ const Show = function ({ show, episodes, dispatch }) {
       <ul>
         <li>
           {
-            seasons(show.get('episodes'), episodes).map((season) => {
+            seasons(show.get('episode_ids'), episodes).map((season) => {
               return (
                 <div key={season.get('season')}>
                   <h3>Season {season.get('season')}</h3>
@@ -49,7 +49,7 @@ const Show = function ({ show, episodes, dispatch }) {
 
 const stateToProps = ({ shows, episodes }, props) => {
   return {
-    show: shows.get('items').find((show) => show.get('id') === props.params.id),
+    show: shows.get('items').find((show) => show.get('id') === Number(props.params.id)),
     episodes
   };
 };

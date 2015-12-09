@@ -88,7 +88,7 @@ const Edit = createClass({
 
 const stateToProps = ({ shows }, props) => {
   return {
-    show: shows.get('items').find((show) => show.get('id') === props.params.id)
+    show: shows.get('items').find((show) => show.get('id') === Number(props.params.id))
   };
 };
 

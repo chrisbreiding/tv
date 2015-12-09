@@ -22,7 +22,7 @@ module.exports = function(app, express) {
   showsRouter.post('/', function(req, res) {
     var show = _.extend(req.body.show, { id: '' + generator.incShowId() });
     var newEpisodes = generator.seasons(_.random(1, 8));
-    show.episodes = _.pluck(newEpisodes, 'id');
+    show.episode_ids = _.pluck(newEpisodes, 'id');
     shows.push(show);
     episodes = episodes.concat(newEpisodes);
     res

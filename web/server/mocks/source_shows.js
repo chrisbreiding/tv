@@ -7,7 +7,7 @@ module.exports = function(app, express) {
 
   var shows = _.map(_.range(18, 30), function (id) {
     return {
-      id: '' + id,
+      id: id,
       name: textGen(1, 4),
       description: textGen(10, 30),
       firstAired: moment()
