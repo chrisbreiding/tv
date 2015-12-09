@@ -1,8 +1,0 @@
-{{#each curatedItems as |item|}}
-  {{yield item}}
-{{/each}}
-{{#if beyondThreshold}}
-  <li class="more-less">
-    <a {{action 'update'}} href="#">{{actionText}}</a>
-  </li>
-{{/if}}
