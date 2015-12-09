@@ -34,23 +34,23 @@ export default {
         });
       case SHOW_ADDED:
         return state.merge({
-          items: state.items.push(action.show)
+          items: state.get('items').push(action.show)
         });
       case SHOW_UPDATED:
-        const indexToUpdate = state.items.findIndex((show) => {
+        const indexToUpdate = state.get('items').findIndex((show) => {
           return show.get('id') === action.show.get('id');
         });
         if (indexToUpdate < 0) { return state; }
 
         return state.merge({
-          items: state.items.set(indexToUpdate, action.show)
+          items: state.get('items').set(indexToUpdate, action.show)
         });
       case SHOW_DELETED:
-        const indexToDelete = state.items.indexOf(action.show);
+        const indexToDelete = state.get('items').indexOf(action.show);
         if (indexToDelete < 0) { return state; }
 
         return state.merge({
-          items: state.items.delete(indexToDelete)
+          items: state.get('items').delete(indexToDelete)
         });
       default:
         return state;
