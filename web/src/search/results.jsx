@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import React, { createClass } from 'react';
-import { searchSourceShows, addShow } from '../data/actions';
+import { searchSourceShows } from './actions';
+import { addShow } from '../shows/actions';
 import Result from './result';
 import Loader from '../loader/loader';
 import { navigateHome } from '../lib/navigation';

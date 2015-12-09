@@ -1,7 +1,7 @@
 import React, { createClass } from 'react';
 import { connect } from 'react-redux';
 import Modal from '../modal/modal';
-import { updateShow, deleteShow } from '../data/actions';
+import { updateShow, deleteShow } from '../shows/actions';
 import { AutoFocusedInput, Input } from '../lib/form';
 import { navigateHome } from '../lib/navigation';
 

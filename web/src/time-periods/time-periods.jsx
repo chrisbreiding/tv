@@ -1,6 +1,7 @@
 import React, { createClass } from 'react';
 import { connect } from 'react-redux';
-import { fetchShows, fetchSettings } from '../data/actions';
+import { fetchShows } from '../shows/actions';
+import { fetchSettings } from '../settings/actions';
 import Shows from '../shows/shows';
 import { withEpisodes, recentShows, upcomingShows, offAirShows } from '../lib/shows';
 import { recentEpisodes, upcomingEpisodes, offAirEpisodes } from '../lib/episodes';

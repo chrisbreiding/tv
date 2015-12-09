@@ -6,14 +6,20 @@ import {
   RECEIVE_SHOWS,
   SHOW_ADDED,
   SHOW_UPDATED,
-  SHOW_DELETED,
+  SHOW_DELETED
+} from '../shows/actions';
+import {
   RECEIVE_EPISODES,
-  EPISODES_ADDED,
+  EPISODES_ADDED
+} from '../episodes/actions';
+import {
   RECEIVE_SETTINGS,
-  SETTINGS_UPDATED,
+  SETTINGS_UPDATED
+} from '../settings/actions';
+import {
   REQUEST_SOURCE_SHOWS,
   RECEIVE_SOURCE_SHOWS
-} from './actions';
+} from '../search/actions';
 
 export default {
   routing: routeReducer,

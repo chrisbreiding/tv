@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import React, { createClass } from 'react';
 import Modal from '../modal/modal';
 import date from '../lib/date';
-import { updateSettings } from '../data/actions';
+import { updateSettings } from './actions';
 import { AutoFocusedInput } from '../lib/form';
 import { navigateHome } from '../lib/navigation';
 
