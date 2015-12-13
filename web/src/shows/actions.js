@@ -96,7 +96,7 @@ export function addShow (showToAdd) {
 }
 
 export function updateShow (show) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     api.updateShow(show).then(() => {
       dispatch(showUpdated(show));
 
@@ -106,7 +106,7 @@ export function updateShow (show) {
 }
 
 export function deleteShow (show) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     api.deleteShow(show).then(() => {
       dispatch(showDeleted(show));
 
