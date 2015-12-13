@@ -2,18 +2,6 @@
   "name": "tv",
   "version": "0.0.0",
   "private": true,
-  "scripts": {
-    "build-production": "rm -rf dist; ember build --environment=production",
-    "deploy": "gh-pages-deploy"
-  },
-  "gh-pages-deploy": {
-    "staticpath": "dist",
-    "cname": "tv.crbapps.com",
-    "prep": [
-      "build-production"
-    ],
-    "noprompt": true
-  },
   "devDependencies": {
     "babel-core": "^6.2.1",
     "babel-loader": "^6.2.0",
