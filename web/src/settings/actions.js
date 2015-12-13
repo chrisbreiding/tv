@@ -1,4 +1,5 @@
 import api from '../data/api';
+import cache, { SETTINGS } from '../data/cache';
 
 export const RECEIVE_SETTINGS = 'RECEIVE_SETTINGS';
 export function receiveSettings (settings) {
@@ -16,18 +17,28 @@ export function settingsUpdated (settings) {
   };
 }
 
+function getSettingsFromApi () {
+  return api.getSettings().then((settings) => {
+    cache.set(SETTINGS, settings);
+    return settings;
+  });
+}
+
 export function fetchSettings () {
   return (dispatch) => {
-    api.getSettings().then((settings) => {
+    cache.get(SETTINGS).then((settings) => {
+      return settings || getSettingsFromApi();
+    }).then((settings) => {
       dispatch(receiveSettings(settings));
     });
   };
 }
 
 export function updateSettings (settings) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     api.updateSettings(settings).then(() => {
       dispatch(settingsUpdated(settings));
+      cache.set(SETTINGS, getState().settings);
     });
   };
 }

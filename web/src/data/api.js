@@ -30,7 +30,7 @@ export default {
       const { shows, episodes } = response && response.data || { shows: [], episodes: [] };
       return {
         shows: Immutable.fromJS(shows),
-        episodes: index(Immutable.fromJS(episodes))
+        episodes: Immutable.fromJS(episodes)
       };
     });
   },

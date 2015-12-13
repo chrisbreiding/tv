@@ -4,7 +4,7 @@ import date from './date';
 export function withEpisodes (shows, episodesIndex) {
   return shows.map((show) => {
     const episodes = show.get('episode_ids')
-      .map((id) => episodesIndex.get(id))
+      .map((id) => episodesIndex.get(`${id}`))
       .sort(sortAscending);
     return show.set('episodes', episodes);
   });

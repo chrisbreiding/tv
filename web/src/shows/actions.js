@@ -1,5 +1,8 @@
+import Immutable from 'immutable';
 import api from '../data/api';
+import cache, { SHOWS, EPISODES } from '../data/cache';
 import { receiveEpisodes, episodesAdded } from '../episodes/actions';
+import { index } from '../lib/episodes';
 
 export const REQUEST_SHOWS = 'REQUEST_SHOWS';
 export function requestShows () {
@@ -40,11 +43,29 @@ export function showDeleted (show) {
   };
 }
 
+function getShowsFromCache () {
+  return Promise.all([
+    cache.get(EPISODES),
+    cache.get(SHOWS)
+  ]);
+}
+
+function getShowsFromApi () {
+  return api.getShows().then(({ episodes, shows }) => {
+    episodes = index(episodes);
+    cache.set(EPISODES, episodes);
+    cache.set(SHOWS, shows);
+    return { episodes: index(episodes), shows };
+  });
+}
+
 export function fetchShows () {
   return (dispatch) => {
     dispatch(requestShows());
 
-    api.getShows().then(({ episodes, shows }) => {
+    getShowsFromCache().then(([episodes, shows]) => {
+      return episodes && shows ? { episodes, shows } : getShowsFromApi();
+    }).then(({ episodes, shows }) => {
       dispatch(receiveEpisodes(episodes));
       dispatch(receiveShows(shows));
     });
@@ -52,10 +73,14 @@ export function fetchShows () {
 }
 
 export function addShow (showToAdd) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     api.addShow(showToAdd).then(({ show, episodes }) => {
       dispatch(episodesAdded(episodes));
       dispatch(showAdded(show));
+
+      const state = getState();
+      cache.set(EPISODES, state.episodes);
+      cache.set(SHOWS, state.shows.get('items'));
     });
   };
 }
@@ -64,6 +89,8 @@ export function updateShow (show) {
   return (dispatch) => {
     api.updateShow(show).then(() => {
       dispatch(showUpdated(show));
+
+      cache.set(SHOWS, getState().shows.get('items'));
     });
   };
 }
@@ -72,6 +99,8 @@ export function deleteShow (show) {
   return (dispatch) => {
     api.deleteShow(show).then(() => {
       dispatch(showDeleted(show));
+
+      cache.set(SHOWS, getState().shows.get('items'));
     });
   };
 }

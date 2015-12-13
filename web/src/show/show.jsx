@@ -8,7 +8,7 @@ import { navigateHome } from '../lib/navigation';
 
 function seasons (episodeIds, episodes) {
   return episodeIds.reduce((coll, episodeId) => {
-    const episode = episodes.get(episodeId);
+    const episode = episodes.get(`${episodeId}`);
     const seasonNumber = episode.get('season');
     const existingSeason = coll.findEntry((season) => season.get('season') === seasonNumber);
     if (existingSeason) {
