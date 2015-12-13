@@ -1,8 +1,10 @@
-import Immutable from 'immutable';
 import api from '../data/api';
-import cache, { SHOWS, EPISODES } from '../data/cache';
+import Immutable from 'immutable';
+import moment from 'moment';
+import cache, { SHOWS, EPISODES, DATE_SHOWS_UPDATED } from '../data/cache';
 import { receiveEpisodes, episodesAdded } from '../episodes/actions';
 import { index } from '../lib/episodes';
+import date from '../lib/date';
 
 export const REQUEST_SHOWS = 'REQUEST_SHOWS';
 export function requestShows () {
@@ -46,7 +48,8 @@ export function showDeleted (show) {
 function getShowsFromCache () {
   return Promise.all([
     cache.get(EPISODES),
-    cache.get(SHOWS)
+    cache.get(SHOWS),
+    cache.get(DATE_SHOWS_UPDATED)
   ]);
 }
 
@@ -55,20 +58,27 @@ function getShowsFromApi () {
     episodes = index(episodes);
     cache.set(EPISODES, episodes);
     cache.set(SHOWS, shows);
+    cache.set(DATE_SHOWS_UPDATED, date.todayMap());
     return { episodes: index(episodes), shows };
   });
+}
+
+function evaluateCache ([episodes, shows, dateUpdated]) {
+  return episodes && shows && dateUpdated && date.isToday(moment(dateUpdated.get('date'))) ?
+    { episodes, shows } :
+    getShowsFromApi();
 }
 
 export function fetchShows () {
   return (dispatch) => {
     dispatch(requestShows());
 
-    getShowsFromCache().then(([episodes, shows]) => {
-      return episodes && shows ? { episodes, shows } : getShowsFromApi();
-    }).then(({ episodes, shows }) => {
-      dispatch(receiveEpisodes(episodes));
-      dispatch(receiveShows(shows));
-    });
+    getShowsFromCache()
+      .then(evaluateCache)
+      .then(({ episodes, shows }) => {
+        dispatch(receiveEpisodes(episodes));
+        dispatch(receiveShows(shows));
+      });
   };
 }
 

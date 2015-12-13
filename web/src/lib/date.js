@@ -1,3 +1,4 @@
+import Immutable from 'immutable';
 import moment from 'moment';
 
 const dateUtils = {
@@ -52,6 +53,10 @@ const dateUtils = {
            dateUtils.isFarFuture(date) ? 'far-future' :
            dateUtils.isFuture(date)    ? 'future' :
                                          'upcoming';
+  },
+
+  todayMap () {
+    return Immutable.Map({ date: moment().toISOString() });
   },
 };
 
