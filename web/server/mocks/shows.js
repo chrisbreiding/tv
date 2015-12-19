@@ -5,12 +5,9 @@ var generator = require('../shows-generator');
 module.exports = function(app, express) {
   var showsRouter = express.Router();
 
-  var episodes = [];
-  var shows = _.map(_.range(15), function () {
-    var generation = generator.show(generator.incShowId());
-    episodes = episodes.concat(generation.episodes);
-    return generation.show;
-  });
+  var showsAndEpisodes = generator.showsAndEpisodes(30);
+  var shows = showsAndEpisodes.shows;
+  var episodes = showsAndEpisodes.episodes;
 
   showsRouter.get('/', function(req, res) {
     res.send({
@@ -20,7 +17,7 @@ module.exports = function(app, express) {
   });
 
   showsRouter.post('/', function(req, res) {
-    var show = _.extend(req.body.show, { id: '' + generator.incShowId() });
+    var show = _.extend(req.body.show, { id: generator.incShowId() });
     var newEpisodes = generator.seasons(_.random(1, 8));
     show.episode_ids = _.pluck(newEpisodes, 'id');
     shows.push(show);
