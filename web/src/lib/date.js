@@ -3,7 +3,7 @@ import moment from 'moment';
 
 const dateUtils = {
   compare (a, b) {
-    return moment(a) - moment(b);
+    return a - b;
   },
 
   isFarPast (momentDate) {
@@ -36,27 +36,26 @@ const dateUtils = {
 
   shortString (date) {
     if (!date) { return ''; }
-    return moment(date).format('YYYY-MM-DD');
+    return date.format('YYYY-MM-DD');
   },
 
   longString (date) {
     if (!date) { return ''; }
-    return moment(date).format('MMM D, YYYY h:mma');
+    return date.format('MMM D, YYYY h:mma');
   },
 
-  status (date) {
-    date = moment(date);
-    return dateUtils.isToday(date)     ? 'today upcoming' :
-           dateUtils.isFarPast(date)   ? 'far-past' :
-           dateUtils.isPast(date)      ? 'past' :
-           dateUtils.isRecent(date)    ? 'recent' :
-           dateUtils.isFarFuture(date) ? 'far-future' :
-           dateUtils.isFuture(date)    ? 'future' :
+  status (momentDateate) {
+    return dateUtils.isToday(momentDateate)     ? 'today upcoming' :
+           dateUtils.isFarPast(momentDateate)   ? 'far-past' :
+           dateUtils.isPast(momentDateate)      ? 'past' :
+           dateUtils.isRecent(momentDateate)    ? 'recent' :
+           dateUtils.isFarFuture(momentDateate) ? 'far-future' :
+           dateUtils.isFuture(momentDateate)    ? 'future' :
                                          'upcoming';
   },
 
-  todayMap () {
-    return Immutable.Map({ date: moment().toISOString() });
+  todayObject () {
+    return { date: moment().toISOString() };
   },
 };
 

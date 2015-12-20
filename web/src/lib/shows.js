@@ -1,5 +1,22 @@
+import Immutable from 'immutable';
 import { upcomingEpisodes, recentEpisodes, sortAscending } from './episodes';
 import date from './date';
+
+export function deserializeShows (shows) {
+  return Immutable.fromJS(shows);
+}
+
+export function serializeShows (shows) {
+  return shows.toJS(shows);
+}
+
+export function deserializeShow (show) {
+  return Immutable.fromJS(show);
+}
+
+export function serializeShow (show) {
+  return show.toJS();
+}
 
 export function withEpisodes (shows, episodesIndex) {
   return shows.map((show) => {

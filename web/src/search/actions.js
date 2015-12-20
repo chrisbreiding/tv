@@ -1,4 +1,5 @@
 import api from '../data/api';
+import { deserialize } from '../lib/source-shows';
 
 export const REQUEST_SOURCE_SHOWS = 'REQUEST_SOURCE_SHOWS';
 export function requestSourceShows () {
@@ -20,7 +21,7 @@ export function searchSourceShows (query) {
     dispatch(requestSourceShows());
 
     api.searchSourceShows(query).then((shows) => {
-      dispatch(receiveSourceShows(shows));
+      dispatch(receiveSourceShows(deserialize(shows)));
     });
   };
 }

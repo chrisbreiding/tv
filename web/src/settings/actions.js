@@ -1,7 +1,7 @@
 import api from '../data/api';
-import Immutable from 'immutable';
 import moment from 'moment';
 import cache, { SETTINGS , DATE_SETTINGS_UPDATED } from '../data/cache';
+import { deserialize, serialize } from '../lib/settings';
 import date from '../lib/date';
 
 export const RECEIVE_SETTINGS = 'RECEIVE_SETTINGS';
@@ -22,21 +22,21 @@ export function settingsUpdated (settings) {
 
 function getSettingsFromCache () {
   return Promise.all([
-    cache.get(SETTINGS),
-    cache.get(DATE_SETTINGS_UPDATED)
+    cache.get(SETTINGS).then(settings => deserialize(settings)),
+    cache.get(DATE_SETTINGS_UPDATED).then(date => date && moment(date.date))
   ]);
 }
 
 function getSettingsFromApi () {
   return api.getSettings().then((settings) => {
     cache.set(SETTINGS, settings);
-    cache.set(DATE_SETTINGS_UPDATED, date.todayMap());
-    return settings;
+    cache.set(DATE_SETTINGS_UPDATED, date.todayObject());
+    return deserialize(settings);
   });
 }
 
 function evaluateCache ([settings, dateUpdated]) {
-  return settings && dateUpdated && date.isToday(moment(dateUpdated.get('date'))) ?
+  return settings && dateUpdated && date.isToday(dateUpdated) ?
     settings :
     getSettingsFromApi();
 }
@@ -53,9 +53,9 @@ export function fetchSettings () {
 
 export function updateSettings (settings) {
   return (dispatch, getState) => {
-    api.updateSettings(settings).then(() => {
+    api.updateSettings(serialize(settings)).then(() => {
       dispatch(settingsUpdated(settings));
-      cache.set(SETTINGS, getState().settings);
+      cache.set(SETTINGS, serialize(getState().settings));
     });
   };
 }

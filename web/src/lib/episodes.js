@@ -4,10 +4,23 @@ import date from './date';
 
 let recentDaysCutoff = localStorage.recentDaysCutoff || 5;
 
-export function index (episodesList) {
-  return episodesList.reduce((coll, episode) => {
-    return coll.set(`${episode.get('id')}`, episode);
-  }, Immutable.Map());
+export function deserializeEpisodes (episodes) {
+  return Immutable.fromJS(episodes).map((episode) => {
+    return episode.set('airdate', moment(episode.get('airdate')));
+  });
+}
+
+export function serializeEpisodes (episodes) {
+  return episodes.map(episode => {
+    return episode.set('airdate', episode.get('airdate').toISOString());
+  }).toJS();
+}
+
+export function index (episodes) {
+  return episodes.reduce((coll, episode) => {
+    coll[episode.id] = episode;
+    return coll;
+  }, {});
 }
 
 export function recentEpisodes (episodes) {
@@ -43,13 +56,13 @@ function isRecent (episode) {
   let airdate = episode.get('airdate');
   let startOfiveDaysAgo = moment().subtract(recentDaysCutoff, 'days').startOf('day');
   let startOfToday = moment().startOf('day');
-  return moment(airdate).isBetween(startOfiveDaysAgo.subtract(1, 'second'), startOfToday);
+  return airdate.isBetween(startOfiveDaysAgo.subtract(1, 'second'), startOfToday);
 }
 
 function isUpcoming (episode) {
   let airdate = episode.get('airdate');
   let startOfToday = moment().startOf('day');
-  return moment(airdate).isAfter(startOfToday.subtract(1, 'second'));
+  return airdate.isAfter(startOfToday.subtract(1, 'second'));
 }
 
 export function longEpisodeNumber (episode) {

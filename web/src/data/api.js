@@ -1,6 +1,4 @@
 import axios from 'axios';
-import Immutable from 'immutable';
-import { index } from '../lib/episodes';
 
 const baseUrl = localStorage.apiUrl || 'http://tvapi.crbapps.com';
 
@@ -27,59 +25,37 @@ function request (endpoint, method = 'get', props = {}) {
 export default {
   getShows () {
     return request('shows').then((response) => {
-      const { shows, episodes } = response && response.data || { shows: [], episodes: [] };
-      return {
-        shows: Immutable.fromJS(shows),
-        episodes: Immutable.fromJS(episodes)
-      };
+      return response && response.data || { shows: [], episodes: [] };
     });
   },
 
   addShow (show) {
-    return request('shows', 'post', {
-      data: { show }
-    }).then((response) => {
-      const { show, episodes } = response.data;
-      return {
-        show: Immutable.fromJS(show),
-        episodes: index(Immutable.fromJS(episodes))
-      };
+    return request('shows', 'post', { data: { show } }).then((response) => {
+      return response.data;
     });
   },
 
   updateShow (show) {
-    return request(`shows/${show.get('id')}`, 'put', {
-      data: {
-        show: show.toObject()
-      }
-    });
+    return request(`shows/${show.id}`, 'put', { data: { show } });
   },
 
   deleteShow (show) {
-    return request(`shows/${show.get('id')}`, 'delete');
+    return request(`shows/${show.id}`, 'delete');
   },
 
   getSettings () {
     return request('settings/1').then((response) => {
-      const { setting } = response && response.data || { setting: {} };
-      return Immutable.Map(setting);
+      return response && response.data && response.data.setting || {};
     });
   },
 
-  updateSettings (settings) {
-    return request('settings/1', 'put', {
-      setting: settings.toObject()
-    });
+  updateSettings (setting) {
+    return request('settings/1', 'put', { data: { setting } });
   },
 
   searchSourceShows (query) {
-    return request('source_shows', 'get', {
-      params: {
-        query: query
-      }
-    }).then((response) => {
-      const { source_shows } = response && response.data || { source_shows: [] };
-      return Immutable.fromJS(source_shows);
+    return request('source_shows', 'get', { params: { query } }).then((response) => {
+      return response && response.data && response.data.source_shows || [];
     });
   },
 };

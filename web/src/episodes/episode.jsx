@@ -25,7 +25,7 @@ export default createClass({
   render () {
     const { show, episode } = this.props;
 
-    const airdate = moment(episode.get('airdate'));
+    const airdate = episode.get('airdate');
     const className = cs({
       'episode-single': true,
        today: date.isToday(airdate),

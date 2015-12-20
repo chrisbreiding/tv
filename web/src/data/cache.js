@@ -1,4 +1,3 @@
-import Immutable from 'immutable';
 import localforage from 'localforage';
 
 export const SHOWS = 'shows';
@@ -9,12 +8,10 @@ export const DATE_SETTINGS_UPDATED = 'date-settings-updated';
 
 export default {
   get (name) {
-    return localforage.getItem(`cache-${name}`).then((data) => {
-      return Immutable.fromJS(data);
-    });
+    return localforage.getItem(`cache-${name}`);
   },
 
   set (name, data) {
-    localforage.setItem(`cache-${name}`, data.toJS());
+    localforage.setItem(`cache-${name}`, data);
   },
 };

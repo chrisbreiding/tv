@@ -3,7 +3,8 @@ import Immutable from 'immutable';
 import moment from 'moment';
 import cache, { SHOWS, EPISODES, DATE_SHOWS_UPDATED } from '../data/cache';
 import { receiveEpisodes, episodesAdded } from '../episodes/actions';
-import { index } from '../lib/episodes';
+import { deserializeShows, serializeShows, deserializeShow, serializeShow } from '../lib/shows';
+import { deserializeEpisodes, serializeEpisodes, index } from '../lib/episodes';
 import date from '../lib/date';
 
 export const REQUEST_SHOWS = 'REQUEST_SHOWS';
@@ -47,24 +48,29 @@ export function showDeleted (show) {
 
 function getShowsFromCache () {
   return Promise.all([
-    cache.get(EPISODES),
-    cache.get(SHOWS),
-    cache.get(DATE_SHOWS_UPDATED)
+    cache.get(EPISODES).then(episodes => episodes && deserializeEpisodes(episodes)),
+    cache.get(SHOWS).then(shows => shows && deserializeShows(shows)),
+    cache.get(DATE_SHOWS_UPDATED).then(date => date && moment(date.date))
   ]);
 }
 
 function getShowsFromApi () {
   return api.getShows().then(({ episodes, shows }) => {
-    episodes = index(episodes);
-    cache.set(EPISODES, episodes);
+    const indexedEpisodes = index(episodes);
+    const deserializedEpisodes = deserializeEpisodes(indexedEpisodes);
+    const deserializedShows = deserializeShows(shows);
+    cache.set(EPISODES, indexedEpisodes);
     cache.set(SHOWS, shows);
-    cache.set(DATE_SHOWS_UPDATED, date.todayMap());
-    return { episodes: index(episodes), shows };
+    cache.set(DATE_SHOWS_UPDATED, date.todayObject());
+    return {
+      episodes: deserializedEpisodes,
+      shows: deserializedShows
+    };
   });
 }
 
 function evaluateCache ([episodes, shows, dateUpdated]) {
-  return episodes && shows && dateUpdated && date.isToday(moment(dateUpdated.get('date'))) ?
+  return episodes && shows && dateUpdated && date.isToday(dateUpdated) ?
     { episodes, shows } :
     getShowsFromApi();
 }
@@ -85,32 +91,32 @@ export function fetchShows () {
 export function addShow (showToAdd) {
   return (dispatch, getState) => {
     api.addShow(showToAdd).then(({ show, episodes }) => {
-      dispatch(episodesAdded(episodes));
-      dispatch(showAdded(show));
+      dispatch(episodesAdded(deserializeEpisodes(index(episodes))));
+      dispatch(showAdded(deserializeShow(show)));
 
       const state = getState();
-      cache.set(EPISODES, state.episodes);
-      cache.set(SHOWS, state.shows.get('items'));
+      cache.set(EPISODES, serializeEpisodes(state.episodes));
+      cache.set(SHOWS, serializeShows(state.shows.get('items')));
     });
   };
 }
 
 export function updateShow (show) {
   return (dispatch, getState) => {
-    api.updateShow(show).then(() => {
-      dispatch(showUpdated(show));
+    api.updateShow(serializeShow(show)).then(() => {
+      dispatch(showUpdated(deserializeShow(show)));
 
-      cache.set(SHOWS, getState().shows.get('items'));
+      cache.set(SHOWS, serializeShows(getState().shows.get('items')));
     });
   };
 }
 
 export function deleteShow (show) {
   return (dispatch, getState) => {
-    api.deleteShow(show).then(() => {
-      dispatch(showDeleted(show));
+    api.deleteShow(serializeShow(show)).then(() => {
+      dispatch(showDeleted(deserializeShow(show)));
 
-      cache.set(SHOWS, getState().shows.get('items'));
+      cache.set(SHOWS, serializeShows(getState().shows.get('items')));
     });
   };
 }
