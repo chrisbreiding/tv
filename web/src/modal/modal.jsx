@@ -14,14 +14,20 @@ export default createClass({
     return (
       <div className={`modal-dialog-overlay ${this.props.className}`}>
         <div className="modal-dialog">
+          <header>
+            {this.props.headerContent}
+            {this._closeButton()}
+          </header>
           <div className="modal-dialog-content">
             {this.props.children}
-            <footer>
+          </div>
+          <footer>
+            {this.props.footerContent}
+            <div className="modal-controls">
               {this._cancelButton()}
               {this._okButton()}
-            </footer>
-          </div>
-          {this._closeButton()}
+            </div>
+          </footer>
         </div>
       </div>
     );

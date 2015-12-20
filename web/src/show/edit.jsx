@@ -15,9 +15,9 @@ const Edit = createClass({
     if (!show) { return <span></span>; }
 
     return (
-      <div>
-        <Modal onClose={this._close}>
-          <form className="form show-edit" onSubmit={this._save}>
+      <div className="show-edit">
+        <Modal onClose={this._close} footerContent={this._controls()}>
+          <form className="form" onSubmit={this._save}>
             <fieldset>
               <label>Display Name</label>
               <AutoFocusedInput ref="displayName" defaultValue={show.get('display_name')} />
@@ -32,14 +32,18 @@ const Edit = createClass({
               <label>File Name</label>
               <Input ref="fileName" defaultValue={show.get('file_name')} />
             </fieldset>
-
-            <footer className="clearfix">
-              <button type="submit">Save</button>
-              <a onClick={this._askForConfirmation} href="#">Delete show</a>
-            </footer>
           </form>
         </Modal>
         {this._confirmation(show)}
+      </div>
+    );
+  },
+
+  _controls () {
+    return (
+      <div className="controls">
+        <a onClick={this._askForConfirmation} href="#">Delete show</a>
+        <button type="submit" onClick={this._save}>Save</button>
       </div>
     );
   },
@@ -83,7 +87,7 @@ const Edit = createClass({
 
   _close () {
     this.props.dispatch(navigateHome());
-  }
+  },
 });
 
 const stateToProps = ({ shows }, props) => {

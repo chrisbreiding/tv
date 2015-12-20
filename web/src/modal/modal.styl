@@ -19,18 +19,29 @@ body.modal-dialog-present {
   background: dark-color;
   border: solid 1px lighten(dark-color, 10%);
   border-radius: 3px;
+  display: flex;
+  flex-direction: column;
   margin: 20px;
   max-height: 90%;
-  overflow-y: scroll;
-  padding: 2em 3em;
   position: relative;
 
   p {
     margin-bottom: 1.2em;
   }
 
+  header,
+  .modal-dialog-content,
   footer {
-    text-align: right;
+    padding: 1em 1.5em;
+  }
+
+  .modal-dialog-content {
+    overflow-y: scroll;
+  }
+
+  .modal-controls {
+    display: flex;
+    justify-content: flex-end;
   }
 
   .ok {

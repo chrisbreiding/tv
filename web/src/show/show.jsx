@@ -27,8 +27,11 @@ const Show = function ({ show, episodes, dispatch }) {
   if (!show || !episodes) { return <span></span>; }
 
   return (
-    <Modal className="all-episodes" onClose={() => dispatch(navigateHome())}>
-      <h2>{show.get('display_name')}</h2>
+    <Modal
+      className="all-episodes"
+      headerContent={<h2>{show.get('display_name')}</h2>}
+      onClose={() => dispatch(navigateHome())}
+    >
       <ul>
         <li>
           {

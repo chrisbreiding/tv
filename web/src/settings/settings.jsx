@@ -9,18 +9,12 @@ import { navigateHome } from '../lib/navigation';
 const Settings = createClass({
   render () {
     return (
-      <Modal onClose={this._close}>
-        <form className="form settings" onSubmit={this._save}>
+      <Modal className="settings" onClose={this._close} footerContent={this._controls()}>
+        <form className="form" onSubmit={this._save}>
           <fieldset>
             <label>View Link</label>
             {this._viewLinkInput()}
           </fieldset>
-
-          <footer className="clearfix">
-            <button type="submit">Save</button>
-          </footer>
-
-          <p>Last updated: {date.longString(this.props.settings.get('last_updated'))}</p>
         </form>
       </Modal>
     );
@@ -30,6 +24,15 @@ const Settings = createClass({
     const viewLink = this.props.settings.get('view_link');
     if (!viewLink) { return null; }
     return <AutoFocusedInput ref="viewLink" defaultValue={viewLink} />;
+  },
+
+  _controls () {
+    return (
+      <div className="controls">
+        <p>Last updated: {date.longString(this.props.settings.get('last_updated'))}</p>
+        <button type="submit" onClick={this._save}>Save</button>
+      </div>
+    );
   },
 
   _save (e) {
