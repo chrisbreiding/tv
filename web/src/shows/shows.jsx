@@ -11,6 +11,9 @@ export default createClass({
 
   render () {
     const { label, type, episodes, settings } = this.props;
+    if (!episodes.size || !this.props.shows.size || !settings.size) {
+      return null;
+    }
     const shows = withEpisodes(this.props.shows, episodes);
 
     return (
