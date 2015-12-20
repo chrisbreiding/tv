@@ -13,7 +13,7 @@ export default createClass({
             <Options show={show} settings={settings} />
           </span>
         </h3>
-        <Episodes show={show} episodes={this.props.filterEpisodes(show.get('episodes'))} />
+        <Episodes show={show} episodes={this.props.filterEpisodes(show.get('episodes'))} threshold={3} />
       </li>
     );
   }
