@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Modal from '../modal/modal';
 import Episodes from '../episodes/episodes';
-import { sortAscending } from '../lib/episodes';
+import { sortAscending } from '../episodes/util';
 import { navigateHome } from '../lib/navigation';
 
 function seasons (episodeIds, episodes) {

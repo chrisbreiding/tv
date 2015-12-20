@@ -1,5 +1,5 @@
 import React, { createClass } from 'react';
-import { withEpisodes } from '../lib/shows';
+import { withEpisodes } from '../shows/util';
 import Show from './show';
 
 export default createClass({

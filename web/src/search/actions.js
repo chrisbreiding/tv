@@ -1,5 +1,5 @@
 import api from '../data/api';
-import { deserialize } from '../lib/source-shows';
+import { deserialize } from '../search/util';
 
 export const REQUEST_SOURCE_SHOWS = 'REQUEST_SOURCE_SHOWS';
 export function requestSourceShows () {

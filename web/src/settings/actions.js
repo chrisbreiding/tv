@@ -1,7 +1,7 @@
 import api from '../data/api';
 import moment from 'moment';
 import cache, { SETTINGS , DATE_SETTINGS_UPDATED } from '../data/cache';
-import { deserialize, serialize } from '../lib/settings';
+import { deserialize, serialize } from '../settings/util';
 import date from '../lib/date';
 
 export const RECEIVE_SETTINGS = 'RECEIVE_SETTINGS';

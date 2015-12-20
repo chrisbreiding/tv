@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
-import { upcomingEpisodes, recentEpisodes, sortAscending } from './episodes';
-import date from './date';
+import { upcomingEpisodes, recentEpisodes, sortAscending } from '../episodes/util';
+import date from '../lib/date';
 
 export function deserializeShows (shows) {
   return Immutable.fromJS(shows);

@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { fetchShows } from '../shows/actions';
 import { fetchSettings } from '../settings/actions';
 import Shows from '../shows/shows';
-import { recentShows, upcomingShows, offAirShows } from '../lib/shows';
-import { recentEpisodes, upcomingEpisodes, offAirEpisodes } from '../lib/episodes';
+import { recentShows, upcomingShows, offAirShows } from '../shows/util';
+import { recentEpisodes, upcomingEpisodes, offAirEpisodes } from '../episodes/util';
 import Loader from '../loader/loader';
 
 const TimePeriods = createClass({

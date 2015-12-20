@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 import moment from 'moment';
-import date from './date';
+import date from '../lib/date';
 
 let recentDaysCutoff = localStorage.recentDaysCutoff || 5;
 

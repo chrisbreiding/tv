@@ -1,7 +1,7 @@
 import cs from 'classnames';
 import moment from 'moment';
 import React, { createClass } from 'react';
-import { shortEpisodeNumber, longEpisodeNumber, fileSafeTitle } from '../lib/episodes';
+import { shortEpisodeNumber, longEpisodeNumber, fileSafeTitle } from '../episodes/util';
 import date from '../lib/date';
 
 export default createClass({

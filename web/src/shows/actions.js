@@ -3,8 +3,8 @@ import Immutable from 'immutable';
 import moment from 'moment';
 import cache, { SHOWS, EPISODES, DATE_SHOWS_UPDATED } from '../data/cache';
 import { receiveEpisodes, episodesAdded } from '../episodes/actions';
-import { deserializeShows, serializeShows, deserializeShow, serializeShow } from '../lib/shows';
-import { deserializeEpisodes, serializeEpisodes, index } from '../lib/episodes';
+import { deserializeShows, serializeShows, deserializeShow, serializeShow } from '../shows/util';
+import { deserializeEpisodes, serializeEpisodes, index } from '../episodes/util';
 import date from '../lib/date';
 
 export const REQUEST_SHOWS = 'REQUEST_SHOWS';
