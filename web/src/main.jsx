@@ -15,7 +15,7 @@ import Settings from './settings/settings';
 import Search from './search/search';
 import SearchResults from './search/results';
 
-const hashHistory = createHistory();
+const hashHistory = createHistory({ queryKey: false });
 syncReduxAndRouter(hashHistory, store);
 
 render(
