@@ -15,7 +15,8 @@ module.exports = function(app, express) {
                     .subtract(_.random(1, 20), 'days')
                     .startOf('day')
                     .toISOString(),
-      network: textGen(1).substr(0, 3).toUpperCase()
+      network: textGen(1).substr(0, 3).toUpperCase(),
+      banner: '/api/static/banner-' + _.random(1, 4) + '.png'
     };
   });
 

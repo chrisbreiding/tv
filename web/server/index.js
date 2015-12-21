@@ -6,5 +6,6 @@ module.exports = function(app, express) {
     }
     next();
   });
+  app.use('/api/static', express.static(__dirname + '/static'));
   app.use('/api', router);
 };

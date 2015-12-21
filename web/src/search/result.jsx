@@ -10,6 +10,7 @@ export default ({ exists, show, onAddShow }) => {
       </button>
       <div>
         {exists ? <p>Show already added</p> : null}
+        <img src={show.get('banner')} />
         <h4>{show.get('name')}</h4>
         <dl>
           <dt className={cs({ 'no-value': !show.get('first_aired') })}>First Aired</dt>
