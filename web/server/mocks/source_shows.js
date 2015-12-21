@@ -10,7 +10,7 @@ module.exports = function(app, express) {
       id: id,
       name: textGen(1, 4),
       description: textGen(10, 30),
-      firstAired: moment()
+      first_aired: moment()
                     .subtract(_.random(1, 10), 'years')
                     .subtract(_.random(1, 20), 'days')
                     .startOf('day')
