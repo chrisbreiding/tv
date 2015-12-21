@@ -32,6 +32,8 @@ const Edit = createClass({
               <label>File Name</label>
               <Input ref="fileName" defaultValue={show.get('file_name')} />
             </fieldset>
+
+            <button className="hide">Hidden here so submit on enter works</button>
           </form>
         </Modal>
         {this._confirmation(show)}
