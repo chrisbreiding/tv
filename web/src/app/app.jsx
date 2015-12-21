@@ -3,6 +3,7 @@ import React, { createClass } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { navigateTo } from '../lib/navigation';
+import { pluckState } from '../data/util';
 import FlashMessage from '../flash-message/flash-message';
 
 const App = createClass({
@@ -38,9 +39,4 @@ const App = createClass({
   },
 });
 
-
-function stateToProps ({ shows }) {
-  return { shows };
-}
-
-export default connect(stateToProps)(App);
+export default connect(pluckState('shows'))(App);

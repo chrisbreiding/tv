@@ -5,6 +5,7 @@ import date from '../lib/date';
 import { updateSettings } from './actions';
 import { AutoFocusedInput } from '../lib/form';
 import { navigateHome } from '../lib/navigation';
+import { pluckState } from '../data/util';
 
 const Settings = createClass({
   render () {
@@ -48,8 +49,4 @@ const Settings = createClass({
   },
 });
 
-const stateToProps = ({ settings }) => {
-  return { settings };
-};
-
-export default connect(stateToProps)(Settings);
+export default connect(pluckState('settings'))(Settings);

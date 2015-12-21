@@ -4,6 +4,7 @@ import { fetchShows } from '../shows/actions';
 import { fetchSettings } from '../settings/actions';
 import Shows from '../shows/shows';
 import { recentShows, upcomingShows, offAirShows } from '../shows/util';
+import { pluckState } from '../data/util';
 import { recentEpisodes, upcomingEpisodes, offAirEpisodes } from '../episodes/util';
 import Loader from '../loader/loader';
 
@@ -55,8 +56,4 @@ const TimePeriods = createClass({
   },
 });
 
-function stateToProps ({ shows, episodes, settings }) {
-  return { shows, episodes, settings };
-}
-
-export default connect(stateToProps)(TimePeriods);
+export default connect(pluckState('shows', 'episodes', 'settings'))(TimePeriods);

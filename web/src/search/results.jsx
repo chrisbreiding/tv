@@ -5,6 +5,7 @@ import { addShow } from '../shows/actions';
 import Result from './result';
 import Loader from '../loader/loader';
 import { navigateHome } from '../lib/navigation';
+import { pluckState } from '../data/util';
 
 const Results = createClass({
   componentDidMount () {
@@ -70,8 +71,4 @@ const Results = createClass({
   }
 });
 
-const stateToProps = ({ shows, sourceShows }) => {
-  return { shows, sourceShows };
-};
-
-export default connect(stateToProps)(Results);
+export default connect(pluckState('shows', 'sourceShows'))(Results);
