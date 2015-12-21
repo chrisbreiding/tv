@@ -1,6 +1,7 @@
 import api from '../data/api';
 import Immutable from 'immutable';
 import moment from 'moment';
+import partial from 'lodash.partial';
 import cache, { SHOWS, EPISODES, DATE_SHOWS_UPDATED } from '../data/cache';
 import { receiveEpisodes, episodesAdded } from '../episodes/actions';
 import { deserializeShows, serializeShows, deserializeShow, serializeShow } from '../shows/util';
@@ -65,8 +66,7 @@ export function showDeleted (show) {
 function getShowsFromCache () {
   return Promise.all([
     cache.get(EPISODES).then(episodes => episodes && deserializeEpisodes(episodes)),
-    cache.get(SHOWS).then(shows => shows && deserializeShows(shows)),
-    cache.get(DATE_SHOWS_UPDATED).then(date => date && moment(date.date))
+    cache.get(SHOWS).then(shows => shows && deserializeShows(shows))
   ]);
 }
 
@@ -77,7 +77,6 @@ function getShowsFromApi () {
     const deserializedShows = deserializeShows(shows);
     cache.set(EPISODES, indexedEpisodes);
     cache.set(SHOWS, shows);
-    cache.set(DATE_SHOWS_UPDATED, date.todayObject());
     return {
       episodes: deserializedEpisodes,
       shows: deserializedShows
@@ -85,21 +84,30 @@ function getShowsFromApi () {
   });
 }
 
-function evaluateCache ([episodes, shows, dateUpdated]) {
-  return episodes && shows && dateUpdated && date.isToday(dateUpdated) ?
-    { episodes, shows } :
-    getShowsFromApi();
+function evaluateCache ([episodes, shows]) {
+  return episodes && shows ? { episodes, shows } : getShowsFromApi();
+}
+
+function dispatchShowsAndEpisodes (dispatch, { episodes, shows }) {
+  dispatch(receiveEpisodes(episodes));
+  dispatch(receiveShows(shows));
 }
 
 export function fetchShows () {
   return (dispatch) => {
     dispatch(requestShows());
 
+    const send = partial(dispatchShowsAndEpisodes, dispatch);
+
     getShowsFromCache()
       .then(evaluateCache)
-      .then(({ episodes, shows }) => {
-        dispatch(receiveEpisodes(episodes));
-        dispatch(receiveShows(shows));
+      .then(send)
+      .then(() => cache.get(DATE_SHOWS_UPDATED))
+      .then((dateUpdated) => {
+         if (dateUpdated && !date.isToday(moment(dateUpdated.date))) {
+           getShowsFromApi().then(send);
+         }
+         cache.set(DATE_SHOWS_UPDATED, date.todayObject());
       });
   };
 }

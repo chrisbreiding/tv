@@ -1,5 +1,6 @@
 import api from '../data/api';
 import moment from 'moment';
+import partial from 'lodash.partial';
 import cache, { SETTINGS , DATE_SETTINGS_UPDATED } from '../data/cache';
 import { deserialize, serialize } from '../settings/util';
 import date from '../lib/date';
@@ -21,32 +22,37 @@ export function settingsUpdated (settings) {
 }
 
 function getSettingsFromCache () {
-  return Promise.all([
-    cache.get(SETTINGS).then(settings => deserialize(settings)),
-    cache.get(DATE_SETTINGS_UPDATED).then(date => date && moment(date.date))
-  ]);
+  return cache.get(SETTINGS).then(settings => deserialize(settings));
 }
 
 function getSettingsFromApi () {
   return api.getSettings().then((settings) => {
     cache.set(SETTINGS, settings);
-    cache.set(DATE_SETTINGS_UPDATED, date.todayObject());
     return deserialize(settings);
   });
 }
 
-function evaluateCache ([settings, dateUpdated]) {
-  return settings && dateUpdated && date.isToday(dateUpdated) ?
-    settings :
-    getSettingsFromApi();
+function evaluateCache (settings) {
+  return settings || getSettingsFromApi();
+}
+
+function dispatchSettings (dispatch, settings) {
+  dispatch(receiveSettings(settings));
 }
 
 export function fetchSettings () {
   return (dispatch) => {
+    const send = partial(dispatchSettings, dispatch);
+
     getSettingsFromCache()
       .then(evaluateCache)
-      .then((settings) => {
-        dispatch(receiveSettings(settings));
+      .then(send)
+      .then(() => cache.get(DATE_SETTINGS_UPDATED))
+      .then((dateUpdated) => {
+         if (dateUpdated && !date.isToday(moment(dateUpdated.date))) {
+           getSettingsFromApi().then(send);
+         }
+         cache.set(DATE_SETTINGS_UPDATED, date.todayObject());
       });
   };
 }
