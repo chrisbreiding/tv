@@ -1,11 +1,6 @@
-import Immutable from 'immutable';
 import moment from 'moment';
 
 const dateUtils = {
-  compare (a, b) {
-    return a - b;
-  },
-
   isFarPast (momentDate) {
     return momentDate.isBefore(moment().subtract(2, 'months'), 'day');
   },

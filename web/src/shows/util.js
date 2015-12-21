@@ -29,15 +29,13 @@ export function withEpisodes (shows, episodesIndex) {
 
 export function recentShows (shows) {
   return shows.filter(hasRecentEpisodes).sort((a, b) => {
-    return date.compare(lastEpisode(b).get('airdate'),
-                        lastEpisode(a).get('airdate'));
+    return lastEpisode(b).get('airdate') - lastEpisode(a).get('airdate');
   });
 }
 
 export function upcomingShows (shows) {
   return shows.filter(hasUpcomingEpisodes).sort((a, b) => {
-    return date.compare(nextEpisode(a).get('airdate'),
-                        nextEpisode(b).get('airdate'));
+    return nextEpisode(a).get('airdate') - nextEpisode(b).get('airdate');
   });
 }
 

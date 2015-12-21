@@ -36,7 +36,14 @@ export function offAirEpisodes () {
 }
 
 export function sortAscending (a, b) {
-  return date.compare(a.get('airdate'), b.get('airdate'));
+  const dateComparison = a.get('airdate') - b.get('airdate');
+  if (!dateComparison) {
+    const seasonComparison = a.get('season') - b.get('season');
+    if (!seasonComparison) {
+      return a.get('episode_number') - b.get('episode_number');
+    }
+  }
+  return dateComparison;
 }
 
 export function fileSafeTitle (episode) {
