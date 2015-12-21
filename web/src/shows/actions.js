@@ -22,6 +22,14 @@ export function receiveShows (shows) {
   };
 }
 
+export const ADDING_SHOW = 'ADDING_SHOW';
+export function addingShow (showName) {
+  return {
+    type: ADDING_SHOW,
+    showName
+  };
+}
+
 export const SHOW_ADDED = 'SHOW_ADDED';
 export function showAdded (show) {
   return {
@@ -35,6 +43,14 @@ export function showUpdated (show) {
   return {
     type: SHOW_UPDATED,
     show
+  };
+}
+
+export const DELETING_SHOW = 'DELETING_SHOW';
+export function deletingShow (showName) {
+  return {
+    type: DELETING_SHOW,
+    showName
   };
 }
 
@@ -90,6 +106,8 @@ export function fetchShows () {
 
 export function addShow (showToAdd) {
   return (dispatch, getState) => {
+    dispatch(addingShow(showToAdd.display_name));
+
     api.addShow(showToAdd).then(({ show, episodes }) => {
       dispatch(episodesAdded(deserializeEpisodes(index(episodes))));
       dispatch(showAdded(deserializeShow(show)));
@@ -113,6 +131,8 @@ export function updateShow (show) {
 
 export function deleteShow (show) {
   return (dispatch, getState) => {
+    dispatch(deletingShow(show.get('display_name')));
+
     api.deleteShow(serializeShow(show)).then(() => {
       dispatch(showDeleted(deserializeShow(show)));
 

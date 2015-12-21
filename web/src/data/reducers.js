@@ -3,8 +3,10 @@ import { routeReducer } from 'redux-simple-router';
 import {
   REQUEST_SHOWS,
   RECEIVE_SHOWS,
+  ADDING_SHOW,
   SHOW_ADDED,
   SHOW_UPDATED,
+  DELETING_SHOW,
   SHOW_DELETED
 } from '../shows/actions';
 import {
@@ -25,6 +27,8 @@ export default {
 
   shows (state = Immutable.Map({
     isFetching: false,
+    addingShow: null,
+    deletingShow: null,
     items: Immutable.List()
   }), action) {
     switch (action.type) {
@@ -37,8 +41,13 @@ export default {
           isFetching: false,
           items: action.shows
         });
+      case ADDING_SHOW:
+        return state.merge({
+          addingShow: action.showName
+        });
       case SHOW_ADDED:
         return state.merge({
+          addingShow: null,
           items: state.get('items').push(action.show)
         });
       case SHOW_UPDATED:
@@ -50,11 +59,16 @@ export default {
         return state.merge({
           items: state.get('items').set(indexToUpdate, action.show)
         });
+      case DELETING_SHOW:
+        return state.merge({
+          deletingShow: action.showName
+        });
       case SHOW_DELETED:
         const indexToDelete = state.get('items').indexOf(action.show);
         if (indexToDelete < 0) { return state; }
 
         return state.merge({
+          deletingShow: null,
           items: state.get('items').delete(indexToDelete)
         });
       default:

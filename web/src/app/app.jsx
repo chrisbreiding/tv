@@ -3,6 +3,7 @@ import React, { createClass } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { navigateTo } from '../lib/navigation';
+import FlashMessage from '../flash-message/flash-message';
 
 const App = createClass({
   componentWillMount () {
@@ -31,9 +32,15 @@ const App = createClass({
           </li>
         </ul>
         {this.props.children}
+        <FlashMessage {...this.props} />
       </div>
     );
   },
 });
 
-export default connect()(App);
+
+function stateToProps ({ shows }) {
+  return { shows };
+}
+
+export default connect(stateToProps)(App);
