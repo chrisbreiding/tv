@@ -22,7 +22,7 @@ export function settingsUpdated (settings) {
 }
 
 function getSettingsFromCache () {
-  return cache.get(SETTINGS).then(settings => deserialize(settings));
+  return cache.get(SETTINGS).then(settings => settings && deserialize(settings));
 }
 
 function getSettingsFromApi () {
