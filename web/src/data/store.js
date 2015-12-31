@@ -6,6 +6,10 @@ import cache from './cache';
 import { serializeShows } from '../shows/util';
 import { serializeEpisodes } from '../episodes/util';
 
+if (localStorage.debug) {
+  window.__crbCache = cache;
+}
+
 const cacheMiddleware = store => next => action => {
   if (!localStorage.debug) { return next(action); }
 
