@@ -16,7 +16,7 @@ const TimePeriods = createClass({
 
   render () {
     if (this.props.shows.get('isFetching')) {
-      return <p className="loading-shows">
+      return <p className="full-screen-centered">
        <Loader>Loading shows...</Loader>
       </p>;
     } else {
