@@ -1,30 +1,48 @@
 import Immutable from 'immutable';
-import { upcomingEpisodes, recentEpisodes, sortAscending } from '../episodes/util';
+import { deserializeEpisodes, serializableEpisodes, upcomingEpisodes, recentEpisodes, sortAscending } from '../episodes/util';
 import date from '../lib/date';
 
 export function deserializeShows (shows) {
   return Immutable.fromJS(shows);
 }
 
-export function serializeShows (shows) {
-  return shows.toJS(shows);
-}
-
 export function deserializeShow (show) {
   return Immutable.fromJS(show);
+}
+
+export function deserializeShowsAndEpisodes (shows) {
+  return Immutable.List(shows).map(deserializeShowAndEpisodes);
+}
+
+export function deserializeShowAndEpisodes (show) {
+  return Immutable.Map(show).set('episodes', deserializeEpisodes(show.episodes));
+}
+
+export function serializeShows (shows) {
+  return shows.map(serializableShow).toJS();
 }
 
 export function serializeShow (show) {
   return show.toJS();
 }
 
-export function withEpisodes (shows, episodesIndex) {
-  return shows.map((show) => {
-    const episodes = show.get('episode_ids')
-      .map((id) => episodesIndex.get(`${id}`))
-      .sort(sortAscending);
-    return show.set('episodes', episodes);
-  });
+export function serializeShowAndEpisodes (show) {
+  return serializableShow(show).toJS();
+}
+
+function serializableShow (show) {
+  return show.update('episodes', serializableEpisodes);
+}
+
+export function showsWithEpisodes (shows, episodesIndex) {
+  return shows.map(show => showWithEpisodes(show, episodesIndex));
+}
+
+export function showWithEpisodes (show, episodesIndex) {
+  const episodes = show.get('episode_ids')
+    .map((id) => episodesIndex.get(`${id}`))
+    .sort(sortAscending);
+  return show.set('episodes', episodes).delete('episode_ids');
 }
 
 export function recentShows (shows) {

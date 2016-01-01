@@ -2,9 +2,8 @@ import api from '../data/api';
 import Immutable from 'immutable';
 import moment from 'moment';
 import partial from 'lodash.partial';
-import cache, { SHOWS, EPISODES, DATE_SHOWS_UPDATED } from '../data/cache';
-import { receiveEpisodes, episodesAdded } from '../episodes/actions';
-import { deserializeShows, serializeShows, deserializeShow, serializeShow } from '../shows/util';
+import cache, { SHOWS, DATE_SHOWS_UPDATED } from '../data/cache';
+import * as showsUtil from '../shows/util';
 import { deserializeEpisodes, serializeEpisodes, index } from '../episodes/util';
 import date from '../lib/date';
 
@@ -64,32 +63,24 @@ export function showDeleted (show) {
 }
 
 function getShowsFromCache () {
-  return Promise.all([
-    cache.get(EPISODES).then(episodes => episodes && deserializeEpisodes(episodes)),
-    cache.get(SHOWS).then(shows => shows && deserializeShows(shows))
-  ]);
+  return cache.get(SHOWS).then(shows => shows && showsUtil.deserializeShowsAndEpisodes(shows));
 }
 
 function getShowsFromApi () {
-  return api.getShows().then(({ episodes, shows }) => {
-    const indexedEpisodes = index(episodes);
-    const deserializedEpisodes = deserializeEpisodes(indexedEpisodes);
-    const deserializedShows = deserializeShows(shows);
-    cache.set(EPISODES, indexedEpisodes);
-    cache.set(SHOWS, shows);
-    return {
-      episodes: deserializedEpisodes,
-      shows: deserializedShows
-    };
+  return api.getShows().then(({ shows, episodes }) => {
+    const deserializedShows = showsUtil.deserializeShows(shows);
+    const deserializedEpisodes = deserializeEpisodes(index(episodes));
+    const showsWithEpisodes = showsUtil.showsWithEpisodes(deserializedShows, deserializedEpisodes);
+    cache.set(SHOWS, showsUtil.serializeShows(showsWithEpisodes));
+    return showsWithEpisodes;
   });
 }
 
-function evaluateCache ([episodes, shows]) {
-  return episodes && shows ? { episodes, shows } : getShowsFromApi();
+function evaluateCache (shows) {
+  return shows || getShowsFromApi();
 }
 
-function dispatchShowsAndEpisodes (dispatch, { episodes, shows }) {
-  dispatch(receiveEpisodes(episodes));
+function dispatchShows (dispatch, shows) {
   dispatch(receiveShows(shows));
 }
 
@@ -97,7 +88,7 @@ export function fetchShows () {
   return (dispatch) => {
     dispatch(requestShows());
 
-    const send = partial(dispatchShowsAndEpisodes, dispatch);
+    const send = partial(dispatchShows, dispatch);
 
     getShowsFromCache()
       .then(evaluateCache)
@@ -117,22 +108,23 @@ export function addShow (showToAdd) {
     dispatch(addingShow(showToAdd.display_name));
 
     api.addShow(showToAdd).then(({ show, episodes }) => {
-      dispatch(episodesAdded(deserializeEpisodes(index(episodes))));
-      dispatch(showAdded(deserializeShow(show)));
+      const deserializedShow = showsUtil.deserializeShow(show);
+      const deserializedEpisodes = deserializeEpisodes(index(episodes));
+      const showWithEpisodes = showsUtil.showWithEpisodes(deserializedShow, deserializedEpisodes);
+      dispatch(showAdded(showWithEpisodes));
 
       const state = getState();
-      cache.set(EPISODES, serializeEpisodes(state.episodes));
-      cache.set(SHOWS, serializeShows(state.shows.get('items')));
+      cache.set(SHOWS, showsUtil.serializeShows(state.shows.get('items')));
     });
   };
 }
 
 export function updateShow (show) {
   return (dispatch, getState) => {
-    api.updateShow(serializeShow(show)).then(() => {
-      dispatch(showUpdated(deserializeShow(show)));
+    api.updateShow(showsUtil.serializeShow(show.delete('episodes'))).then(() => {
+      dispatch(showUpdated(show));
 
-      cache.set(SHOWS, serializeShows(getState().shows.get('items')));
+      cache.set(SHOWS, showsUtil.serializeShows(getState().shows.get('items')));
     });
   };
 }
@@ -141,10 +133,10 @@ export function deleteShow (show) {
   return (dispatch, getState) => {
     dispatch(deletingShow(show.get('display_name')));
 
-    api.deleteShow(serializeShow(show)).then(() => {
-      dispatch(showDeleted(deserializeShow(show)));
+    api.deleteShow(showsUtil.serializeShow(show.delete('episodes'))).then(() => {
+      dispatch(showDeleted(show));
 
-      cache.set(SHOWS, serializeShows(getState().shows.get('items')));
+      cache.set(SHOWS, showsUtil.serializeShows(getState().shows.get('items')));
     });
   };
 }

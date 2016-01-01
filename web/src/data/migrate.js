@@ -1,6 +1,9 @@
 import localforage from 'localforage';
 
 const migrations = {
+  1 () {
+    return localforage.clear();
+  },
 };
 
 function run (version) {

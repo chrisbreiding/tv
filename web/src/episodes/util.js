@@ -6,14 +6,14 @@ let recentDaysCutoff = localStorage.recentDaysCutoff || 5;
 
 export function deserializeEpisodes (episodes) {
   return Immutable.fromJS(episodes).map((episode) => {
-    return episode.set('airdate', moment(episode.get('airdate')));
+    return episode.update('airdate', airdate => moment(airdate));
   });
 }
 
-export function serializeEpisodes (episodes) {
+export function serializableEpisodes (episodes) {
   return episodes.map(episode => {
-    return episode.set('airdate', episode.get('airdate').toISOString());
-  }).toJS();
+    return episode.update('airdate', airdate => airdate.toISOString());
+  });
 }
 
 export function index (episodes) {

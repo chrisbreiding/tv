@@ -10,10 +10,6 @@ import {
   SHOW_DELETED
 } from '../shows/actions';
 import {
-  RECEIVE_EPISODES,
-  EPISODES_ADDED
-} from '../episodes/actions';
-import {
   RECEIVE_SETTINGS,
   SETTINGS_UPDATED
 } from '../settings/actions';
@@ -71,17 +67,6 @@ export default {
           deletingShow: null,
           items: state.get('items').delete(indexToDelete)
         });
-      default:
-        return state;
-    }
-  },
-
-  episodes (state = Immutable.Map(), action) {
-    switch (action.type) {
-      case RECEIVE_EPISODES:
-        return action.episodes;
-      case EPISODES_ADDED:
-        return state.merge(action.episodes);
       default:
         return state;
     }

@@ -15,6 +15,8 @@ const TimePeriods = createClass({
   },
 
   render () {
+    const shows = this.props.shows.get('items');
+
     if (this.props.shows.get('isFetching')) {
       return <p className="full-screen-centered">
        <Loader>Loading shows...</Loader>
@@ -25,27 +27,21 @@ const TimePeriods = createClass({
           <Shows
             type="recent"
             label="Recent"
-            shows={this.props.shows.get('items')}
-            filterShows={recentShows}
-            episodes={this.props.episodes}
+            shows={recentShows(shows)}
             filterEpisodes={recentEpisodes}
             settings={this.props.settings}
           />
           <Shows
             type="upcoming"
             label="Upcoming"
-            shows={this.props.shows.get('items')}
-            filterShows={upcomingShows}
-            episodes={this.props.episodes}
+            shows={upcomingShows(shows)}
             filterEpisodes={upcomingEpisodes}
             settings={this.props.settings}
           />
           <Shows
             type="off-air"
             label="Off Air"
-            shows={this.props.shows.get('items')}
-            filterShows={offAirShows}
-            episodes={this.props.episodes}
+            shows={offAirShows(shows)}
             filterEpisodes={offAirEpisodes}
             settings={this.props.settings}
           />
@@ -56,4 +52,4 @@ const TimePeriods = createClass({
   },
 });
 
-export default connect(pluckState('shows', 'episodes', 'settings'))(TimePeriods);
+export default connect(pluckState('shows', 'settings'))(TimePeriods);
