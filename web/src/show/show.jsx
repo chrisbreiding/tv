@@ -6,9 +6,8 @@ import Episodes from '../episodes/episodes';
 import { sortAscending } from '../episodes/util';
 import { navigateHome } from '../lib/navigation';
 
-function seasons (episodeIds, episodes) {
-  return episodeIds.reduce((coll, episodeId) => {
-    const episode = episodes.get(`${episodeId}`);
+function seasons (episodes) {
+  return episodes.reduce((coll, episode) => {
     const seasonNumber = episode.get('season');
     const existingSeason = coll.findEntry((season) => season.get('season') === seasonNumber);
     if (existingSeason) {
@@ -23,8 +22,8 @@ function seasons (episodeIds, episodes) {
   }, Immutable.List()).sortBy(season => season.get('season'));
 }
 
-const Show = function ({ show, episodes, dispatch }) {
-  if (!show || !episodes) { return <span></span>; }
+const Show = function ({ show, dispatch }) {
+  if (!show) { return <span></span>; }
 
   return (
     <Modal
@@ -35,7 +34,7 @@ const Show = function ({ show, episodes, dispatch }) {
       <ul>
         <li>
           {
-            seasons(show.get('episode_ids'), episodes).map((season) => {
+            seasons(show.get('episodes')).map((season) => {
               return (
                 <div key={season.get('season')}>
                   <h3>Season {season.get('season')}</h3>
@@ -50,10 +49,9 @@ const Show = function ({ show, episodes, dispatch }) {
   );
 };
 
-const stateToProps = ({ shows, episodes }, props) => {
+const stateToProps = ({ shows }, props) => {
   return {
-    show: shows.get('items').find((show) => show.get('id') === Number(props.params.id)),
-    episodes
+    show: shows.get('items').find((show) => show.get('id') === Number(props.params.id))
   };
 };
 
