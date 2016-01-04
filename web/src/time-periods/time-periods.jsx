@@ -4,7 +4,6 @@ import { fetchShows } from '../shows/actions';
 import { fetchSettings } from '../settings/actions';
 import Shows from '../shows/shows';
 import { pluckState } from '../data/util';
-import { recentEpisodes, upcomingEpisodes, offAirEpisodes } from '../episodes/util';
 import Loader from '../loader/loader';
 
 const TimePeriods = createClass({
@@ -27,21 +26,18 @@ const TimePeriods = createClass({
             type="recent"
             label="Recent"
             shows={shows.get('recent')}
-            filterEpisodes={recentEpisodes}
             settings={settings}
           />
           <Shows
             type="upcoming"
             label="Upcoming"
             shows={shows.get('upcoming')}
-            filterEpisodes={upcomingEpisodes}
             settings={settings}
           />
           <Shows
             type="off-air"
             label="Off Air"
             shows={shows.get('offAir')}
-            filterEpisodes={offAirEpisodes}
             settings={settings}
           />
           {children}

@@ -4,13 +4,13 @@ import MoreLess from '../more-less/more-less';
 
 export default createClass({
   render () {
-    const { show, episodes, threshold } = this.props;
+    const { showFilename, episodes, threshold } = this.props;
 
     return (
       <MoreLess threshold={threshold}>
         {
           episodes.map((episode) => {
-            return <Episode key={episode.get('id')} show={show} episode={episode} />;
+            return <Episode key={episode.get('id')} showFilename={showFilename} episode={episode} />;
           })
         }
       </MoreLess>

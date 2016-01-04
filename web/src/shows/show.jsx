@@ -4,16 +4,16 @@ import Options from './show-options';
 
 export default createClass({
   render () {
-    const { show, settings } = this.props;
+    const { show, viewLink } = this.props;
     return (
       <li key={show.get('id')}>
         <h3>
           <span>
             {show.get('display_name')}
-            <Options show={show} settings={settings} />
+            <Options id={show.get('id')} searchName={show.get('search_name')} viewLink={viewLink} />
           </span>
         </h3>
-        <Episodes show={show} episodes={this.props.filterEpisodes(show.get('episodes'))} threshold={3} />
+        <Episodes showFilename={show.get('file_name')} episodes={show.get('episodes')} threshold={3} />
       </li>
     );
   }

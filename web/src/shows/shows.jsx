@@ -1,5 +1,4 @@
 import React, { createClass } from 'react';
-import { withEpisodes } from '../shows/util';
 import Show from './show';
 
 export default createClass({
@@ -24,9 +23,9 @@ export default createClass({
 
   _show (show) {
     return <Show
-             key={show.get('id')}
-             show={show}
-             settings={this.props.settings}
-             filterEpisodes={this.props.filterEpisodes} />;
+     key={show.get('id')}
+     show={show}
+     viewLink={this.props.settings.get('view_link')}
+    />;
   },
 });

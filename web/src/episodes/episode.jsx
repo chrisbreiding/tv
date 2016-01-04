@@ -23,7 +23,7 @@ export default createClass({
   },
 
   render () {
-    const { show, episode } = this.props;
+    const { showFilename, episode } = this.props;
 
     const airdate = episode.get('airdate');
     const className = cs({
@@ -46,7 +46,7 @@ export default createClass({
         <span className="airdate">{date.shortString(episode.get('airdate'))}</span>
         <span className="title" onClick={this._showFileName}>{episode.get('title')}</span>
         <span className="file-name" ref="fileName">
-          {show.get('file_name')} - {longEpisodeNumber(episode)} - {fileSafeTitle(episode)}
+          {showFilename} - {longEpisodeNumber(episode)} - {fileSafeTitle(episode)}
         </span>
       </li>
     );

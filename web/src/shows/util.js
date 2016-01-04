@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import { deserializeEpisodes, serializableEpisodes, upcomingEpisodes, recentEpisodes, sortAscending } from '../episodes/util';
+import { deserializeEpisodes, serializableEpisodes, recentEpisodes, upcomingEpisodes, offAirEpisodes, sortAscending } from '../episodes/util';
 import date from '../lib/date';
 
 export function deserializeShows (shows) {
@@ -48,17 +48,31 @@ export function showWithEpisodes (show, episodesIndex) {
 export function recentShows (shows) {
   return shows.filter(hasRecentEpisodes).sort((a, b) => {
     return lastEpisode(b).get('airdate') - lastEpisode(a).get('airdate');
+  }).map(show => {
+    return show.update('episodes', episodes => recentEpisodes(episodes));
   });
 }
 
 export function upcomingShows (shows) {
   return shows.filter(hasUpcomingEpisodes).sort((a, b) => {
     return nextEpisode(a).get('airdate') - nextEpisode(b).get('airdate');
+  }).map(show => {
+    return show.update('episodes', episodes => upcomingEpisodes(episodes));
   });
 }
 
+function sortAlphabetically (a, b) {
+  const aName = a.get('display_name').toLowerCase();
+  const bName = b.get('display_name').toLowerCase();
+  if (aName < bName) { return -1; }
+  if (aName > bName) { return 1; }
+  return 0;
+}
+
 export function offAirShows (shows) {
-  return shows.filter(isOffAir);
+  return shows.filter(isOffAir).sort(sortAlphabetically).map(show => {
+    return show.update('episodes', episodes => offAirEpisodes(episodes));
+  });
 }
 
 function hasRecentEpisodes (show) {
