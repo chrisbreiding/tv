@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import { routeReducer } from 'redux-simple-router';
+import { recentShows, upcomingShows, offAirShows } from '../shows/util';
 import {
   REQUEST_SHOWS,
   RECEIVE_SHOWS,
@@ -18,6 +19,15 @@ import {
   RECEIVE_SOURCE_SHOWS
 } from '../search/actions';
 
+function withFilteredShows (all) {
+  return {
+    all,
+    recent: recentShows(all),
+    upcoming: upcomingShows(all),
+    offAir: offAirShows(all),
+  };
+}
+
 export default {
   routing: routeReducer,
 
@@ -25,7 +35,10 @@ export default {
     isFetching: false,
     addingShow: null,
     deletingShow: null,
-    items: Immutable.List()
+    all: Immutable.List(),
+    recent: Immutable.List(),
+    upcoming: Immutable.List(),
+    offAir: Immutable.List()
   }), action) {
     switch (action.type) {
       case REQUEST_SHOWS:
@@ -34,9 +47,10 @@ export default {
         });
       case RECEIVE_SHOWS:
         return state.merge({
-          isFetching: false,
-          items: action.shows
-        });
+          isFetching: false
+        }).merge(
+          withFilteredShows(action.shows)
+        );
       case ADDING_SHOW:
         return state.merge({
           addingShow: action.showName
@@ -44,29 +58,29 @@ export default {
       case SHOW_ADDED:
         return state.merge({
           addingShow: null,
-          items: state.get('items').push(action.show)
-        });
+        }).merge(
+          withFilteredShows(state.get('all').push(action.show))
+        );
       case SHOW_UPDATED:
-        const indexToUpdate = state.get('items').findIndex((show) => {
+        const indexToUpdate = state.get('all').findIndex((show) => {
           return show.get('id') === action.show.get('id');
         });
         if (indexToUpdate < 0) { return state; }
 
-        return state.merge({
-          items: state.get('items').set(indexToUpdate, action.show)
-        });
+        return state.merge(withFilteredShows(state.get('all').set(indexToUpdate, action.show)));
       case DELETING_SHOW:
         return state.merge({
           deletingShow: action.showName
         });
       case SHOW_DELETED:
-        const indexToDelete = state.get('items').indexOf(action.show);
+        const indexToDelete = state.get('all').indexOf(action.show);
         if (indexToDelete < 0) { return state; }
 
         return state.merge({
-          deletingShow: null,
-          items: state.get('items').delete(indexToDelete)
-        });
+          deletingShow: null
+        }).merge(
+          withFilteredShows(state.get('all').delete(indexToDelete))
+        );
       default:
         return state;
     }

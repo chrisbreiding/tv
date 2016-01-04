@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { fetchShows } from '../shows/actions';
 import { fetchSettings } from '../settings/actions';
 import Shows from '../shows/shows';
-import { recentShows, upcomingShows, offAirShows } from '../shows/util';
 import { pluckState } from '../data/util';
 import { recentEpisodes, upcomingEpisodes, offAirEpisodes } from '../episodes/util';
 import Loader from '../loader/loader';
@@ -15,9 +14,9 @@ const TimePeriods = createClass({
   },
 
   render () {
-    const shows = this.props.shows.get('items');
+    const { shows, settings, children } = this.props;
 
-    if (this.props.shows.get('isFetching')) {
+    if (shows.get('isFetching')) {
       return <p className="full-screen-centered">
        <Loader>Loading shows...</Loader>
       </p>;
@@ -27,25 +26,25 @@ const TimePeriods = createClass({
           <Shows
             type="recent"
             label="Recent"
-            shows={recentShows(shows)}
+            shows={shows.get('recent')}
             filterEpisodes={recentEpisodes}
-            settings={this.props.settings}
+            settings={settings}
           />
           <Shows
             type="upcoming"
             label="Upcoming"
-            shows={upcomingShows(shows)}
+            shows={shows.get('upcoming')}
             filterEpisodes={upcomingEpisodes}
-            settings={this.props.settings}
+            settings={settings}
           />
           <Shows
             type="off-air"
             label="Off Air"
-            shows={offAirShows(shows)}
+            shows={shows.get('offAir')}
             filterEpisodes={offAirEpisodes}
-            settings={this.props.settings}
+            settings={settings}
           />
-          {this.props.children}
+          {children}
         </div>
       );
     }

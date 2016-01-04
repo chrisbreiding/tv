@@ -51,7 +51,7 @@ const Show = function ({ show, dispatch }) {
 
 const stateToProps = ({ shows }, props) => {
   return {
-    show: shows.get('items').find((show) => show.get('id') === Number(props.params.id))
+    show: shows.get('all').find((show) => show.get('id') === Number(props.params.id))
   };
 };
 

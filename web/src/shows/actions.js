@@ -114,7 +114,7 @@ export function addShow (showToAdd) {
       dispatch(showAdded(showWithEpisodes));
 
       const state = getState();
-      cache.set(SHOWS, showsUtil.serializeShows(state.shows.get('items')));
+      cache.set(SHOWS, showsUtil.serializeShows(state.shows.get('all')));
     });
   };
 }
@@ -124,7 +124,7 @@ export function updateShow (show) {
     api.updateShow(showsUtil.serializeShow(show.delete('episodes'))).then(() => {
       dispatch(showUpdated(show));
 
-      cache.set(SHOWS, showsUtil.serializeShows(getState().shows.get('items')));
+      cache.set(SHOWS, showsUtil.serializeShows(getState().shows.get('all')));
     });
   };
 }
@@ -136,7 +136,7 @@ export function deleteShow (show) {
     api.deleteShow(showsUtil.serializeShow(show.delete('episodes'))).then(() => {
       dispatch(showDeleted(show));
 
-      cache.set(SHOWS, showsUtil.serializeShows(getState().shows.get('items')));
+      cache.set(SHOWS, showsUtil.serializeShows(getState().shows.get('all')));
     });
   };
 }

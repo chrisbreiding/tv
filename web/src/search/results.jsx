@@ -54,7 +54,7 @@ const Results = createClass({
   },
 
   _exists (sourceShow) {
-    return !!this.props.shows.get('items').find((show => show.get('source_id') === sourceShow.get('id')));
+    return !!this.props.shows.get('all').find((show => show.get('source_id') === sourceShow.get('id')));
   },
 
   _addShow (show) {
