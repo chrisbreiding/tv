@@ -17,4 +17,8 @@ export default {
   set (name, data) {
     localforage.setItem(`cache-${name}`, data);
   },
+
+  clear () {
+    return localforage.clear();
+  }
 };

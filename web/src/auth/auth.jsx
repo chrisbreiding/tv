@@ -1,5 +1,6 @@
 import React, { createClass } from 'react';
 import { connect } from 'react-redux';
+import cache from '../data/cache';
 import { getApiKey, setApiKey } from '../data/api';
 import { AutoFocusedInput } from '../lib/form';
 import { navigateHome } from '../lib/navigation';
@@ -30,7 +31,9 @@ const Auth = createClass({
   _submit (e) {
     e.preventDefault();
     setApiKey(this.refs.apiKey.getValue());
-    this.props.dispatch(navigateHome());
+    cache.clear().then(() => {
+      this.props.dispatch(navigateHome());
+    });
   }
 });
 
