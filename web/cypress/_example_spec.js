@@ -1036,7 +1036,7 @@ describe('Kitchen Sink', function(){
 
       // **** Stubbed PUT comment route ****
       //
-      message = 'whoa, this comment doesn\'t exist'
+      var message = 'whoa, this comment doesn\'t exist'
 
       cy
         .route({
@@ -1265,7 +1265,7 @@ describe('Kitchen Sink', function(){
 
       // use moment's format function
       // https://on.cypress.io/api/cypress-moment
-      var time = Cypress.moment().utc('2014-04-25T19:38:53.196Z').format('h:mm A')
+      // var time = Cypress.moment().utc('2014-04-25T19:38:53.196Z').format('h:mm A')
 
       cy
         .get('.utility-moment').contains('3:38 PM')
@@ -1302,7 +1302,7 @@ describe('Kitchen Sink', function(){
 
       function waitOneSecond(){
         // return a promise that resolves after 1 second
-        return new Cypress.Promise(function(resolve, reject){
+        return new Cypress.Promise(function(resolve){
           setTimeout(function(){
             // set waited to true
             waited = true
