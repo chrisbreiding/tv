@@ -1,5 +1,3 @@
-VALID_API_KEY = 'ZEvJD8kJQ8d7bykLpRJR'
-
 showsTheMainPage = ->
   cy
     .get('.recent h2').should 'have.text', 'Recent'
@@ -8,13 +6,10 @@ showsTheMainPage = ->
 
 describe 'authentication', ->
 
-  beforeEach ->
-    cy.visit 'http://localhost:8000'
-
-  it 'has the correct title', ->
-    cy.title().should 'include', 'Episodes'
-
   describe 'when no api key is set', ->
+
+    beforeEach ->
+      cy.server().visit '/'
 
     it 'shows the auth page', ->
       cy.get '.auth'
@@ -24,7 +19,7 @@ describe 'authentication', ->
       beforeEach ->
         cy
           .get '.auth input'
-          .type VALID_API_KEY
+          .type Cypress.env('apiKey')
           .get '.auth button'
           .click()
 
@@ -33,11 +28,14 @@ describe 'authentication', ->
   describe 'when incorrect api key is set', ->
 
     beforeEach ->
-      cy.clearLocalStorage().then (ls)->
-        ls.setItem 'apiKey', 'notvalid'
+      cy.server().visit '/', onBeforeLoad: (contentWindow)->
+        contentWindow.localStorage.setItem 'apiKey', 'notvalid'
 
     it 'shows the auth page', ->
       cy.get '.auth'
+
+    it 'shows the api key', ->
+      cy.get('.auth input').should 'have.value', 'notvalid'
 
     describe 'when a correct api key is typed in', ->
 
@@ -45,7 +43,7 @@ describe 'authentication', ->
         cy
           .get '.auth input'
           .clear()
-          .type VALID_API_KEY
+          .type Cypress.env('apiKey')
           .get '.auth button'
           .click()
 
@@ -54,8 +52,7 @@ describe 'authentication', ->
   describe 'when correct api key is set', ->
 
     beforeEach ->
-      cy.clearLocalStorage().then (ls)->
-        ls.setItem 'apiKey', VALID_API_KEY
-        cy.reload()
+      cy.server().visit '/', onBeforeLoad: (contentWindow)->
+        contentWindow.localStorage.setItem 'apiKey', Cypress.env('apiKey')
 
     it 'shows the main page', showsTheMainPage
