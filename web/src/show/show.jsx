@@ -32,18 +32,19 @@ const Show = function ({ show, dispatch }) {
       onClose={() => dispatch(navigateHome())}
     >
       <ul>
-        <li>
-          {
-            seasons(show.get('episodes')).map((season) => {
-              return (
-                <div key={season.get('season')}>
-                  <h3>Season {season.get('season')}</h3>
-                  <Episodes show={show} episodes={season.get('episodes').sort(sortAscending)} />
-                </div>
-              );
-            })
-          }
-        </li>
+        {
+          seasons(show.get('episodes')).map((season) => {
+            return (
+              <li key={season.get('season')} className="season">
+                <h3>Season {season.get('season')}</h3>
+                <Episodes
+                  showFilename={show.get('file_name')}
+                  episodes={season.get('episodes').sort(sortAscending)}
+                />
+              </li>
+            );
+          })
+        }
       </ul>
     </Modal>
   );
