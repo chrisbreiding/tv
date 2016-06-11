@@ -1,16 +1,9 @@
 describe 'episodes', ->
 
-  beforeEach ->
-    cy
-      .server().visit '/#/shows'
-      .clearLocalStorage().then (ls)->
-        ls.setItem 'apiKey', Cypress.env('apiKey')
-        cy.reload()
-
   describe 'viewing all episodes for a show', ->
 
     beforeEach ->
-      cy.visit '/#/shows/23'
+      cy.visitAuthed '/shows/23'
 
     it 'displays the show name', ->
       cy
