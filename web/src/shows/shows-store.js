@@ -9,11 +9,11 @@ class ShowsStore {
   @observable isLoading = false;
 
   getShowById (id) {
-    return _.find(this.shows, { id });
+    return this.shows.find((show) => show.id === id)
   }
 
-  hasShow (id) {
-    return !!this.getShowById(id);
+  hasSourceShow (sourceShow) {
+    return !!this.shows.find((show) => show.source_id === sourceShow.id)
   }
 
   @computed get recent () {

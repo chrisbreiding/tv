@@ -58,7 +58,7 @@ export default class SearchResults extends Component {
   }
 
   _exists (sourceShow) {
-    return showsStore.hasShow(sourceShow.id);
+    return showsStore.hasSourceShow(sourceShow);
   }
 
   _addShow (show) {
