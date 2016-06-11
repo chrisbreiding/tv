@@ -17,17 +17,11 @@ export default class Settings extends Component {
         <form className="form" onSubmit={this._save}>
           <fieldset>
             <label>View Link</label>
-            {this._viewLinkInput()}
+            <AutoFocusedInput ref="viewLink" defaultValue={settingsStore.view_link} />
           </fieldset>
         </form>
       </Modal>
     );
-  }
-
-  _viewLinkInput () {
-    const viewLink = settingsStore.view_link;
-    if (!viewLink) { return null; }
-    return <AutoFocusedInput ref="viewLink" defaultValue={viewLink} />;
   }
 
   _controls () {
