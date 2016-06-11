@@ -1,20 +1,16 @@
-import React, { createClass } from 'react';
+import { observer } from 'mobx-react';
+import React from 'react';
 import Episodes from '../episodes/episodes';
 import Options from './show-options';
 
-export default createClass({
-  render () {
-    const { show, viewLink } = this.props;
-    return (
-      <li key={show.get('id')}>
-        <h3>
-          <span>
-            {show.get('display_name')}
-            <Options id={show.get('id')} searchName={show.get('search_name')} viewLink={viewLink} />
-          </span>
-        </h3>
-        <Episodes showFilename={show.get('file_name')} episodes={show.get('episodes')} threshold={3} />
-      </li>
-    );
-  }
-});
+export default observer(({ show, type, viewLink }) => (
+  <li key={show.id}>
+    <h3>
+      <span>
+        {show.display_name}
+        <Options id={show.id} searchName={show.search_name} viewLink={viewLink} />
+      </span>
+    </h3>
+    <Episodes showFilename={show.file_name} episodes={show[`${type}Episodes`]} threshold={3} />
+  </li>
+));

@@ -1,45 +1,34 @@
-import Immutable from 'immutable';
+import _ from 'lodash';
+import { observer } from 'mobx-react';
 import React from 'react';
-import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+
 import Modal from '../modal/modal';
 import Episodes from '../episodes/episodes';
-import { sortAscending } from '../episodes/util';
-import { navigateHome } from '../lib/navigation';
+import { inSeasons, sortAscending } from '../episodes/util';
+import showsStore from '../shows/shows-store';
 
-function seasons (episodes) {
-  return episodes.reduce((coll, episode) => {
-    const seasonNumber = episode.get('season');
-    const existingSeason = coll.findEntry((season) => season.get('season') === seasonNumber);
-    if (existingSeason) {
-      const [index, season] = existingSeason;
-      return coll.set(index, season.set('episodes', season.get('episodes').push(episode)));
-    } else {
-      return coll.push(Immutable.Map({
-        season: seasonNumber,
-        episodes: Immutable.List([episode])
-      }));
-    }
-  }, Immutable.List()).sortBy(season => season.get('season'));
-}
+export default withRouter(observer(function Show ({ params, router }) {
+  const show = showsStore.getShowById(Number(params.id));
+  if (!show) return null;
 
-const Show = function ({ show, dispatch }) {
-  if (!show) { return <span></span>; }
+  const seasons = inSeasons(show.episodes);
 
   return (
     <Modal
       className="all-episodes"
-      headerContent={<h2>{show.get('display_name')}</h2>}
-      onClose={() => dispatch(navigateHome())}
+      headerContent={<h2>{show.display_name}</h2>}
+      onClose={() => router.push('/')}
     >
       <ul>
         {
-          seasons(show.get('episodes')).map((season) => {
+          _.map(seasons, (season) => {
             return (
-              <li key={season.get('season')} className="season">
-                <h3>Season {season.get('season')}</h3>
+              <li key={season.season} className="season">
+                <h3>Season {season.season}</h3>
                 <Episodes
-                  showFilename={show.get('file_name')}
-                  episodes={season.get('episodes').sort(sortAscending)}
+                  showFilename={show.file_name}
+                  episodes={_(season.episodes).sort(sortAscending).value()}
                 />
               </li>
             );
@@ -48,12 +37,4 @@ const Show = function ({ show, dispatch }) {
       </ul>
     </Modal>
   );
-};
-
-const stateToProps = ({ shows }, props) => {
-  return {
-    show: shows.get('all').find((show) => show.get('id') === Number(props.params.id))
-  };
-};
-
-export default connect(stateToProps)(Show);
+}));

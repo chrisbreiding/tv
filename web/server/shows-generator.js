@@ -38,7 +38,7 @@ module.exports = {
         search_name: name + ' s',
         file_name: name + ' f',
         source_id: '' + _.random(20),
-        episode_ids: _.pluck(episodes, 'id')
+        episode_ids: _.map(episodes, 'id')
       },
       episodes: episodes
     };

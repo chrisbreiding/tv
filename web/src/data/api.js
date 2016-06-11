@@ -18,7 +18,7 @@ function request (endpoint, method = 'get', props = {}) {
   return axios(Object.assign({
     url: `${baseUrl}/${endpoint}`,
     headers: headers(),
-    method
+    method,
   }, props));
 }
 
@@ -39,8 +39,8 @@ export default {
     return request(`shows/${show.id}`, 'put', { data: { show } });
   },
 
-  deleteShow (show) {
-    return request(`shows/${show.id}`, 'delete');
+  deleteShow ({ id }) {
+    return request(`shows/${id}`, 'delete');
   },
 
   getSettings () {

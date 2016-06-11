@@ -5,7 +5,7 @@ export class Input extends Component {
     return <input ref="input" {...this.props} />;
   }
 
-  getValue () {
+  get value () {
     return this.refs.input.value;
   }
 }

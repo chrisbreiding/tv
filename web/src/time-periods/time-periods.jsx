@@ -1,21 +1,22 @@
-import React, { createClass } from 'react';
-import { connect } from 'react-redux';
-import { fetchShows } from '../shows/actions';
-import { fetchSettings } from '../settings/actions';
+import { observer } from 'mobx-react';
+import React, { Component } from 'react';
+
+import { loadShows } from '../shows/shows-api';
+import showsStore from '../shows/shows-store';
+import { loadSettings } from '../settings/settings-api';
+import settingsStore from '../settings/settings-store';
 import Shows from '../shows/shows';
-import { pluckState } from '../data/util';
 import Loader from '../loader/loader';
 
-const TimePeriods = createClass({
+@observer
+export default class TimePeriods extends Component {
   componentWillMount () {
-    this.props.dispatch(fetchShows());
-    this.props.dispatch(fetchSettings());
-  },
+    loadShows();
+    loadSettings();
+  }
 
   render () {
-    const { shows, settings, children } = this.props;
-
-    if (shows.get('isFetching')) {
+    if (showsStore.isLoading || settingsStore.isLoading) {
       return <p className="full-screen-centered">
        <Loader>Loading shows...</Loader>
       </p>;
@@ -25,26 +26,24 @@ const TimePeriods = createClass({
           <Shows
             type="recent"
             label="Recent"
-            shows={shows.get('recent')}
-            settings={settings}
+            showsStore={showsStore}
+            settings={settingsStore}
           />
           <Shows
             type="upcoming"
             label="Upcoming"
-            shows={shows.get('upcoming')}
-            settings={settings}
+            showsStore={showsStore}
+            settings={settingsStore}
           />
           <Shows
-            type="off-air"
+            type="offAir"
             label="Off Air"
-            shows={shows.get('offAir')}
-            settings={settings}
+            showsStore={showsStore}
+            settings={settingsStore}
           />
-          {children}
+          {this.props.children}
         </div>
       );
     }
-  },
-});
-
-export default connect(pluckState('shows', 'settings'))(TimePeriods);
+  }
+}

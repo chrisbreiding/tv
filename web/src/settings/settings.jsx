@@ -1,13 +1,16 @@
-import { connect } from 'react-redux';
-import React, { createClass } from 'react';
+import { observer } from 'mobx-react';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router';
+
 import Modal from '../modal/modal';
 import date from '../lib/date';
-import { updateSettings } from './actions';
 import { AutoFocusedInput } from '../lib/form';
-import { navigateHome } from '../lib/navigation';
-import { pluckState } from '../data/util';
+import { updateSettings } from './settings-api'
+import settingsStore from './settings-store';
 
-const Settings = createClass({
+@withRouter
+@observer
+export default class Settings extends Component {
   render () {
     return (
       <Modal className="settings" onClose={this._close} footerContent={this._controls()}>
@@ -19,34 +22,32 @@ const Settings = createClass({
         </form>
       </Modal>
     );
-  },
+  }
 
   _viewLinkInput () {
-    const viewLink = this.props.settings.get('view_link');
+    const viewLink = settingsStore.view_link;
     if (!viewLink) { return null; }
     return <AutoFocusedInput ref="viewLink" defaultValue={viewLink} />;
-  },
+  }
 
   _controls () {
     return (
       <div className="controls">
-        <p>Last updated: {date.longString(this.props.settings.get('last_updated'))}</p>
+        <p>Last updated: {date.longString(settingsStore.last_updated)}</p>
         <button type="submit" onClick={this._save}>Save</button>
       </div>
     );
-  },
+  }
 
-  _save (e) {
+  _save = (e) => {
     e.preventDefault();
-    this.props.dispatch(updateSettings(this.props.settings.merge({
-      view_link: this.refs.viewLink.getValue()
-    })));
+    updateSettings({
+      view_link: this.refs.viewLink.value,
+    });
     this._close();
-  },
+  }
 
-  _close () {
-    this.props.dispatch(navigateHome());
-  },
-});
-
-export default connect(pluckState('settings'))(Settings);
+  _close = () => {
+    this.props.router.push('/');
+  }
+}

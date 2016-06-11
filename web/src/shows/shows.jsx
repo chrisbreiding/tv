@@ -1,31 +1,31 @@
-import React, { createClass } from 'react';
+import _ from 'lodash';
+import { observer } from 'mobx-react';
+import React, { Component } from 'react';
 import Show from './show';
 
-export default createClass({
-  shouldComponentUpdate (nextProps) {
-    return nextProps.shows !== this.props.shows ||
-      nextProps.settings !== this.props.settings;
-  },
-
+@observer
+export default class Shows extends Component {
   render () {
-    const { label, type, shows, settings } = this.props;
-    if (!shows.size || !settings.size) {
+    const { label, type, showsStore, settings } = this.props;
+    const shows = showsStore[type];
+    if (!shows.length || !_.keys(settings).length) {
       return null;
     }
 
     return (
-      <div className={`shows ${type}`}>
+      <div className={`shows ${_.kebabCase(type)}`}>
         <h2>{label}</h2>
-        <ul>{shows.map(this._show)}</ul>
+        <ul>{_.map(shows, this._show)}</ul>
       </div>
     );
-  },
+  }
 
-  _show (show) {
+  _show = (show) => {
     return <Show
-     key={show.get('id')}
+     key={show.id}
      show={show}
-     viewLink={this.props.settings.get('view_link')}
+     type={this.props.type}
+     viewLink={this.props.settings.view_link}
     />;
-  },
-});
+  }
+}

@@ -1,23 +1,21 @@
-import React, { createClass } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router';
+
 import cache from '../data/cache';
 import { getApiKey, setApiKey } from '../data/api';
 import { AutoFocusedInput } from '../lib/form';
-import { navigateHome } from '../lib/navigation';
 
-const Auth = createClass({
+@withRouter
+export default class Auth extends Component {
   render () {
     return (
       <div className="auth">
-        <form className="form" onSubmit={this._submit}>
+        <form className="form" onSubmit={this._submit.bind(this)}>
           <p>Your API key is missing or invalid. Please authenticate.</p>
 
           <fieldset>
             <label>API Key</label>
-            <AutoFocusedInput
-              ref="apiKey"
-              defaultValue={getApiKey()}
-            />
+            <AutoFocusedInput ref="apiKey" defaultValue={getApiKey()} />
           </fieldset>
 
           <footer className="clearfix">
@@ -26,15 +24,13 @@ const Auth = createClass({
         </form>
       </div>
     );
-  },
+  }
 
   _submit (e) {
     e.preventDefault();
-    setApiKey(this.refs.apiKey.getValue());
+    setApiKey(this.refs.apiKey.value);
     cache.clear().then(() => {
-      this.props.dispatch(navigateHome());
+      this.props.router.push('/');
     });
   }
-});
-
-export default connect()(Auth);
+}

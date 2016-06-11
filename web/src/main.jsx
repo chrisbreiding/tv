@@ -1,10 +1,9 @@
-import { Provider } from 'react-redux';
+import { useStrict } from 'mobx';
 import React from 'react';
 import { render } from 'react-dom';
-import createHistory from 'history/lib/createHashHistory';
-import { syncReduxAndRouter } from 'redux-simple-router';
-import { IndexRoute, Router, Route, Redirect } from 'react-router';
-import store from './data/store';
+import { createHashHistory } from 'history';
+import { IndexRoute, Router, Route, Redirect, useRouterHistory } from 'react-router';
+useStrict(true);
 
 import App from './app/app';
 import Auth from './auth/auth';
@@ -15,27 +14,24 @@ import Settings from './settings/settings';
 import Search from './search/search';
 import SearchResults from './search/results';
 
-const hashHistory = createHistory({ queryKey: false });
-syncReduxAndRouter(hashHistory, store);
+const history = useRouterHistory(createHashHistory)({ queryKey: false });
 
 render(
-  <Provider store={store}>
-    <Router history={hashHistory}>
-      <Redirect from="/" to="/shows" />
-      <Route path="/" component={App}>
-        <Route path="/shows" component={TimePeriods}>
-          <Route path=":id" component={Show} />
-          <Route path=":id/edit" component={EditShow} />
-          <Route path="/settings" component={Settings} />
-          <Route path="/search" component={Search}>
-            <IndexRoute component={SearchResults} />
-            <Route path=":query" component={SearchResults} />
-          </Route>
+  <Router history={history}>
+    <Redirect from="/" to="/shows" />
+    <Route path="/" component={App}>
+      <Route path="/shows" component={TimePeriods}>
+        <Route path=":id" component={Show} />
+        <Route path=":id/edit" component={EditShow} />
+        <Route path="/settings" component={Settings} />
+        <Route path="/search" component={Search}>
+          <IndexRoute component={SearchResults} />
+          <Route path=":query" component={SearchResults} />
         </Route>
-        <Route path="/auth" component={Auth} />
-        <Redirect from="/*" to="/shows" />
       </Route>
-    </Router>
-  </Provider>,
+      <Route path="/auth" component={Auth} />
+      <Redirect from="/*" to="/shows" />
+    </Route>
+  </Router>,
   document.getElementById('app')
 );

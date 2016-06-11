@@ -1,18 +1,22 @@
-import React, { createClass } from 'react';
-import { connect } from 'react-redux';
-import Modal from '../modal/modal';
-import { updateShow, deleteShow } from '../shows/actions';
-import { AutoFocusedInput, Input } from '../lib/form';
-import { navigateHome } from '../lib/navigation';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 
-const Edit = createClass({
-  getInitialState () {
-    return { confirmDeletion: false };
-  },
+import Modal from '../modal/modal';
+import { AutoFocusedInput, Input } from '../lib/form';
+import { deleteShow, updateShow } from '../shows/shows-api';
+import showsStore from '../shows/shows-store';
+
+@withRouter
+export default class EditShow extends Component {
+  constructor (props) {
+    super(props);
+
+    this.state = { confirmDeletion: false };
+  }
 
   render () {
-    const { show } = this.props;
-    if (!show) { return <span></span>; }
+    const show = this.show = showsStore.getShowById(Number(this.props.params.id));
+    if (!show) return null;
 
     return (
       <div className="show-edit">
@@ -20,26 +24,26 @@ const Edit = createClass({
           <form className="form" onSubmit={this._save}>
             <fieldset>
               <label>Display Name</label>
-              <AutoFocusedInput ref="displayName" defaultValue={show.get('display_name')} />
+              <AutoFocusedInput ref="displayName" defaultValue={show.display_name} />
             </fieldset>
 
             <fieldset>
               <label>Search Name</label>
-              <Input ref="searchName" defaultValue={show.get('search_name')} />
+              <Input ref="searchName" defaultValue={show.search_name} />
             </fieldset>
 
             <fieldset>
               <label>File Name</label>
-              <Input ref="fileName" defaultValue={show.get('file_name')} />
+              <Input ref="fileName" defaultValue={show.file_name} />
             </fieldset>
 
             <button className="hide">Hidden here so submit on enter works</button>
           </form>
         </Modal>
-        {this._confirmation(show)}
+        {this._confirmation()}
       </div>
     );
-  },
+  }
 
   _controls () {
     return (
@@ -48,54 +52,45 @@ const Edit = createClass({
         <button type="submit" onClick={this._save}>Save</button>
       </div>
     );
-  },
+  }
 
-  _askForConfirmation (e) {
+  _askForConfirmation = (e) => {
     e.preventDefault();
     this.setState({ confirmDeletion: true });
-  },
+  }
 
-  _confirmation (show) {
-    if (!this.state.confirmDeletion) { return null; }
+  _confirmation = () => {
+    if (!this.state.confirmDeletion) return null;
 
     return (
       <Modal onOk={this._confirmDelete} onCancel={this._cancelDelete}>
-        <p>Delete {show.get('display_name')}?</p>
+        <p>Delete {this.show.display_name}?</p>
       </Modal>
     );
-  },
+  }
 
-  _confirmDelete () {
-    this.props.dispatch(deleteShow(this.props.show));
+  _confirmDelete = () => {
+    deleteShow(this.show);
     this._close();
-  },
+  }
 
-  _cancelDelete () {
+  _cancelDelete = () => {
     this.setState({ confirmDeletion: false });
-  },
+  }
 
-  _save (e) {
+  _save = (e) => {
     e.preventDefault();
 
-    const show = this.props.show.merge({
-      display_name: this.refs.displayName.getValue(),
-      search_name: this.refs.searchName.getValue(),
-      file_name: this.refs.fileName.getValue(),
+    updateShow({
+      id: this.show.id,
+      display_name: this.refs.displayName.value,
+      search_name: this.refs.searchName.value,
+      file_name: this.refs.fileName.value,
     });
-
-    this.props.dispatch(updateShow(show));
     this._close();
-  },
+  }
 
-  _close () {
-    this.props.dispatch(navigateHome());
-  },
-});
-
-const stateToProps = ({ shows }, props) => {
-  return {
-    show: shows.get('all').find((show) => show.get('id') === Number(props.params.id))
-  };
-};
-
-export default connect(stateToProps)(Edit);
+  _close = () => {
+    this.props.router.push('/');
+  }
+}

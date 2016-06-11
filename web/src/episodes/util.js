@@ -1,89 +1,48 @@
-import Immutable from 'immutable';
-import moment from 'moment';
-import date from '../lib/date';
+import _ from 'lodash';
 
-let recentDaysCutoff = localStorage.recentDaysCutoff || 5;
-
-export function deserializeEpisodes (episodes) {
-  return Immutable.fromJS(episodes).map((episode) => {
-    return episode.update('airdate', airdate => moment(airdate));
-  });
-}
-
-export function serializableEpisodes (episodes) {
-  return episodes.map(episode => {
-    return episode.update('airdate', airdate => airdate.toISOString());
-  });
-}
-
-export function index (episodes) {
-  return episodes.reduce((coll, episode) => {
+function indexed (episodes) {
+  return _.reduce(episodes, (coll, episode) => {
     coll[episode.id] = episode;
     return coll;
   }, {});
 }
 
-export function recentEpisodes (episodes) {
-  return episodes.filter(isRecent);
+function get (id) {
+  return this.episodes[id];
 }
 
-export function upcomingEpisodes (episodes) {
-  return episodes.filter(isUpcoming);
+function inSeasons (episodes) {
+  const seasons = _.reduce(episodes, (coll, episode) => {
+    const seasonNumber = episode.season;
+    const index = _.findIndex(coll, { season: seasonNumber });
+    if (index > -1) {
+      coll[index].episodes.push(episode);
+    } else {
+      coll.push({
+        season: seasonNumber,
+        episodes: [episode],
+      });
+    }
+    return coll;
+  }, []);
+
+  return _.sortBy(seasons, 'season');
 }
 
-export function offAirEpisodes () {
-  return Immutable.List();
-}
-
-export function sortAscending (a, b) {
-  const dateComparison = a.get('airdate') - b.get('airdate');
+function sortAscending (a, b) {
+  const dateComparison = a.airdate - b.airdate;
   if (!dateComparison) {
-    const seasonComparison = a.get('season') - b.get('season');
+    const seasonComparison = a.season - b.season;
     if (!seasonComparison) {
-      return a.get('episode_number') - b.get('episode_number');
+      return a.episode_number - b.episode_number;
     }
   }
   return dateComparison;
 }
 
-export function fileSafeTitle (episode) {
-  var title = episode.get('title');
-  if (title == null) {
-    return '';
-  }
-
-  return title
-    .replace(/[\/\\]/g, '-')
-    .replace(/\:\s+/g, ' - ')
-    .replace(/\&/g, 'and')
-    .replace(/[\.\!\?\@\#\$\%\^\*\:]/g, '');
-}
-
-function isRecent (episode) {
-  let airdate = episode.get('airdate');
-  let startOfiveDaysAgo = moment().subtract(recentDaysCutoff, 'days').startOf('day');
-  let startOfToday = moment().startOf('day');
-  return airdate.isBetween(startOfiveDaysAgo.subtract(1, 'second'), startOfToday);
-}
-
-function isUpcoming (episode) {
-  let airdate = episode.get('airdate');
-  let startOfToday = moment().startOf('day');
-  return airdate.isAfter(startOfToday.subtract(1, 'second'));
-}
-
-export function longEpisodeNumber (episode) {
-  let season = toTwoDigitString(episode.get('season'));
-  let episodeNumber = toTwoDigitString(episode.get('episode_number'));
-  return `s${season}e${episodeNumber}`;
-}
-
-export function shortEpisodeNumber (episode) {
-  return longEpisodeNumber(episode)
-   .replace('s0', '')
-   .replace(/[se]/g, '');
-}
-
-function toTwoDigitString (num) {
-  return num < 10 ? `0${num}` : `${num}`;
-}
+export {
+  indexed,
+  get,
+  inSeasons,
+  sortAscending,
+};

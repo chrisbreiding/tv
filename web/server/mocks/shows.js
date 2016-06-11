@@ -19,7 +19,7 @@ module.exports = function(app, express) {
   showsRouter.post('/', function(req, res) {
     var show = _.extend(req.body.show, { id: generator.incShowId() });
     var newEpisodes = generator.seasons(_.random(1, 8));
-    show.episode_ids = _.pluck(newEpisodes, 'id');
+    show.episode_ids = _.map(newEpisodes, 'id');
     shows.push(show);
     episodes = episodes.concat(newEpisodes);
     res
@@ -32,19 +32,19 @@ module.exports = function(app, express) {
 
   showsRouter.get('/:id', function(req, res) {
     res.send({
-      'show': _.where(shows, { id: req.params.id })
+      'show': _.find(shows, { id: Number(req.params.id) })
     });
   });
 
   showsRouter.put('/:id', function(req, res) {
-    var show = _.find(shows, { id: req.params.id });
+    var show = _.find(shows, { id: Number(req.params.id) });
     res.send({
       'show': _.extend(show, req.body.show)
     });
   });
 
   showsRouter.delete('/:id', function(req, res) {
-    var index = _.findIndex(shows, { id: req.params.id });
+    var index = _.findIndex(shows, { id: Number(req.params.id) });
     if (index >= 0) {
       shows.splice(index, 1);
     }

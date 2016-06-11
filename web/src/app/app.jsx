@@ -1,33 +1,34 @@
 import axios from 'axios';
-import React, { createClass } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router';
-import { navigateTo } from '../lib/navigation';
-import { pluckState } from '../data/util';
-import FlashMessage from '../flash-message/flash-message';
+import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router';
+
+import Messages from '../messages/messages';
 import Loader from '../loader/loader';
 import migrate from '../data/migrate';
 
-const App = createClass({
-  getInitialState () {
-    return { ready: false };
-  },
+@withRouter
+export default class App extends Component {
+  constructor (props) {
+    super(props);
+
+    this.state = { ready: false };
+  }
 
   componentWillMount () {
     axios.interceptors.response.use(null, (error) => {
       if (error.status === 401) {
-        this.props.dispatch(navigateTo('/auth'));
+        this.props.router.push('/auth');
         return;
       }
       return Promise.reject(error);
     });
 
     migrate().then(() => this.setState({ ready: true }));
-  },
+  }
 
   render () {
     return this.state.ready ? this._container() : this._loading();
-  },
+  }
 
   _container () {
     return (
@@ -45,10 +46,10 @@ const App = createClass({
           </li>
         </ul>
         {this.props.children}
-        <FlashMessage {...this.props} />
+        <Messages />
       </div>
     );
-  },
+  }
 
   _loading () {
     return (
@@ -56,7 +57,5 @@ const App = createClass({
         <Loader>Updating...</Loader>
       </p>
     );
-  },
-});
-
-export default connect(pluckState('shows'))(App);
+  }
+}

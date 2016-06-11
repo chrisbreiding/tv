@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react';
 import React from 'react';
 import { Link } from 'react-router';
 
@@ -5,7 +6,7 @@ function makeViewLink (link, searchName) {
   return (link || '').replace('%s', searchName);
 }
 
-export default ({ id, searchName, viewLink }) => {
+export default observer(({ id, searchName, viewLink }) => {
   return (
     <div className="options">
       <ul>
@@ -27,4 +28,4 @@ export default ({ id, searchName, viewLink }) => {
       </ul>
     </div>
   );
-};
+});

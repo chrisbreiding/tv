@@ -1,74 +1,75 @@
-import { connect } from 'react-redux';
-import React, { createClass } from 'react';
-import { searchSourceShows } from './actions';
-import { addShow } from '../shows/actions';
+import { observer } from 'mobx-react';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router';
+
+import { addShow } from '../shows/shows-api';
+import showsStore from '../shows/shows-store';
+import searchStore from './search-store';
+
 import Result from './result';
 import Loader from '../loader/loader';
-import { navigateHome } from '../lib/navigation';
-import { pluckState } from '../data/util';
 
-const Results = createClass({
-  componentDidMount () {
-    this._search();
-  },
+@withRouter
+@observer
+export default class SearchResults extends Component {
+  componentWillMount () {
+    this._search(this.props.params.query);
+  }
 
-  componentDidUpdate (prevProps) {
-     if (this.props.params.query !== prevProps.params.query) {
-      this._search();
+  componentWillReceiveProps (nextProps) {
+    if (this.props.params.query !== nextProps.params.query) {
+      this._search(nextProps.params.query);
     }
-  },
+  }
 
-  _search () {
-    if (this.props.params.query) {
-      this.props.dispatch(searchSourceShows(this.props.params.query));
+  _search (query) {
+    if (query) {
+      searchStore.searchSourceShows(query);
     }
-  },
+  }
 
   render () {
-    const sourceShows = this.props.sourceShows.get('items');
+    const searchResults = searchStore.results;
 
-    if (this.props.sourceShows.get('isFetching')) {
+    if (searchStore.isLoading) {
       return <p className="no-results">
         <Loader>Searching...</Loader>
       </p>;
     } else if (this.props.params.query == null) {
       return null;
-    } else if (sourceShows.isEmpty()) {
+    } else if (!searchResults.length) {
       return <p className="no-results">No shows found</p>;
     }
 
     return (
       <ul className="results">
-        {sourceShows.map((show) => {
+        {searchResults.map((show) => {
           return (
             <Result
-              key={show.get('id')}
+              key={show.id}
               show={show}
               exists={this._exists(show)}
-              onAddShow={this._addShow(show)}
+              onAddShow={() => this._addShow(show)}
             />
           );
         })}
       </ul>
     );
-  },
+  }
 
   _exists (sourceShow) {
-    return !!this.props.shows.get('all').find((show => show.get('source_id') === sourceShow.get('id')));
-  },
+    return showsStore.hasShow(sourceShow.id);
+  }
 
   _addShow (show) {
-    return () => {
-      const name = show.get('name');
-      this.props.dispatch(addShow({
-        display_name: name,
-        search_name: name,
-        file_name: name,
-        source_id: show.get('id')
-      }));
-      this.props.dispatch(navigateHome());
-    };
-  }
-});
+    const name = show.name;
+    addShow({
+      display_name: name,
+      search_name: name,
+      file_name: name,
+      source_id: show.id,
+    });
 
-export default connect(pluckState('shows', 'sourceShows'))(Results);
+    this.props.router.push('/');
+  }
+}

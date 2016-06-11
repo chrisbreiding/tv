@@ -1,10 +1,12 @@
-import { connect } from 'react-redux';
-import React, { createClass } from 'react';
+import { observer } from 'mobx-react';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 import Modal from '../modal/modal';
 import { AutoFocusedInput } from '../lib/form';
-import { navigateHome, navigateTo } from '../lib/navigation';
 
-const Search = createClass({
+@withRouter
+@observer
+export default class Search extends Component {
   render () {
     return (
       <Modal className="search" onClose={this._close}>
@@ -17,16 +19,14 @@ const Search = createClass({
         {this.props.children}
       </Modal>
     );
-  },
+  }
 
-  _search (e) {
+  _search = (e) => {
     e.preventDefault();
-    this.props.dispatch(navigateTo(`/search/${this.refs.query.getValue()}`));
-  },
+    this.props.router.push(`/search/${this.refs.query.value}`);
+  }
 
-  _close () {
-    this.props.dispatch(navigateHome());
-  },
-});
-
-export default connect()(Search);
+  _close = () => {
+    this.props.router.push('/');
+  }
+}

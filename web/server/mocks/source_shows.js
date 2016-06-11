@@ -5,7 +5,7 @@ var textGen = require('../text-generator');
 module.exports = function(app, express) {
   var sourceShowsRouter = express.Router();
 
-  var shows = _.map(_.range(18, 30), function (id) {
+  var shows = _.map(_.range(25, 45), function (id) {
     return {
       id: id,
       name: textGen(1, 4),
@@ -22,7 +22,7 @@ module.exports = function(app, express) {
 
   sourceShowsRouter.get('/', function(req, res) {
     res.send({
-      'source_shows': req.query.query === 'none' ? [] : _.sample(shows, _.random(2, 10))
+      'source_shows': req.query.query === 'none' ? [] : _.sampleSize(shows, _.random(2, 10))
     });
   });
 
