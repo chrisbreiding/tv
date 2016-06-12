@@ -18,6 +18,7 @@ class SettingsStore {
 
   serialize () {
     return {
+      last_updated: this.last_updated.toISOString(),
       view_link: this.view_link,
     };
   }

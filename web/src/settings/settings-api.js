@@ -4,7 +4,6 @@ import moment from 'moment';
 import api from '../data/api';
 import cache, { DATE_SETTINGS_UPDATED, SETTINGS } from '../data/cache';
 import date from '../lib/date';
-import messagesStore from '../messages/messages';
 import settingsStore from '../settings/settings-store';
 
 function getSettingsFromCache () {
