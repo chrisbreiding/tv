@@ -2,6 +2,10 @@
   "name": "tv",
   "version": "0.0.0",
   "private": true,
+  "scripts": {
+    "start": "zunder watch",
+    "deploy": "zunder deploy"
+  },
   "devDependencies": {
     "babel-core": "^6.2.1",
     "babel-eslint": "^6.0.4",
