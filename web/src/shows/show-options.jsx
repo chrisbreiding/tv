@@ -1,9 +1,12 @@
-import { observer } from 'mobx-react';
-import React from 'react';
-import { Link } from 'react-router';
+import _ from 'lodash'
+import { observer } from 'mobx-react'
+import React from 'react'
+import { Link } from 'react-router'
 
 function makeViewLink (link, searchName) {
-  return (link || '').replace('%s', searchName);
+  return link
+    .replace(/%s/g, searchName)
+    .replace(/\[searchName]/g, searchName)
 }
 
 export default observer(({ id, searchName, viewLink }) => {
@@ -20,12 +23,14 @@ export default observer(({ id, searchName, viewLink }) => {
             <i className="fa fa-edit"></i>
           </Link>
         </li>
-        <li>
-          <a href={makeViewLink(viewLink, searchName)} title="View" target="_blank">
-            <i className="fa fa-eye"></i>
-          </a>
-        </li>
+        {_.map((viewLink || '').split(','), (link) => (
+          <li key={link}>
+            <a href={makeViewLink(link, searchName)} title="View" target="_blank">
+              <i className="fa fa-eye"></i>
+            </a>
+          </li>
+        ))}
       </ul>
     </div>
-  );
-});
+  )
+})
