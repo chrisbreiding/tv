@@ -1,0 +1,39 @@
+{
+  "name": "tv-desktop",
+  "description": "Desktop app for TV episodes",
+  "productName": "TV Episodes",
+  "private": true,
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": {
+    "name": "Chris Breiding",
+    "url": "http://chrisbreiding.com/"
+  },
+  "scripts": {
+    "build-prod": "zunder build-prod",
+    "icons": "iconutil -c icns assets/icon.iconset -o build/icon.icns",
+    "start": "concurrently 'zunder watch' 'electron .'",
+    "dist": "npm run build-prod && npm run icons && build",
+    "pack": "npm run build-prod && npm run icons && build --dir"
+  },
+  "build": {
+    "appId": "com.chrisbreiding.tv.desktop",
+    "mac": {
+      "category": "public.app-category.entertainment"
+    }
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "concurrently": "^3.1.0",
+    "devtron": "^1.4.0",
+    "electron": "^1.4.14",
+    "electron-builder": "^11.2.4",
+    "eslint": "^3.13.1",
+    "eslint-plugin-react": "^6.9.0",
+    "zunder": "^4.0.4"
+  },
+  "dependencies": {
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  }
+}
