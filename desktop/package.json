@@ -12,7 +12,8 @@
   "scripts": {
     "build-prod": "zunder build-prod",
     "icons": "iconutil -c icns assets/icon.iconset -o build/icon.icns",
-    "start": "concurrently 'zunder watch' 'electron .'",
+    "start": "electron .",
+    "watch": "zunder watch",
     "dist": "npm run build-prod && npm run icons && build",
     "pack": "npm run build-prod && npm run icons && build --dir"
   },
@@ -33,6 +34,8 @@
     "zunder": "^4.0.4"
   },
   "dependencies": {
+    "bluebird": "^3.4.7",
+    "font-awesome": "^4.7.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2"
   }

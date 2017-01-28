@@ -1,0 +1,21 @@
+.app {
+  bottom: 0;
+  display: flex;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+.loading {
+  align-items: center;
+  // color: #555;
+  display: flex;
+  flex-grow: 1;
+  font-size: 1.4em;
+  justify-content: center;
+
+  i {
+    margin-right: 0.5em;
+  }
+}
