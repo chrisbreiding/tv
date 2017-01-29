@@ -1,19 +1,18 @@
 import cs from 'classnames'
-import _ from 'lodash'
 import React, { Component } from 'react'
 import ipc from '../lib/ipc'
 
 class App extends Component {
   state = {
-    directories: {},
     isLoading: true,
+    tvShowsDirectory: null,
     selectingDirectory: false,
   }
 
   componentDidMount () {
-    ipc('get:directories').then((directories) => {
+    ipc('get:directories').then(({ tvShows }) => {
       this.setState({
-        directories,
+        tvShowsDirectory: tvShows,
         isLoading: false,
       })
     })
@@ -33,17 +32,10 @@ class App extends Component {
         selecting: this.state.selectingDirectory,
       })}>
         <h1>Settings</h1>
-        <label>Downloads Directory</label>
-        <div className='fieldset'>
-          <p>{this.state.directories.downloads}</p>
-          <button onClick={this._selectDirectory('downloads')}>
-            Select
-          </button>
-        </div>
         <label>TV Shows Directory</label>
         <div className='fieldset'>
-          <p>{this.state.directories.tvShows}</p>
-          <button onClick={this._selectDirectory('tvShows')}>
+          <p>{this.state.tvShowsDirectory}</p>
+          <button onClick={this._selectDirectory}>
             Select
           </button>
         </div>
@@ -52,15 +44,12 @@ class App extends Component {
     )
   }
 
-  _selectDirectory = (directory) => () => {
+  _selectDirectory = () => {
     this.setState({ selectingDirectory: true })
-    ipc('select:directory', directory).then((directoryPath) => {
-      debugger
+    ipc('select:directory', 'tvShows').then((directoryPath) => {
       if (directoryPath) {
         this.setState({
-          directories: _.extend({}, this.state.directories, {
-            [directory]: directoryPath,
-          }),
+          tvShowsDirectory: directoryPath,
           selectingDirectory: false,
         })
       } else {

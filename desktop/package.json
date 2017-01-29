@@ -12,7 +12,7 @@
   "scripts": {
     "build-prod": "zunder build-prod",
     "icons": "iconutil -c icns assets/icon.iconset -o build/icon.icns",
-    "start": "electron .",
+    "start": "nodemon --exec 'electron .'",
     "watch": "zunder watch",
     "dist": "npm run build-prod && npm run icons && build",
     "pack": "npm run build-prod && npm run icons && build --dir"
@@ -30,6 +30,7 @@
     "electron-builder": "^11.2.4",
     "eslint": "^3.13.1",
     "eslint-plugin-react": "^6.9.0",
+    "nodemon": "^1.11.0",
     "zunder": "^4.0.4"
   },
   "dependencies": {
