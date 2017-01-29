@@ -1,13 +1,17 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const _ = require('lodash')
+const { app, dialog, BrowserWindow, ipcMain } = require('electron')
+const Config = require('electron-config')
 const path = require('path')
 const url = require('url')
+
+const config = new Config()
 
 let win
 
 function createWindow () {
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 400,
+    height: 400,
     webPreferences: {
       preload: path.join(__dirname, 'lib', 'ipc.js'),
       nodeIntegration: false,
@@ -39,9 +43,36 @@ app.on('activate', () => {
   }
 })
 
-ipcMain.on('get:directories:request', (event) => {
-  event.sender.send('get:directories:response', null, {
-    downloads: '/path/to/downloads',
-    tvShows: '/path/to/tv-shows',
+const on = (requestName, callback) => {
+  ipcMain.on(`${requestName}:request`, (event, ...args) => {
+    callback((...reponseArgs)  => {
+      event.sender.send(`${requestName}:response`, ...reponseArgs)
+    }, ...args)
+  })
+}
+
+const getDirectories = () => {
+  return config.get('directories') || {}
+}
+
+on('get:directories', (respond) => {
+  respond(null, getDirectories())
+})
+
+on('select:directory', (respond, directory) => {
+  dialog.showOpenDialog({
+    title: `Select ${_.startCase(directory)} Directory`,
+    buttonLabel: 'Select',
+    properties: ['openDirectory'],
+  }, (directoryPaths) => {
+    if (!directoryPaths || !directoryPaths.length) {
+      return respond()
+    }
+
+    const directoryPath = directoryPaths[0]
+    config.set('directories', _.extend({}, getDirectories(), {
+      [directory]: directoryPath,
+    }))
+    respond(null, directoryPath)
   })
 })

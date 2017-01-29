@@ -9,7 +9,6 @@
 
 .loading {
   align-items: center;
-  // color: #555;
   display: flex;
   flex-grow: 1;
   font-size: 1.4em;
@@ -17,5 +16,50 @@
 
   i {
     margin-right: 0.5em;
+  }
+}
+
+.cover {
+  background: rgba(255, 255, 255, 0.4);
+  display: none;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 20px 0;
+  position: relative;
+  max-width: 360px;
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  // display: flex doesn't work on a real <fieldset />
+  .fieldset {
+    display: flex;
+    margin-bottom: 15px;
+  }
+
+  p {
+    background: #111;
+    border: solid 1px #777;
+    color: darken($light-color, 20%);
+    flex-grow: 2;
+    margin-right: 5px;
+    overflow-x: auto;
+    padding: 5px 10px;
+  }
+
+  &.selecting .cover {
+    display: block;
   }
 }
