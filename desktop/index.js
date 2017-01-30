@@ -21,7 +21,7 @@ function createWindow () {
   if (win) return
 
   win = new BrowserWindow({
-    width: 400,
+    width: 600,
     height: 400,
     webPreferences: {
       preload: path.join(__dirname, 'lib', 'ipc.js'),
