@@ -1,6 +1,9 @@
+import _ from 'lodash';
 import cs from 'classnames';
 import React, { Component } from 'react';
 import date from '../lib/date';
+import uiState from '../lib/ui-state';
+import api from '../data/api';
 
 export default class Episode extends Component {
   constructor (props) {
@@ -10,6 +13,8 @@ export default class Episode extends Component {
   }
 
   componentDidMount () {
+    if (uiState.desktopRunning) return
+
     this.handler = () => {
       if (this.state.showingFileName) {
         this.setState({ showingFileName: false });
@@ -19,11 +24,13 @@ export default class Episode extends Component {
   }
 
   componentWillUnmount () {
+    if (uiState.desktopRunning) return
+
     document.body.removeEventListener('click', this.handler);
   }
 
   render () {
-    const { showFilename, episode } = this.props;
+    const { episode } = this.props;
 
     const airdate = episode.airdate;
     const className = cs({
@@ -46,13 +53,26 @@ export default class Episode extends Component {
         <span className="airdate">{date.shortString(episode.airdate)}</span>
         <span className="title" onClick={this._showFileName}>{episode.title}</span>
         <span className="file-name" ref="fileName">
-          {showFilename} - {episode.longEpisodeNumber} - {episode.fileSafeTitle}
+          {this._fileName()}
         </span>
       </li>
     );
   }
 
+  _fileName () {
+    const { showFilename, episode } = this.props;
+    return `${showFilename} - ${episode.longEpisodeNumber} - ${episode.fileSafeTitle}`
+  }
+
   _showFileName = () => {
+    if (uiState.desktopRunning) {
+      api.handleEpisode(_.extend(this.props.episode.serialize(), {
+        showName: this.props.showFilename,
+        fileName: this._fileName(),
+      }))
+      return
+    }
+
     this.setState({ showingFileName: true }, () => {
       let text = this.refs.fileName;
       let selection = window.getSelection();

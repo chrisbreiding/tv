@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const baseUrl = localStorage.apiUrl || 'http://tvapi.crbapps.com';
+const desktopBaseUrl = 'http://localhost:4192';
 
 export function getApiKey () {
   return localStorage.apiKey;
@@ -23,6 +24,16 @@ function request (endpoint, method = 'get', props = {}) {
 }
 
 export default {
+  pingDesktop () {
+    return axios.get(`${desktopBaseUrl}/ping`)
+    .then(() => true)
+    .catch(() => false)
+  },
+
+  handleEpisode (episode) {
+    return axios.post(desktopBaseUrl, { episode })
+  },
+
   getShows () {
     return request('shows').then((response) => {
       return response && response.data || { shows: [], episodes: [] };

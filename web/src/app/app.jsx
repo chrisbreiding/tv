@@ -1,10 +1,13 @@
 import axios from 'axios';
+import { action } from 'mobx';
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router';
 
 import Messages from '../messages/messages';
 import Loader from '../loader/loader';
+import api from '../data/api'
 import migrate from '../data/migrate';
+import uiState from '../lib/ui-state';
 
 @withRouter
 export default class App extends Component {
@@ -14,7 +17,7 @@ export default class App extends Component {
     this.state = { ready: false };
   }
 
-  componentWillMount () {
+  componentDidMount () {
     axios.interceptors.response.use(null, (error) => {
       if (error.status === 401) {
         this.props.router.push('/auth');
@@ -24,6 +27,10 @@ export default class App extends Component {
     });
 
     migrate().then(() => this.setState({ ready: true }));
+
+    api.pingDesktop().then(action('ping:desktop', (desktopRunning) => {
+      uiState.desktopRunning = desktopRunning;
+    }));
   }
 
   render () {
