@@ -150,6 +150,7 @@ const sendNotification = (notification) => {
 
 const handlingError = (title, message, type = 'error') => {
   const error = new Error()
+  error.isHandlingError = true
   error.title = title
   error.message = message
   error.type = type
@@ -301,9 +302,15 @@ server.on('handle:episode', (episode) => {
     sendHandlingNotice(false)
   })
   .catch((error) => {
+    if (!error.isHandlingError) {
+      error.title = 'Unexpected error while handling episode'
+      error.type = 'error'
+      error.message = error.stack
+    }
     if (error.title) {
       sendNotification(error)
     }
+
     sendHandlingNotice(false)
   })
 })
