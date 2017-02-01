@@ -7,6 +7,7 @@ const Config = require('electron-config')
 const path = require('path')
 const Promise = require('bluebird')
 const sanitize = require('sanitize-filename')
+const trash = require('trash')
 const url = require('url')
 
 const glob = Promise.promisify(require('glob'))
@@ -287,7 +288,7 @@ server.on('handle:episode', (episode) => {
     if (toDelete === directories.downloads) {
       toDelete = filePath
     }
-    return fs.removeAsync(toDelete)
+    return trash([toDelete])
       .return([filePath, newFilePath])
       .catch(wrapAndThrowError(`Error removing ${toDelete}`))
   })
