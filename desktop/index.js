@@ -8,6 +8,8 @@ const path = require('path')
 const Promise = require('bluebird')
 const sanitize = require('sanitize-filename')
 const url = require('url')
+
+const glob = Promise.promisify(require('glob'))
 const fs = Promise.promisifyAll(require('fs-extra'))
 
 const server = require('./lib/server')
@@ -157,14 +159,44 @@ const wrapAndThrowError = (title, type) => (error) => {
   throw handlingError(title, error.message, type)
 }
 
-const getFile = (directories) => {
+const videoExtensions = ['mkv', 'avi', 'mp4', 'm4v']
+const standardizeName = (name) => name.replace(/[ \'\"\.\-]/g, '').toLowerCase()
+const pad = (num) => num < 10 ? `0${num}` : `${num}`
+
+const findFile = (episode, downloadsDirectory) => {
+  return glob(`${downloadsDirectory}/**/*.+(${videoExtensions.join('|')})`)
+    .then((filePaths) => {
+      if (!filePaths.length) {
+        throw new Error('No file found')
+      }
+
+      const showName = standardizeName(episode.showName)
+      const seasonAndEpisode = `s${pad(episode.season)}e${pad(episode.episode_number)}`
+
+      const files = _.filter(filePaths, (filePath) => {
+        const fileName = standardizeName(path.basename(filePath))
+        return (
+          fileName.indexOf(showName) > -1
+          && fileName.indexOf(seasonAndEpisode) > -1
+        )
+      })
+
+      if (files.length !== 1) {
+        throw new Error('No file found')
+      } else {
+        return files[0]
+      }
+    })
+}
+
+const promptForFile = (downloadsDirectory) => {
   return new Promise((resolve, reject) => {
     dialog.showOpenDialog({
       title: 'Select Show',
       buttonLabel: 'Select',
-      defaultPath: directories.downloads,
+      defaultPath: downloadsDirectory,
       filters: [
-        { name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'm4v'] },
+        { name: 'Movies', extensions: videoExtensions },
       ],
     }, (filePaths) => {
       if (filePaths && filePaths[0]) {
@@ -174,6 +206,13 @@ const getFile = (directories) => {
       }
     })
   })
+}
+
+const getFile = (episode, downloadsDirectory) => {
+  return findFile(episode, downloadsDirectory)
+    .catch(() => {
+      return promptForFile(downloadsDirectory)
+    })
 }
 
 const ensureDirectories = (directories) => {
@@ -226,14 +265,13 @@ server.on('handle:episode', (episode) => {
     return ensureDirectories(directories)
   })
   .then(() => {
+    return getFile(episode, directories.downloads)
+  })
+  .then((filePath) => {
     const newDirectory = path.join(directories.tvShows, episode.showName, `Season ${episode.season}`)
     return fs.ensureDirAsync(newDirectory)
-      .return(newDirectory)
+      .return([newDirectory, filePath])
       .catch(wrapAndThrowError(`Failed to make directory ${newDirectory}`))
-  })
-  .then((newDirectory) => {
-    return getFile(directories)
-      .then((filePath) => [newDirectory, filePath])
   })
   .then(([newDirectory, filePath]) => {
     const extension = path.extname(filePath)
