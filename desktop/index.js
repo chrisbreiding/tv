@@ -289,7 +289,7 @@ server.on('handle:episode', (episode) => {
       toDelete = filePath
     }
     return trash([toDelete])
-      .return([filePath, newFilePath])
+      .then(() => [filePath, newFilePath])
       .catch(wrapAndThrowError(`Error removing ${toDelete}`))
   })
   .then(([filePath, newFilePath]) => {
