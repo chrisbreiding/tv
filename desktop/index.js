@@ -23,12 +23,22 @@ const logError = (error, ...message) => {
   console.error(chalk.red(error)) // eslint-disable-line no-console
 }
 
+const getWindowSettings = () => config.get('window') || {}
+
+const updateWindowSettings = (newSettings) => {
+  config.set('window', _.extend(getWindowSettings(), newSettings))
+}
+
 function createWindow () {
   if (win) return Promise.resolve()
 
+  const windowSettings = getWindowSettings()
+
   win = new BrowserWindow({
-    width: 600,
-    height: isDev ? 700 : 400,
+    width: windowSettings.width || 600,
+    height: windowSettings.height || (isDev ? 700 : 400),
+    x: windowSettings.x,
+    y: windowSettings.y,
     webPreferences: {
       preload: path.join(__dirname, 'lib', 'ipc.js'),
       nodeIntegration: false,
@@ -47,8 +57,29 @@ function createWindow () {
 
   return new Promise((resolve) => {
     win.webContents.on('did-finish-load', () => {
-      win.webContents.openDevTools()
+      if (isDev && windowSettings.isDevToolsOpen !== false) {
+        win.webContents.openDevTools()
+      }
       resolve()
+    })
+
+    win.on('resize', _.debounce(() => {
+      const [width, height] = win.getSize()
+      const [x, y] = win.getPosition()
+      updateWindowSettings({ width, height, x, y })
+    }, 1000))
+
+    win.on('moved', _.debounce(() => {
+      const [x, y] = win.getPosition()
+      updateWindowSettings({ x, y })
+    }, 1000))
+
+    win.webContents.on('devtools-opened', () => {
+      updateWindowSettings({ isDevToolsOpen: true })
+    })
+
+    win.webContents.on('devtools-closed', () => {
+      updateWindowSettings({ isDevToolsOpen: false })
     })
   })
 }
