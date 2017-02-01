@@ -3,4 +3,5 @@ npm-debug.log
 
 dist
 dist-prod
+app-dist
 node_modules

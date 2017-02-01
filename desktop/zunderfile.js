@@ -1,7 +1,7 @@
 require('zunder').setConfig({
   cacheBust: false,
-  devDir: 'build',
-  prodDir: 'build',
+  devDir: 'app-dist',
+  prodDir: 'app-dist',
   staticGlobs: {
     'node_modules/font-awesome/fonts/**': '/fonts',
   },
