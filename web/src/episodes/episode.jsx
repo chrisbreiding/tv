@@ -60,15 +60,21 @@ export default class Episode extends Component {
   }
 
   _fileName () {
-    const { showFilename, episode } = this.props;
-    return `${showFilename} - ${episode.longEpisodeNumber} - ${episode.fileSafeTitle}`
+    const { episode, show } = this.props;
+    return `${show._filename} - ${episode.longEpisodeNumber} - ${episode.fileSafeTitle}`
   }
 
   _showFileName = () => {
     if (uiState.desktopRunning) {
-      api.handleEpisode(_.extend(this.props.episode.serialize(), {
-        showName: this.props.showFilename,
+      const { episode, show } = this.props
+
+      api.handleEpisode(_.extend(episode.serialize(), {
         fileName: this._fileName(),
+        show: {
+          displayName: show.display_name,
+          searchName: show.search_name,
+          fileName: show.file_name,
+        },
       }))
       return
     }

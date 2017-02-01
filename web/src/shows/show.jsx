@@ -11,6 +11,6 @@ export default observer(({ show, type, viewLink }) => (
         <Options id={show.id} searchName={show.search_name} viewLink={viewLink} />
       </span>
     </h3>
-    <Episodes showFilename={show.file_name} episodes={show[`${type}Episodes`]} threshold={3} />
+    <Episodes show={show} episodes={show[`${type}Episodes`]} threshold={3} />
   </li>
 ));

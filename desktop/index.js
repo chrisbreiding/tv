@@ -172,7 +172,7 @@ const findFile = (episode, downloadsDirectory) => {
         throw new Error('No file found')
       }
 
-      const showName = standardizeName(episode.showName)
+      const showName = standardizeName(episode.show.searchName)
       const seasonAndEpisode = `s${pad(episode.season)}e${pad(episode.episode_number)}`
 
       const files = _.filter(filePaths, (filePath) => {
@@ -270,7 +270,7 @@ server.on('handle:episode', (episode) => {
     return getFile(episode, directories.downloads)
   })
   .then((filePath) => {
-    const newDirectory = path.join(directories.tvShows, episode.showName, `Season ${episode.season}`)
+    const newDirectory = path.join(directories.tvShows, episode.show.fileName, `Season ${episode.season}`)
     return fs.ensureDirAsync(newDirectory)
       .return([newDirectory, filePath])
       .catch(wrapAndThrowError(`Failed to make directory ${newDirectory}`))

@@ -27,7 +27,7 @@ export default withRouter(observer(function Show ({ params, router }) {
               <li key={season.season} className="season">
                 <h3>Season {season.season}</h3>
                 <Episodes
-                  showFilename={show.file_name}
+                  show={show}
                   episodes={_(season.episodes).sort(sortAscending).value()}
                 />
               </li>
