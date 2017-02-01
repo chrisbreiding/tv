@@ -22,15 +22,12 @@ class App extends Component {
       this.isLoading = false
     }))
 
-    ipc.on('handling:episode', action('handling:episode', (details) => {
-      if (details.title) {
-        state.addNotification({
-          type: details.type,
-          title: details.title,
-          message: details.message,
-        })
-      }
-      this.isHandlingEpisode = details.isHandling
+    ipc.on('notification', action('received:notification', (notification) => {
+      state.addNotification(notification)
+    }))
+
+    ipc.on('handling:episode', action('handling:episode', (isHandling) => {
+      this.isHandlingEpisode = isHandling
     }))
   }
 

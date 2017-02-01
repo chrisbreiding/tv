@@ -4,7 +4,6 @@ const _ = require('lodash')
 const { app, dialog, BrowserWindow, ipcMain } = require('electron')
 const chalk = require('chalk')
 const Config = require('electron-config')
-const mkdirp = require('mkdirp')
 const path = require('path')
 const Promise = require('bluebird')
 const sanitize = require('sanitize-filename')
@@ -19,6 +18,11 @@ let win
 
 const isDev = process.env.NODE_ENV === 'development'
 
+const logError = (error, ...message) => {
+  if (message && message.length) console.error(chalk.red(message.join(' '))) // eslint-disable-line no-console
+  console.error(chalk.red(error)) // eslint-disable-line no-console
+}
+
 function createWindow () {
   if (win) return Promise.resolve()
 
@@ -28,7 +32,7 @@ function createWindow () {
     webPreferences: {
       preload: path.join(__dirname, 'lib', 'ipc.js'),
       nodeIntegration: false,
-    }
+    },
   })
 
   win.loadURL(url.format({
@@ -52,7 +56,7 @@ function createWindow () {
 app.on('ready', () => {
   createWindow()
   server.start().catch((error) => {
-    console.log('Error starting server:', error)
+    logError(error, 'Error starting server')
   })
 })
 
@@ -102,47 +106,28 @@ on('select:directory', (respond, directory) => {
   })
 })
 
-const logError = (error, ...message) => {
-  if (message && message.length) console.error(chalk.red(message.join(' ')))
-  console.error(chalk.red(error))
+const sendHandlingNotice = (isHandling) => {
+  win.webContents.send('handling:episode', isHandling)
 }
 
-const sendHandling = (details) => {
-  win.webContents.send('handling:episode', details)
+const sendNotification = (notification) => {
+  win.webContents.send('notification', notification)
 }
 
-server.on('handle:episode', (episode) => {
-  createWindow().then(() => {
-    app.focus()
+const handlingError = (title, message, type = 'error') => {
+  const error = new Error()
+  error.title = title
+  error.message = message
+  error.type = type
+  return error
+}
 
-    const directories = getDirectories()
+const wrapAndThrowError = (title, type) => (error) => {
+  throw handlingError(title, error.message, type)
+}
 
-    sendHandling({ isHandling: true })
-
-    let hasError = false
-
-    if (!directories.downloads) {
-      hasError = true
-      sendHandling({
-        title: 'Error handling episode: must set Downloads directory',
-        type: 'error',
-        isHandling: false,
-      })
-    }
-
-      if (!directories.tvShows) {
-      hasError = true
-      sendHandling({
-        title: 'Error handling episode: must set TV Shows directory',
-        type: 'error',
-        isHandling: false,
-      })
-    }
-
-    if (hasError) {
-      return
-    }
-
+const getFile = (directories) => {
+  return new Promise((resolve, reject) => {
     dialog.showOpenDialog({
       title: 'Select Show',
       buttonLabel: 'Select',
@@ -151,70 +136,104 @@ server.on('handle:episode', (episode) => {
         { name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'm4v'] },
       ],
     }, (filePaths) => {
-      if (!filePaths || !filePaths.length) {
-        sendHandling({
-          title: 'Canceled handling episode',
-          isHandling: false,
-        })
-        return
+      if (filePaths && filePaths[0]) {
+        resolve(filePaths[0])
+      } else {
+        reject(handlingError('Canceled handling episode', '', 'info'))
       }
-
-      const filePath = filePaths[0]
-      const directory = path.dirname(filePath)
-      const extension = path.extname(filePath)
-
-      const newFileName = sanitize(episode.fileName)
-
-      const newDirectory = path.join(directories.tvShows, episode.showName, `Season ${episode.season}`)
-      fs.ensureDirAsync(newDirectory)
-      .then(() => {
-        const newFilePath = path.join(newDirectory, `${newFileName}${extension}`)
-        const writeStream = fs.createWriteStream(newFilePath)
-
-        writeStream.on('error', (error) => {
-          sendHandling({
-            title: `Error copying ${filePath} to ${newFilePath}`,
-            message: error.message,
-            type: 'error',
-            isHandling: false,
-          })
-        })
-
-        writeStream.on('finish', () => {
-          // assumes file will only ever be in downloads or one level deep
-          let toDelete = directory
-          if (directory === directories.downloads) {
-            toDelete = filePath
-          }
-          fs.removeAsync(toDelete)
-          .then(() => {
-            sendHandling({
-              title: 'Finished renaming and moving episode',
-              message: `${filePath} renamed and moved to ${newFilePath}`,
-              type: 'success',
-              isHandling: false,
-            })
-          })
-          .catch((error) => {
-            sendHandling({
-              title: `Error removing ${toDelete}`,
-              message: error,
-              type: 'error',
-              isHandling: false,
-            })
-          })
-        })
-
-        fs.createReadStream(filePath).pipe(writeStream)
-      })
-      .catch((error) => {
-        sendHandling({
-          title: `Failed to make directory ${newDirectory}`,
-          message: error,
-          type: 'error',
-          isHandling: false,
-        })
-      })
     })
+  })
+}
+
+const ensureDirectories = (directories) => {
+  let directoriesSet = true
+
+  if (!directories.downloads) {
+    directoriesSet = false
+    sendNotification({
+      title: 'Error handling episode: must set Downloads directory',
+      type: 'error',
+    })
+  }
+
+  if (!directories.tvShows) {
+    directoriesSet = false
+    sendNotification({
+      title: 'Error handling episode: must set TV Shows directory',
+      type: 'error',
+    })
+  }
+
+  if (!directoriesSet) {
+    throw handlingError('')
+  }
+}
+
+const copyFile = (from, to) => {
+  return new Promise((resolve, reject) => {
+    const writeStream = fs.createWriteStream(to)
+
+    writeStream.on('error', (error) => {
+      reject(handlingError(`Error copying ${from} to ${to}`, error.message))
+    })
+
+    writeStream.on('finish', () => {
+      resolve()
+    })
+
+    fs.createReadStream(from).pipe(writeStream)
+  })
+}
+
+server.on('handle:episode', (episode) => {
+  const directories = getDirectories()
+
+  createWindow()
+  .then(() => {
+    app.focus()
+    sendHandlingNotice(true)
+    return ensureDirectories(directories)
+  })
+  .then(() => {
+    const newDirectory = path.join(directories.tvShows, episode.showName, `Season ${episode.season}`)
+    return fs.ensureDirAsync(newDirectory)
+      .return(newDirectory)
+      .catch(wrapAndThrowError(`Failed to make directory ${newDirectory}`))
+  })
+  .then((newDirectory) => {
+    return getFile(directories)
+      .then((filePath) => [newDirectory, filePath])
+  })
+  .then(([newDirectory, filePath]) => {
+    const extension = path.extname(filePath)
+    const newFileName = sanitize(episode.fileName)
+    const newFilePath = path.join(newDirectory, `${newFileName}${extension}`)
+
+    return copyFile(filePath, newFilePath)
+      .return([filePath, newFilePath])
+  })
+  .then(([filePath, newFilePath]) => {
+    // assumes file will only ever be in downloads or one level deep
+    let toDelete = path.dirname(filePath)
+    if (toDelete === directories.downloads) {
+      toDelete = filePath
+    }
+    return fs.removeAsync(toDelete)
+      .return([filePath, newFilePath])
+      .catch(wrapAndThrowError(`Error removing ${toDelete}`))
+  })
+  .then(([filePath, newFilePath]) => {
+    sendNotification({
+      title: 'Finished renaming and moving episode',
+      message: `${filePath} renamed and moved to ${newFilePath}`,
+      type: 'success',
+    })
+    sendHandlingNotice(false)
+  })
+  .catch((error) => {
+    if (error.title) {
+      sendNotification(error)
+    }
+    sendHandlingNotice(false)
   })
 })
