@@ -17,12 +17,14 @@ const config = new Config()
 
 let win
 
+const isDev = process.env.NODE_ENV === 'development'
+
 function createWindow () {
-  if (win) return
+  if (win) return Promise.resolve()
 
   win = new BrowserWindow({
     width: 600,
-    height: 400,
+    height: isDev ? 700 : 400,
     webPreferences: {
       preload: path.join(__dirname, 'lib', 'ipc.js'),
       nodeIntegration: false,
@@ -37,6 +39,13 @@ function createWindow () {
 
   win.on('closed', () => {
     win = null
+  })
+
+  return new Promise((resolve) => {
+    win.webContents.on('did-finish-load', () => {
+      win.webContents.openDevTools()
+      resolve()
+    })
   })
 }
 
@@ -98,62 +107,114 @@ const logError = (error, ...message) => {
   console.error(chalk.red(error))
 }
 
+const sendHandling = (details) => {
+  win.webContents.send('handling:episode', details)
+}
+
 server.on('handle:episode', (episode) => {
-  createWindow()
-  app.focus()
+  createWindow().then(() => {
+    app.focus()
 
-  const directories = getDirectories()
+    const directories = getDirectories()
 
-  if (!directories.downloads) {
-    logError('Must set Downloads directory')
-    return
-  }
+    sendHandling({ isHandling: true })
 
-  if (!directories.tvShows) {
-    logError('Must set TV Shows directory')
-    return
-  }
+    let hasError = false
 
-  // TODO: send message to UI that this is going on
-  // with error if either directory doesn't exist
-
-  dialog.showOpenDialog({
-    title: 'Select Show',
-    buttonLabel: 'Select',
-  }, (filePaths) => {
-    if (!filePaths || !filePaths.length) return
-
-    const filePath = filePaths[0]
-    const directory = path.dirname(filePath)
-    const extension = path.extname(filePath)
-
-    const newFileName = sanitize(episode.fileName)
-
-    const newDirectory = path.join(directories.tvShows, episode.showName, `Season ${episode.season}`)
-    fs.ensureDirAsync(newDirectory)
-    .then(() => {
-      const newFilePath = path.join(newDirectory, `${newFileName}${extension}`)
-      const writeStream = fs.createWriteStream(newFilePath)
-
-      writeStream.on('error', (error) => {
-        logError(error, 'Error copying', filePath, 'to', newFilePath)
+    if (!directories.downloads) {
+      hasError = true
+      sendHandling({
+        title: 'Error handling episode: must set Downloads directory',
+        type: 'error',
+        isHandling: false,
       })
+    }
 
-      writeStream.on('finish', () => {
-        // assumes file will only ever be in downloads or one level deep
-        let toDelete = directory
-        if (directory === directories.downloads) {
-          toDelete = filePath
-        }
-        fs.removeAsync(toDelete).catch((error) => {
-          logError(error, 'Error removing', toDelete)
+      if (!directories.tvShows) {
+      hasError = true
+      sendHandling({
+        title: 'Error handling episode: must set TV Shows directory',
+        type: 'error',
+        isHandling: false,
+      })
+    }
+
+    if (hasError) {
+      return
+    }
+
+    dialog.showOpenDialog({
+      title: 'Select Show',
+      buttonLabel: 'Select',
+      defaultPath: directories.downloads,
+      filters: [
+        { name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'm4v'] },
+      ],
+    }, (filePaths) => {
+      if (!filePaths || !filePaths.length) {
+        sendHandling({
+          title: 'Canceled handling episode',
+          isHandling: false,
+        })
+        return
+      }
+
+      const filePath = filePaths[0]
+      const directory = path.dirname(filePath)
+      const extension = path.extname(filePath)
+
+      const newFileName = sanitize(episode.fileName)
+
+      const newDirectory = path.join(directories.tvShows, episode.showName, `Season ${episode.season}`)
+      fs.ensureDirAsync(newDirectory)
+      .then(() => {
+        const newFilePath = path.join(newDirectory, `${newFileName}${extension}`)
+        const writeStream = fs.createWriteStream(newFilePath)
+
+        writeStream.on('error', (error) => {
+          sendHandling({
+            title: `Error copying ${filePath} to ${newFilePath}`,
+            message: error.message,
+            type: 'error',
+            isHandling: false,
+          })
+        })
+
+        writeStream.on('finish', () => {
+          // assumes file will only ever be in downloads or one level deep
+          let toDelete = directory
+          if (directory === directories.downloads) {
+            toDelete = filePath
+          }
+          fs.removeAsync(toDelete)
+          .then(() => {
+            sendHandling({
+              title: 'Finished renaming and moving episode',
+              message: `${filePath} renamed and moved to ${newFilePath}`,
+              type: 'success',
+              isHandling: false,
+            })
+          })
+          .catch((error) => {
+            sendHandling({
+              title: `Error removing ${toDelete}`,
+              message: error,
+              type: 'error',
+              isHandling: false,
+            })
+          })
+        })
+
+        fs.createReadStream(filePath).pipe(writeStream)
+      })
+      .catch((error) => {
+        sendHandling({
+          title: `Failed to make directory ${newDirectory}`,
+          message: error,
+          type: 'error',
+          isHandling: false,
         })
       })
-
-      fs.createReadStream(filePath).pipe(writeStream)
-    })
-    .catch((error) => {
-      logError(error, 'Failed to make directory', newDirectory)
     })
   })
 })

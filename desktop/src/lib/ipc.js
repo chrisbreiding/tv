@@ -11,4 +11,10 @@ const ipc = (event, data) => {
   })
 }
 
+ipc.on = (event, callback) => {
+  ipcRenderer.on(event, (__, ...args) => {
+    callback(...args)
+  })
+}
+
 export default ipc

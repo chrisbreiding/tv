@@ -3,5 +3,8 @@
     "lib/",
     "index.js"
   ],
-  "ext": "js"
+  "ext": "js",
+  "env": {
+    "NODE_ENV": "development"
+  }
 }

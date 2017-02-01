@@ -26,6 +26,11 @@ h1 {
   margin-bottom: 1em;
 }
 
+p {
+  color: darken($light-color, 20%);
+  line-height: 1.5;
+}
+
 button {
   background: $primary-color;
   border: solid 1px $primary-color;

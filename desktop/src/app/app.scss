@@ -7,11 +7,17 @@
   top: 0;
 }
 
+.wrap {
+  display: flex;
+  width: 100%;
+}
+
 .loading {
   align-items: center;
+  color: darken($light-color, 40%);
   display: flex;
   flex-grow: 1;
-  font-size: 1.4em;
+  font-size: 1.2em;
   justify-content: center;
 
   i {
@@ -19,8 +25,46 @@
   }
 }
 
+.notifications {
+  position: absolute;
+  left: 0.5em;
+  right: 0.5em;
+  top: 0.5em;
+
+  li {
+    align-items: center;
+    background: #565656;
+    box-shadow: 0 0 1em $darkest-color;
+    display: flex;
+    margin-bottom: 0.5em;
+    justify-content: space-between;
+    padding: 0.3em 0.3em 0.3em 1em;
+
+    &.success {
+      background: $success-color;
+    }
+
+    &.error {
+      background: $error-color;
+    }
+  }
+
+  p {
+    color: $light-color;
+    padding-right: 1em;
+  }
+
+  button {
+    background: none;
+    border: none;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
 .cover {
-  background: rgba(255, 255, 255, 0.4);
   display: none;
   bottom: 0;
   left: 0;
@@ -46,16 +90,16 @@
   .fieldset {
     display: flex;
     margin-bottom: 15px;
-  }
 
-  p {
-    background: #111;
-    border: solid 1px #777;
-    color: darken($light-color, 20%);
-    flex-grow: 2;
-    margin-right: 5px;
-    overflow-x: auto;
-    padding: 5px 10px;
+    p {
+      background: #111;
+      border: solid 1px #777;
+      flex-grow: 2;
+      margin-right: 5px;
+      min-width: 14em;
+      overflow-x: auto;
+      padding: 5px 10px;
+    }
   }
 
   &.selecting .cover {
