@@ -61,7 +61,7 @@ export default class Episode extends Component {
 
   _fileName () {
     const { episode, show } = this.props;
-    return `${show._filename} - ${episode.longEpisodeNumber} - ${episode.fileSafeTitle}`
+    return `${show.file_name} - ${episode.longEpisodeNumber} - ${episode.fileSafeTitle}`
   }
 
   _showFileName = () => {
