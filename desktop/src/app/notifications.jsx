@@ -1,23 +1,53 @@
+import cs from 'classnames'
 import _ from 'lodash'
+import Markdown from 'markdown-it'
+import { observable } from 'mobx'
 import { observer } from 'mobx-react'
-import React from 'react'
+import React, { Component } from 'react'
 
 import state from './state'
 
-const remove = (id) => () => {
-  state.removeNotification(id)
+const md = new Markdown()
+
+@observer
+class Notification extends Component {
+  @observable isExpanded = false
+
+  render () {
+    const { message, title, type } = this.props.notification
+
+    return (
+      <li className={cs(type, {
+        'is-expanded': this.isExpanded,
+        'has-message': !!message,
+      })}>
+        <div className='content'>
+          <button onClick={this._toggleExpanded}>
+            <i className='fa fa-fw'></i>
+          </button>
+          <p dangerouslySetInnerHTML={{ __html: md.render(title) }}></p>
+          <button onClick={this._remove}>
+            <i className='fa fa-remove'></i>
+          </button>
+        </div>
+        <div className='expanded-content' dangerouslySetInnerHTML={{ __html: md.render(message) }}></div>
+      </li>
+    )
+  }
+
+  _toggleExpanded = () => {
+    this.isExpanded = !this.isExpanded
+  }
+
+  _remove = () => {
+    state.removeNotification(this.props.notification.id)
+  }
 }
 
-// TODO: add expandable message
 const Notifications = observer(() => (
   <ul className='notifications'>
-    {_.map(state.notifications, ({ id, type, title }) => (
-      <li key={id} className={type}>
-        <p>{title}</p>
-        <button onClick={remove(id)}>
-          <i className='fa fa-remove'></i>
-        </button>
-      </li>
+    {_.map(state.notifications, (notification) => (
+      <Notification key={notification.id} notification={notification} />
     ))}
   </ul>
 ))

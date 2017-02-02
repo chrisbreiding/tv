@@ -12,6 +12,7 @@ const url = require('url')
 
 const glob = Promise.promisify(require('glob'))
 const fs = Promise.promisifyAll(require('fs-extra'))
+const homedir = require('homedir')()
 
 const server = require('./lib/server')
 
@@ -119,7 +120,9 @@ const getDirectories = () => {
 }
 
 on('get:directories', (respond) => {
-  respond(null, getDirectories())
+  respond(null, _.transform(getDirectories(), (dirs, dirPath, dirName) => {
+    dirs[dirName] = tildeify(dirPath)
+  }))
 })
 
 on('select:directory', (respond, directory) => {
@@ -223,7 +226,7 @@ const ensureDirectories = (directories) => {
   if (!directories.downloads) {
     directoriesSet = false
     sendNotification({
-      title: 'Error handling episode: must set Downloads directory',
+      title: 'Error handling episode: must set **Downloads** directory',
       type: 'error',
     })
   }
@@ -231,7 +234,7 @@ const ensureDirectories = (directories) => {
   if (!directories.tvShows) {
     directoriesSet = false
     sendNotification({
-      title: 'Error handling episode: must set TV Shows directory',
+      title: 'Error handling episode: must set **TV Shows** directory',
       type: 'error',
     })
   }
@@ -246,7 +249,10 @@ const copyFile = (from, to) => {
     const writeStream = fs.createWriteStream(to)
 
     writeStream.on('error', (error) => {
-      reject(handlingError(`Error copying ${from} to ${to}`, error.message))
+      reject(handlingError(
+        `Error copying file`,
+        `Attempt to move **${tildeify(from)}**\nto **${tildeify(to)}\n\n${error.message}** failed\n\n${error.message}`
+      ))
     })
 
     writeStream.on('finish', () => {
@@ -255,6 +261,10 @@ const copyFile = (from, to) => {
 
     fs.createReadStream(from).pipe(writeStream)
   })
+}
+
+const tildeify = (directory) => {
+  return directory.replace(homedir, '~')
 }
 
 server.on('handle:episode', (episode) => {
@@ -273,7 +283,7 @@ server.on('handle:episode', (episode) => {
     const newDirectory = path.join(directories.tvShows, episode.show.fileName, `Season ${episode.season}`)
     return fs.ensureDirAsync(newDirectory)
       .return([newDirectory, filePath])
-      .catch(wrapAndThrowError(`Failed to make directory ${newDirectory}`))
+      .catch(wrapAndThrowError(`Failed to make directory **${tildeify(newDirectory)}**`))
   })
   .then(([newDirectory, filePath]) => {
     const extension = path.extname(filePath)
@@ -291,24 +301,26 @@ server.on('handle:episode', (episode) => {
     }
     return trash([toDelete])
       .then(() => [filePath, newFilePath])
-      .catch(wrapAndThrowError(`Error removing ${toDelete}`))
+      .catch(wrapAndThrowError(`Error removing **${tildeify(toDelete)}**`))
   })
   .then(([filePath, newFilePath]) => {
     sendNotification({
-      title: 'Finished renaming and moving episode',
-      message: `${filePath} renamed and moved to ${newFilePath}`,
+      title: `Finished handling episode for **${episode.show.displayName}**`,
+      message: `**${tildeify(filePath)}**\n  renamed and moved to\n**${tildeify(newFilePath)}**`,
       type: 'success',
     })
     sendHandlingNotice(false)
   })
   .catch((error) => {
-    if (!error.isHandlingError) {
-      error.title = 'Unexpected error while handling episode'
-      error.type = 'error'
-      error.message = error.stack
+    let notification = error
+    if (!notification.isHandlingError) {
+      notification = new Error()
+      notification.title = 'Unexpected error while handling episode'
+      notification.type = 'error'
+      notification.message = error.stack
     }
-    if (error.title) {
-      sendNotification(error)
+    if (notification.title) {
+      sendNotification(notification)
     }
 
     sendHandlingNotice(false)
