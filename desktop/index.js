@@ -194,7 +194,7 @@ const findFile = (episode, downloadsDirectory) => {
     })
 }
 
-const promptForFile = (downloadsDirectory) => {
+const promptForFile = (episode, downloadsDirectory) => {
   return new Promise((resolve, reject) => {
     dialog.showOpenDialog({
       title: 'Select Show',
@@ -207,7 +207,7 @@ const promptForFile = (downloadsDirectory) => {
       if (filePaths && filePaths[0]) {
         resolve(filePaths[0])
       } else {
-        reject(handlingError('Canceled handling episode', '', 'info'))
+        reject(handlingError(`Canceled handling episode for **${episode.show.displayName}**`, '', 'info'))
       }
     })
   })
@@ -216,7 +216,7 @@ const promptForFile = (downloadsDirectory) => {
 const getFile = (episode, downloadsDirectory) => {
   return findFile(episode, downloadsDirectory)
     .catch(() => {
-      return promptForFile(downloadsDirectory)
+      return promptForFile(episode, downloadsDirectory)
     })
 }
 

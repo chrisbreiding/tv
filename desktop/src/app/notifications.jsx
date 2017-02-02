@@ -13,6 +13,10 @@ const md = new Markdown()
 class Notification extends Component {
   @observable isExpanded = false
 
+  componentDidMount () {
+    this.autoRemoveTimeout = setTimeout(this._remove, 10000)
+  }
+
   render () {
     const { message, title, type } = this.props.notification
 
@@ -36,6 +40,7 @@ class Notification extends Component {
   }
 
   _toggleExpanded = () => {
+    clearTimeout(this.autoRemoveTimeout)
     this.isExpanded = !this.isExpanded
   }
 
