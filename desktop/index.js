@@ -5,6 +5,7 @@ const { app, dialog, BrowserWindow, ipcMain } = require('electron')
 const chalk = require('chalk')
 const Config = require('electron-config')
 const path = require('path')
+const PlexAPI = require("plex-api")
 const Promise = require('bluebird')
 const sanitize = require('sanitize-filename')
 const trash = require('trash')
@@ -17,6 +18,7 @@ const homedir = require('homedir')()
 const server = require('./lib/server')
 
 const config = new Config()
+const plex = new PlexAPI('MBP13.local')
 
 let win
 
@@ -268,6 +270,19 @@ const tildeify = (directory) => {
   return directory.replace(homedir, '~')
 }
 
+const refreshPlex = () => {
+  plex.find("/library/sections", { title: "TV Shows" })
+  .then((directories) => {
+    const uri = _.get(directories, '[0].uri')
+    if (uri) {
+      return plex.perform(`${uri}/refresh`)
+    }
+  })
+  .catch(() => {
+    // couldn't connect, no big deal
+  })
+}
+
 server.on('handle:episode', (episode) => {
   const directories = getDirectories()
 
@@ -311,6 +326,7 @@ server.on('handle:episode', (episode) => {
       type: 'success',
     })
     sendHandlingNotice(false)
+    refreshPlex()
   })
   .catch((error) => {
     let notification = error
