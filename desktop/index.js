@@ -49,8 +49,9 @@ function createWindow () {
     },
   })
 
+  const distDir = isDev ? 'app-dist' : 'app-dist-prod'
   win.loadURL(url.format({
-    pathname: path.join(__dirname, 'app-dist', 'index.html'),
+    pathname: path.join(__dirname, distDir, 'index.html'),
     protocol: 'file:',
     slashes: true,
   }))
