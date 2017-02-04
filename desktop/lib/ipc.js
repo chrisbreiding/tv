@@ -1,5 +1,23 @@
-var { ipcRenderer } = require('electron')
+'use strict'
 
-process.once('loaded', () => {
-  global.ipcRenderer = ipcRenderer
-})
+const { ipcMain } = require('electron')
+const window = require('./window')
+
+const on = (requestName, callback) => {
+  ipcMain.on(`${requestName}:request`, (event, ...args) => {
+    callback((...reponseArgs)  => {
+      event.sender.send(`${requestName}:response`, ...reponseArgs)
+    }, ...args)
+  })
+}
+
+const send = (eventName, data) => {
+  window.ensure().then((win) => {
+    win.webContents.send(eventName, data)
+  })
+}
+
+module.exports = {
+  on,
+  send,
+}

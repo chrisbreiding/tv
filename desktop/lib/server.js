@@ -36,7 +36,7 @@ module.exports = {
 
   start () {
     return new Promise((resolve, reject) => {
-      this.server = app.listen(4192, (...args) => {
+      this.server = app.listen(4192, () => {
         resolve()
       })
 

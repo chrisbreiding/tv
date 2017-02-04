@@ -6,6 +6,8 @@ class State {
 
   addNotification (notification) {
     notification.id = _.uniqueId()
+    notification.title = notification.title || ''
+    notification.message = notification.message || ''
     this.notifications.push(notification)
   }
 
