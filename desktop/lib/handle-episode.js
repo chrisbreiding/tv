@@ -22,10 +22,10 @@ const sendHandlingNotice = (isHandling) => {
 }
 
 const sendNotification = (notification) => {
-  ipc.send('notification', notification)
+  return ipc.send('notification', notification)
 }
 
-const handlingError = (title, message, type = 'error') => {
+const handlingError = (title, message = '', type = 'error') => {
   const error = new Error()
   error.isHandlingError = true
   error.title = title
@@ -94,30 +94,50 @@ const getFile = (episode, directories) => () => {
   })
 }
 
-const ensureBaseDirectories = (directories) => {
-  let directoriesSet = true
+const directoryError = (name) => {
+  return handlingError(`Error handling episode: must set **${name}** directory`)
+}
 
-  if (!directories.downloads) {
-    directoriesSet = false
-    sendNotification({
-      title: 'Error handling episode: must set **Downloads** directory',
-      type: 'error',
-    })
-  }
+const verifyBaseDirectoriesSet = (directories) => {
+  const errors = new Promise.AggregateError()
 
-  if (!directories.tvShows) {
-    directoriesSet = false
-    sendNotification({
-      title: 'Error handling episode: must set **TV Shows** directory',
-      type: 'error',
-    })
-  }
+  if (!directories.downloads) errors.push(directoryError('Downloads'))
+  if (!directories.tvShows) errors.push(directoryError('TV Shows'))
 
-  if (directoriesSet) {
-    return Promise.resolve()
+  if (errors.length) {
+    return Promise.reject(errors)
   } else {
-    return Promise.reject(handlingError(''))
+    return Promise.resolve()
   }
+}
+
+const directoryExists = (directoryPath, name) => {
+  return fs.statAsync(directoryPath)
+  .catch(() => {
+    throw handlingError(`The ${name} directory, **${directoryPath}**, does not exist`)
+  })
+  .then((stats) => {
+    if (!stats.isDirectory()) {
+      throw handlingError(`The ${name} directory, **${directoryPath}**, is not a directory`)
+    }
+  })
+}
+
+const verifyBaseDirectoriesExist = (directories) => () => {
+  const errors = new Promise.AggregateError()
+  return Promise.all([
+    directoryExists(directories.downloads, 'Downloads').catch((error) => {
+      errors.push(error)
+      throw error
+    }),
+    directoryExists(directories.tvShows, 'TV Shows').catch((error) => {
+      errors.push(error)
+      throw error
+    }),
+  ])
+  .catch(() => {
+    throw errors
+  })
 }
 
 const ensureSeasonDirectory = (episode, directories) => (filePath) => {
@@ -177,23 +197,20 @@ const notifySuccess = (episode) => ([filePath, newFilePath]) => {
     message: `**${util.tildeify(filePath)}**\n  renamed and moved to\n**${util.tildeify(newFilePath)}**`,
     type: 'success',
   })
-  sendHandlingNotice(false)
   return refreshPlex()
 }
 
-const notifyError = (episode) => (error) => {
-  let notification = error
-  if (!notification.isHandlingError) {
-    notification = new Error()
-    notification.title = 'Unexpected error while handling episode'
-    notification.message = `${episode.fileName}\n\n${error.stack}`
-    notification.type = 'error'
-  }
-  if (notification.title) {
-    ipc.send('notification', notification)
-  }
+const notHandlingError = (error) => !error.isHandlingError
 
-  sendHandlingNotice(false)
+const massageUncaughtError = (episode) => (error) => {
+  error.title = 'Unexpected error while handling episode'
+  error.message = `${episode.fileName}\n\n${error.stack}`
+  error.type = 'error'
+  throw error
+}
+
+const notifyErrors = (errors) => {
+  return errors.map(sendNotification)
 }
 
 module.exports = (episode) => {
@@ -201,11 +218,17 @@ module.exports = (episode) => {
 
   sendHandlingNotice(true)
 
-  ensureBaseDirectories(directories)
+  verifyBaseDirectoriesSet(directories)
+  .then(verifyBaseDirectoriesExist(directories))
   .then(getFile(episode, directories))
   .then(ensureSeasonDirectory(episode, directories))
   .then(copyFile(episode))
   .then(trashOriginal(directories))
   .then(notifySuccess(episode))
-  .catch(notifyError(episode))
+  .catch(Promise.AggregateError, notifyErrors(episode))
+  .catch(notHandlingError, massageUncaughtError(episode))
+  .catch(sendNotification)
+  .finally(() => {
+    sendHandlingNotice(false)
+  })
 }

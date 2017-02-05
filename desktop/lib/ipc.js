@@ -12,7 +12,7 @@ const on = (requestName, callback) => {
 }
 
 const send = (eventName, data) => {
-  window.ensure().then((win) => {
+  return window.ensure().then((win) => {
     win.webContents.send(eventName, data)
   })
 }
