@@ -12,13 +12,14 @@ const trash = require('trash')
 const glob = Promise.promisify(require('glob'))
 const fs = Promise.promisifyAll(require('fs-extra'))
 
-const plex = new PlexAPI('MBP13.local')
-
 const ipc = require('./ipc')
 const util = require('./util')
 
-const sendHandlingNotice = (isHandling) => {
-  ipc.send('handling:episode', isHandling)
+const plex = new PlexAPI('MBP13.local')
+const handlers = {}
+
+const sendHandlingNotice = (episode, isHandling) => {
+  ipc.send('handling:episode', episode, isHandling)
 }
 
 const sendNotification = (notification) => {
@@ -92,6 +93,19 @@ const getFile = (episode, directories) => () => {
   .catch(() => {
     return promptForFile(episode, directories.downloads)
   })
+  .then((filePath) => {
+    const otherEpisodeUsingFile = _.find(handlers, { filePath })
+
+    if (otherEpisodeUsingFile) {
+      throw handlingError(
+        `File already in use`,
+        `Tried to use *${util.tildeify(filePath)}*\nfor **${episode.fileName}**,\nbut being used for **${otherEpisodeUsingFile.fileName}**`
+      )
+    } else {
+      handlers[episode.id].filePath = filePath
+      return filePath
+    }
+  })
 }
 
 const directoryError = (name) => {
@@ -144,7 +158,7 @@ const ensureSeasonDirectory = (episode, directories) => (filePath) => {
   const newDirectory = path.join(directories.tvShows, episode.show.fileName, `Season ${episode.season}`)
   return fs.ensureDirAsync(newDirectory)
     .return([filePath, newDirectory])
-    .catch(wrapAndThrowError(`Failed to make directory **${util.tildeify(newDirectory)}**`))
+    .catch(wrapAndThrowError(`Failed to make directory *${util.tildeify(newDirectory)}*`))
 }
 
 const copyFile = (episode) => ([filePath, newDirectory]) => {
@@ -162,7 +176,7 @@ const copyFile = (episode) => ([filePath, newDirectory]) => {
   .catch((error) => {
     throw handlingError(
       `Error copying file`,
-      `Failed to move **${util.tildeify(filePath)}**\nto\n**${util.tildeify(newFilePath)}**\n\n${error.message}`
+      `Failed to move *${util.tildeify(filePath)}*\nto\n*${util.tildeify(newFilePath)}*\n\n${error.message}`
     )
   })
 }
@@ -175,7 +189,15 @@ const trashOriginal = (directories) => ([filePath, newFilePath]) => {
   }
   return Promise.resolve(trash([toDelete]))
   .return([filePath, newFilePath])
-  .catch(wrapAndThrowError(`Error removing **${util.tildeify(toDelete)}**`))
+  .catch(wrapAndThrowError(`Error removing *${util.tildeify(toDelete)}*`))
+}
+
+const notifySuccess = (episode) => ([filePath, newFilePath]) => {
+  return sendNotification({
+    title: `Finished handling episode for **${episode.show.displayName}**`,
+    message: `*${util.tildeify(filePath)}*\n  renamed and moved to\n*${util.tildeify(newFilePath)}*`,
+    type: 'success',
+  })
 }
 
 const refreshPlex = () => {
@@ -189,15 +211,6 @@ const refreshPlex = () => {
   .catch(() => {
     // couldn't connect, no big deal
   })
-}
-
-const notifySuccess = (episode) => ([filePath, newFilePath]) => {
-  sendNotification({
-    title: `Finished handling episode for **${episode.show.displayName}**`,
-    message: `**${util.tildeify(filePath)}**\n  renamed and moved to\n**${util.tildeify(newFilePath)}**`,
-    type: 'success',
-  })
-  return refreshPlex()
 }
 
 const notHandlingError = (error) => !error.isHandlingError
@@ -214,9 +227,12 @@ const notifyErrors = (errors) => {
 }
 
 module.exports = (episode) => {
+  if (handlers[episode.id]) return
+
   const directories = util.getDirectories()
 
-  sendHandlingNotice(true)
+  handlers[episode.id] = episode
+  sendHandlingNotice(episode, true)
 
   verifyBaseDirectoriesSet(directories)
   .then(verifyBaseDirectoriesExist(directories))
@@ -225,10 +241,19 @@ module.exports = (episode) => {
   .then(copyFile(episode))
   .then(trashOriginal(directories))
   .then(notifySuccess(episode))
-  .catch(Promise.AggregateError, notifyErrors(episode))
+  .then(() => {
+    delete handlers[episode.id]
+    sendHandlingNotice(episode, false)
+    if (!_.size(handlers)) {
+      return refreshPlex()
+    }
+  })
+
+  .catch(Promise.AggregateError, notifyErrors)
   .catch(notHandlingError, massageUncaughtError(episode))
   .catch(sendNotification)
-  .finally(() => {
-    sendHandlingNotice(false)
+  .then(() => {
+    delete handlers[episode.id]
+    sendHandlingNotice(episode, false)
   })
 }

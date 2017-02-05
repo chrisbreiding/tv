@@ -14,14 +14,22 @@
 
 .loading {
   align-items: center;
-  color: darken($light-color, 40%);
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
-  font-size: 1.2em;
   justify-content: center;
 
   i {
     margin-right: 0.5em;
+  }
+
+  p {
+    color: darken($light-color, 20%);
+    margin-top: 0.6em;
+
+    &:first-child {
+      font-size: 1.1em;
+    }
   }
 }
 

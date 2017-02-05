@@ -11,9 +11,9 @@ const on = (requestName, callback) => {
   })
 }
 
-const send = (eventName, data) => {
+const send = (eventName, ...args) => {
   return window.ensure().then((win) => {
-    win.webContents.send(eventName, data)
+    win.webContents.send(eventName, ...args)
   })
 }
 
