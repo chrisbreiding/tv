@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { computed, observable } from 'mobx';
 import moment from 'moment';
 
@@ -18,7 +19,7 @@ export default class EpisodeModel {
     this.id = episode.id;
     this.season = episode.season;
     this.episode_number = episode.episode_number;
-    this.title = episode.title;
+    this.title = _.trim(episode.title);
     this.airdate = moment(episode.airdate);
   }
 
