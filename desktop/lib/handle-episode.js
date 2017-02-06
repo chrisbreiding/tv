@@ -51,13 +51,24 @@ const findFile = (episode, downloadsDirectory) => {
     }
 
     const showName = standardizeName(episode.show.searchName)
-    const seasonAndEpisode = `s${pad(episode.season)}e${pad(episode.episode_number)}`
+    const season = episode.season
+    const epNum = episode.episode_number
+    const paddedSeason = pad(season)
+    const paddedEpNum = pad(epNum)
+    const seasonAndEpisodes = [
+      `${season}${epNum}`,
+      `${season}${paddedEpNum}`,
+      `${paddedSeason}${paddedEpNum}`,
+      `s${season}e${epNum}`,
+      `s${season}e${paddedEpNum}`,
+      `s${paddedSeason}e${paddedEpNum}`,
+    ]
 
     const files = _.filter(filePaths, (filePath) => {
       const fileName = standardizeName(path.basename(filePath))
       return (
-        fileName.indexOf(showName) > -1
-        && fileName.indexOf(seasonAndEpisode) > -1
+        _.includes(fileName, showName)
+        && _.some(seasonAndEpisodes, _.partial(_.includes, fileName))
       )
     })
 
