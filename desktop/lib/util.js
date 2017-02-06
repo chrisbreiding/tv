@@ -38,6 +38,19 @@ const tildeify = (directory) => {
   return directory.replace(homedir, '~')
 }
 
+const handlingError = (title, message = '', type = 'error') => {
+  const error = new Error()
+  error.isHandlingError = true
+  error.title = title
+  error.message = message
+  error.type = type
+  return error
+}
+
+const wrapAndThrowError = (title, type) => (error) => {
+  throw handlingError(title, error.message, type)
+}
+
 module.exports = {
   isDev,
   getDirectories,
@@ -46,4 +59,6 @@ module.exports = {
   updateWindowSettings,
   logError,
   tildeify,
+  handlingError,
+  wrapAndThrowError,
 }
