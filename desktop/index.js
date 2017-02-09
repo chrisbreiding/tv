@@ -50,7 +50,7 @@ ipc.on('select:directory', (respond, directory) => {
 
     const directoryPath = directoryPaths[0]
     util.setDirectory(directory, directoryPath)
-    respond(null, directoryPath)
+    respond(null, util.tildeify(directoryPath))
   })
 })
 
