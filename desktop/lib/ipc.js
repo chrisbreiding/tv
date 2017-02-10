@@ -1,6 +1,8 @@
 'use strict'
 
+const _ = require('lodash')
 const { ipcMain } = require('electron')
+const Promise = require('bluebird')
 const window = require('./window')
 
 const on = (requestName, callback) => {
@@ -8,6 +10,21 @@ const on = (requestName, callback) => {
     callback((...reponseArgs)  => {
       event.sender.send(`${requestName}:response`, ...reponseArgs)
     }, ...args)
+  })
+}
+
+const request = (requestName, ...args) => {
+  return window.ensure().then((win) => {
+    return new Promise((resolve, reject) => {
+      win.webContents.send(`${requestName}:request`, ...args)
+      ipcMain.once(`${requestName}:response`, (event, error, response) => {
+        if (error) {
+          reject(_.extend(new Error(''), error))
+        } else {
+          resolve(response)
+        }
+      })
+    })
   })
 }
 
@@ -19,5 +36,6 @@ const send = (eventName, ...args) => {
 
 module.exports = {
   on,
+  request,
   send,
 }

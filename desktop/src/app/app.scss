@@ -33,6 +33,61 @@
   }
 }
 
+.plex-credentials {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+
+  h1 {
+    margin: 0;
+  }
+
+  p {
+    margin: 0.8em 0;
+  }
+
+  .fieldset {
+    justify-content: flex-end;
+  }
+
+  label {
+    margin-bottom: 0;
+    margin-right: 0.4em;
+  }
+
+  input {
+    display: block;
+  }
+
+  button,
+  a {
+    float: right;
+  }
+
+  a {
+    background: lighten($dark-color, 20%);
+    border: solid 1px lighten($dark-color, 20%);
+    border-radius: 3px;
+    color: $neutral-color;
+    outline: none;
+    margin-right: 0.5em;
+    padding: .4em .6em;
+    transition: all .2s ease;
+    text-decoration: none;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background: lighten($dark-color, 40%);
+      border-color: lighten($dark-color, 40%);
+      color: $light-color;
+    }
+
+  }
+}
+
 .notifications {
   position: absolute;
   left: 0.5em;
@@ -133,25 +188,14 @@
   padding: 20px;
   position: relative;
 
-  label {
-    display: block;
-    margin-bottom: 5px;
-  }
-
-  // display: flex doesn't work on a real <fieldset />
-  .fieldset {
-    display: flex;
-    margin-bottom: 15px;
-
-    p {
-      background: #111;
-      border: solid 1px #777;
-      flex-grow: 2;
-      margin-right: 5px;
-      min-width: 14em;
-      overflow-x: auto;
-      padding: 5px 10px;
-    }
+  .fieldset p {
+    background: $darkest-color;
+    border: solid 1px lighten($dark-color, 20%);
+    flex-grow: 2;
+    margin-right: 0.3em;
+    min-width: 14em;
+    overflow-x: auto;
+    padding: 0.3em 0.6em;
   }
 
   &.selecting .cover {

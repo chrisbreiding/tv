@@ -6,12 +6,14 @@ import ipc from '../lib/ipc'
 
 import Loader from './loader'
 import Notifications from './notifications'
+import PlexCredentials from './plex-credentials'
 import Settings from './settings'
 import state from './state'
 
 @observer
 class App extends Component {
   @observable handlingEpisodes = observable.map()
+  @observable requestingPlexCredentials = false
 
   componentDidMount () {
     ipc.on('notification', action('received:notification', (notification) => {
@@ -25,6 +27,10 @@ class App extends Component {
         this.handlingEpisodes.delete(episode.id)
       }
     }))
+
+    ipc.on('get:plex:credentials:request', action('plex:credentials:requested', () => {
+      this.requestingPlexCredentials = true
+    }))
   }
 
   render () {
@@ -37,6 +43,15 @@ class App extends Component {
   }
 
   _content () {
+    if (this.requestingPlexCredentials) {
+      return (
+        <PlexCredentials
+          onCancel={this._cancelPlexCredentials}
+          onSubmit={this._sendPlexCredentials}
+        />
+      )
+    }
+
     if (this.handlingEpisodes.size) {
       return (
         <Loader message={`Handling Episode${this.handlingEpisodes.size > 1 ? 's' : ''}`}>
@@ -48,6 +63,16 @@ class App extends Component {
     }
 
     return <Settings />
+  }
+
+  @action _cancelPlexCredentials = () => {
+    this.requestingPlexCredentials = false
+    ipc.send('get:plex:credentials:response', { message: 'User canceled' })
+  }
+
+  @action _sendPlexCredentials = (credentials) => {
+    this.requestingPlexCredentials = false
+    ipc.send('get:plex:credentials:response', null, credentials)
   }
 }
 

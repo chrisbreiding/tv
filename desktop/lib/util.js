@@ -51,6 +51,14 @@ const wrapAndThrowError = (title, type) => (error) => {
   throw handlingError(title, error.message, type)
 }
 
+const getPlexToken = () => {
+  return config.get('plexToken')
+}
+
+const setPlexToken = (token) => {
+  return config.set('plexToken', token)
+}
+
 module.exports = {
   isDev,
   getDirectories,
@@ -61,4 +69,6 @@ module.exports = {
   tildeify,
   handlingError,
   wrapAndThrowError,
+  getPlexToken,
+  setPlexToken,
 }

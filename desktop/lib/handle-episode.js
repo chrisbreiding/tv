@@ -1,16 +1,15 @@
 'use strict'
 
 const _ = require('lodash')
-const PlexAPI = require("plex-api")
 const Promise = require('bluebird')
 
 const runPreflight = require('./run-preflight')
 const getFile = require('./get-file')
 const moveFile = require('./move-file')
 const ipc = require('./ipc')
+const plex = require('./plex')
 const util = require('./util')
 
-const plex = new PlexAPI('MBP13.local')
 const handlers = {}
 
 const sendHandlingNotice = (episode, isHandling) => {
@@ -26,19 +25,6 @@ const notifySuccess = (episode) => ([filePath, newFilePath]) => {
     title: `Finished handling episode for **${episode.show.displayName}**`,
     message: `*${util.tildeify(filePath)}*\n  renamed and moved to\n*${util.tildeify(newFilePath)}*`,
     type: 'success',
-  })
-}
-
-const refreshPlex = () => {
-  return plex.find("/library/sections", { title: "TV Shows" })
-  .then((directories) => {
-    const uri = _.get(directories, '[0].uri')
-    if (uri) {
-      return plex.perform(`${uri}/refresh`)
-    }
-  })
-  .catch(() => {
-    // couldn't connect, no big deal
   })
 }
 
@@ -69,7 +55,11 @@ module.exports = (episode) => {
     delete handlers[episode.id]
     sendHandlingNotice(episode, false)
     if (!_.size(handlers)) {
-      return refreshPlex()
+      return plex.refresh()
+      .then(() => sendNotification({
+        title: 'Refreshing Plex TV Shows',
+        type: 'success',
+      }))
     }
   })
 
