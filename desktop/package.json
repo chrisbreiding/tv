@@ -40,6 +40,7 @@
     "zunder": "^4.0.4"
   },
   "dependencies": {
+    "@cypress/react-tooltip": "^0.1.3",
     "bluebird": "^3.4.7",
     "body-parser": "^1.16.0",
     "chalk": "^1.1.3",
@@ -60,6 +61,8 @@
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "sanitize-filename": "^1.6.1",
-    "trash": "^4.0.0"
+    "teeeff": "^1.3.3",
+    "trash": "^4.0.0",
+    "webtorrent": "^0.98.6"
   }
 }

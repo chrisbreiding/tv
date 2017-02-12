@@ -7,6 +7,7 @@ import ipc from '../lib/ipc'
 import Loader from './loader'
 import Notifications from './notifications'
 import PlexCredentials from './plex-credentials'
+import TorrentPicker from './torrent-picker'
 import Settings from './settings'
 import state from './state'
 
@@ -14,6 +15,7 @@ import state from './state'
 class App extends Component {
   @observable handlingEpisodes = observable.map()
   @observable requestingPlexCredentials = false
+  @observable torrents = []
 
   componentDidMount () {
     ipc.on('notification', action('received:notification', (notification) => {
@@ -31,6 +33,10 @@ class App extends Component {
     ipc.on('get:plex:credentials:request', action('plex:credentials:requested', () => {
       this.requestingPlexCredentials = true
     }))
+
+    ipc.on('select:torrent:request', action('select:torrent:requested', (torrents) => {
+      this.torrents = torrents
+    }))
   }
 
   render () {
@@ -43,6 +49,16 @@ class App extends Component {
   }
 
   _content () {
+    if (this.torrents.length) {
+      return (
+        <TorrentPicker
+          torrents={this.torrents}
+          onCancel={this._cancelSelectTorrent}
+          onSubmit={this._sendSelectedTorrent}
+        />
+      )
+    }
+
     if (this.requestingPlexCredentials) {
       return (
         <PlexCredentials
@@ -73,6 +89,16 @@ class App extends Component {
   @action _sendPlexCredentials = (credentials) => {
     this.requestingPlexCredentials = false
     ipc.send('get:plex:credentials:response', null, credentials)
+  }
+
+  @action _cancelSelectTorrent = () => {
+    this.torrents = []
+    ipc.send('select:torrent:response', { message: 'User canceled' })
+  }
+
+  @action _sendSelectedTorrent = (torrent) => {
+    this.torrents = []
+    ipc.send('select:torrent:response', null, torrent)
   }
 }
 

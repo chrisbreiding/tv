@@ -12,13 +12,19 @@
   width: 100%;
 }
 
-.loading {
+main {
   align-items: center;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   justify-content: center;
+  margin: auto;
+  padding: 1em;
+  max-width: 100%;
+  overflow: auto;
+}
 
+.loading {
   i {
     margin-right: 0.5em;
   }
@@ -34,12 +40,6 @@
 }
 
 .plex-credentials {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  justify-content: center;
-
   h1 {
     margin: 0;
   }
@@ -60,31 +60,51 @@
   input {
     display: block;
   }
+}
 
-  button,
-  a {
-    float: right;
+.torrent-picker {
+  table {
+    background: $darkest-color;
+    color: darken($light-color, 20%);
+    max-width: 100%;
   }
 
-  a {
-    background: lighten($dark-color, 20%);
-    border: solid 1px lighten($dark-color, 20%);
-    border-radius: 3px;
-    color: $neutral-color;
-    outline: none;
-    margin-right: 0.5em;
-    padding: .4em .6em;
-    transition: all .2s ease;
-    text-decoration: none;
+  tbody tr {
+    cursor: pointer;
 
-    &:hover,
-    &:focus,
-    &:active {
-      background: lighten($dark-color, 40%);
-      border-color: lighten($dark-color, 40%);
-      color: $light-color;
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
     }
+  }
 
+  th, td {
+    padding: 0.4em 0.6em;
+  }
+
+  .name span,
+  .upload-date span,
+  .uploader span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .name {
+    max-width: 150px;
+  }
+
+  td.seeders,
+  td.verified {
+    color: $success-color;
+  }
+
+  td.leechers {
+    color: $error-color;
+  }
+
+  .cancel {
+    margin: 1em 0 0;
   }
 }
 
@@ -181,9 +201,8 @@
 }
 
 .settings {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: initial;
+  flex-grow: 0;
   margin: 0 auto;
   padding: 20px;
   position: relative;
@@ -201,4 +220,10 @@
   &.selecting .cover {
     display: block;
   }
+}
+
+.tooltip {
+  color: $dark-color;
+  font-size: 0.9em;
+  word-wrap: break-word;
 }

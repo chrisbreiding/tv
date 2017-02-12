@@ -1,4 +1,5 @@
 @import 'lib/variables';
 @import 'lib/base';
-@import "../node_modules/font-awesome/scss/font-awesome";
+@import '../node_modules/@cypress/react-tooltip/dist/tooltip.scss';
+@import '../node_modules/font-awesome/scss/font-awesome';
 @import '!(lib)*/**/*';

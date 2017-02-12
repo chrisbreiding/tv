@@ -1,7 +1,7 @@
 import cs from 'classnames'
 import _ from 'lodash'
 import Markdown from 'markdown-it'
-import { observable } from 'mobx'
+import { action, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 
@@ -14,7 +14,9 @@ class Notification extends Component {
   @observable isExpanded = false
 
   componentDidMount () {
-    this.autoRemoveTimeout = setTimeout(this._remove, 10000)
+    if (this.props.notification.type !== 'error') {
+      this.autoRemoveTimeout = setTimeout(this._remove, 10000)
+    }
   }
 
   render () {
@@ -39,12 +41,12 @@ class Notification extends Component {
     )
   }
 
-  _toggleExpanded = () => {
+  @action _toggleExpanded = () => {
     clearTimeout(this.autoRemoveTimeout)
     this.isExpanded = !this.isExpanded
   }
 
-  _remove = () => {
+  @action _remove = () => {
     state.removeNotification(this.props.notification.id)
   }
 }

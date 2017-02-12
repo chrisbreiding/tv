@@ -44,11 +44,14 @@ const notifyErrors = (errors) => {
 module.exports = (episode) => {
   if (handlers[episode.id]) return
 
+  // TODO: make this more complex, with reference to the current state
+  // need to store a queue that the front end can ask for when it loads
   handlers[episode.id] = episode
   sendHandlingNotice(episode, true)
 
   runPreflight()
-  .then(getFile(handlers, episode))
+  // TODO: fork here if user already has file and just wants to rename/move it
+  .then(getFile(handlers, episode).download)
   .then(moveFile(episode))
   .then(notifySuccess(episode))
   .then(() => {
@@ -62,7 +65,6 @@ module.exports = (episode) => {
       }))
     }
   })
-
   .catch(Promise.AggregateError, notifyErrors)
   .catch(notHandlingError, massageUncaughtError(episode))
   .catch(sendNotification)

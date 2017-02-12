@@ -30,6 +30,9 @@ const copyFile = (episode) => ([filePath, newDirectory]) => {
   return Promise.resolve(copy)
   .return([filePath, newFilePath])
   .catch((error) => {
+    // TODO: if this fails, it still creates an empty file. need to clean that
+    //       up, along with any directories that were created along the way,
+    //       but not if those directories already existed
     throw util.handlingError(
       `Error copying file`,
       `Failed to move *${util.tildeify(filePath)}*\nto\n*${util.tildeify(newFilePath)}*\n\n${error.message}`
