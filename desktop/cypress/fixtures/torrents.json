@@ -1,0 +1,62 @@
+[
+  {
+    "id": "1",
+    "name": "The.TV.Show.S02E14.WEBRip.XviD-FUM.ettv",
+    "seeders": "302",
+    "leechers": "54",
+    "uploadDate": "02-04 10:30:01",
+    "verified": true,
+    "uploader": "ettv",
+    "size": "213 MiB"
+  },
+  {
+    "id": "2",
+    "name": "The.TV.Show.S02E14.DVD.XviD-FUM.TVTeam",
+    "seeders": "103",
+    "leechers": "23",
+    "uploadDate": "02-04 1:45:12",
+    "verified": false,
+    "uploader": "TVTeam",
+    "size": "1.4 GiB"
+  },
+  {
+    "id": "3",
+    "name": "The.TV.Show.S02E14.WEBRip.MPWhat-FUM.some-some",
+    "seeders": "5",
+    "leechers": "200",
+    "uploadDate": "02-04 8:51:42",
+    "verified": true,
+    "uploader": "some uploader",
+    "size": "582 MiB"
+  },
+  {
+    "id": "4",
+    "name": "The.TV.Show.S02E14.WEBRip.XviD-FUM.ettv.gets.reALLy.LoNG.And.NEEDS.line.BrEAks",
+    "seeders": "302",
+    "leechers": "54",
+    "uploadDate": "02-04 10:30:01",
+    "verified": true,
+    "uploader": "ettv",
+    "size": "213 MiB"
+  },
+  {
+    "id": "5",
+    "name": "The.TV.Show.S02E14.DVD.XviD-FUM.TVTeam",
+    "seeders": "103",
+    "leechers": "23",
+    "uploadDate": "02-04 1:45:12",
+    "verified": false,
+    "uploader": "TVTeam",
+    "size": "2.3 TiB"
+  },
+  {
+    "id": "6",
+    "name": "The.TV.Show.S02E14.WEBRip.MPWhat-FUM.some-some",
+    "seeders": "5",
+    "leechers": "200",
+    "uploadDate": "02-04 8:51:42",
+    "verified": true,
+    "uploader": "some uploader",
+    "size": "582 MiB"
+  }
+]
