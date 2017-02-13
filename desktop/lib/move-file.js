@@ -2,7 +2,6 @@
 
 const path = require('path')
 const Promise = require('bluebird')
-const promisePipe = require("promisepipe")
 const sanitize = require('sanitize-filename')
 const trash = require('trash')
 
@@ -22,12 +21,7 @@ const copyFile = (episode) => ([filePath, newDirectory]) => {
   const newFileName = sanitize(episode.fileName)
   const newFilePath = path.join(newDirectory, `${newFileName}${extension}`)
 
-  const copy = promisePipe(
-    fs.createReadStream(filePath),
-    fs.createWriteStream(newFilePath)
-  )
-
-  return Promise.resolve(copy)
+  return fs.renameAsync(filePath, newFilePath)
   .return([filePath, newFilePath])
   .catch((error) => {
     // TODO: if this fails, it still creates an empty file. need to clean that
