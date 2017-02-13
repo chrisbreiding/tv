@@ -18,6 +18,10 @@ const videoExtensions = ['mkv', 'avi', 'mp4', 'm4v']
 const standardizeName = (name) => name.replace(/[ \'\"\.\-]/g, '').toLowerCase()
 const pad = (num) => num < 10 ? `0${num}` : `${num}`
 
+const hasVideoExtension = (fileName) => {
+  return new RegExp(`(${videoExtensions.join('|')})$`).test(fileName)
+}
+
 const matchesEpisode = (episode, name) => {
   name = standardizeName(name)
   const showName = standardizeName(episode.show.searchName)
@@ -47,18 +51,25 @@ const getFileMatchingEpisode = (episode) => (filePaths) => {
 
   const files = _.filter(filePaths, (filePath) => {
     const fileName = path.basename(filePath)
-    return matchesEpisode(episode, fileName) && !_.includes(fileName, 'sample')
+    return (
+      !_.includes(fileName, 'sample') &&
+      hasVideoExtension(fileName) &&
+      matchesEpisode(episode, fileName)
+    )
   })
 
-  if (files.length !== 1) {
-    throw new Error('No file found')
-  } else {
+  if (files.length === 1) {
     return files[0]
+  } else {
+    throw new Error('No file found')
   }
 }
 
 const findFile = (episode, downloadsDirectory) => {
-  return glob(`${downloadsDirectory}/**/*.+(${videoExtensions.join('|')})`)
+  return glob(`${downloadsDirectory}/**/*.+(${videoExtensions.join('|')})`, {
+    nocase: true,
+    nodir: true,
+  })
   .then(getFileMatchingEpisode(episode))
 }
 
