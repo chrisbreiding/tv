@@ -10,6 +10,7 @@ const WebTorrent = require('webtorrent')
 const glob = Promise.promisify(require('glob'))
 
 const ipc = require('./ipc')
+const queue = require('./episode-queue')
 const util = require('./util')
 
 const webTorrent = new WebTorrent()
@@ -75,6 +76,8 @@ const findFile = (episode, downloadsDirectory) => {
 
 const promptForFile = (episode, downloadsDirectory) => {
   return new Promise((resolve, reject) => {
+    queue.update(episode.id, { state: queue.USER_SELECTING_FILE })
+
     dialog.showOpenDialog({
       title: 'Select Show',
       buttonLabel: 'Select',
@@ -86,14 +89,13 @@ const promptForFile = (episode, downloadsDirectory) => {
       if (filePaths && filePaths[0]) {
         resolve(filePaths[0])
       } else {
-        // TODO: make this a CancelationError
-        reject(util.handlingError(`Canceled handling episode for **${episode.show.displayName}**`, '', 'info'))
+        reject(new util.CancelationError(`Canceled handling episode for **${episode.show.displayName}**`))
       }
     })
   })
 }
 
-const getFileFromDisk = (handlers, episode) => {
+const getFileFromDisk = (episode) => {
   const directory = util.getDirectories().downloads
 
   return findFile(episode, directory)
@@ -101,27 +103,31 @@ const getFileFromDisk = (handlers, episode) => {
     return promptForFile(episode, directory)
   })
   .then((filePath) => {
-    const otherEpisodeUsingFile = _.find(handlers, { filePath })
+    const otherEpisodeUsingFile = queue.find({ filePath })
 
     if (otherEpisodeUsingFile) {
-      throw util.handlingError(
+      throw new util.HandlingError(
         `File already in use`,
         `Tried to use *${util.tildeify(filePath)}*\nfor **${episode.fileName}**,\nbut being used for **${otherEpisodeUsingFile.fileName}**`
       )
     } else {
-      handlers[episode.id].filePath = filePath
+      queue.update(episode.id, { filePath })
       return filePath
     }
   })
 }
 
-const selectTorrent = (torrents) => {
+const selectTorrent = (episode, torrents) => {
+  queue.update(episode.id, { state: queue.USER_SELECTING_TORRENT })
+
   return ipc.request('select:torrent', torrents)
   .then((torrent) => torrent.magnetLink)
-  .catch(util.wrapAndThrowError('User canceled selecting torrent'))
+  .catch(util.wrapCancelationError('Canceled selecting torrent'))
 }
 
 const getTorrentLink = (episode) => {
+  queue.update(episode.id, { state: queue.SEARCHING_TORRENTS })
+
   const search = TF.search(episode.show.searchName, {
     category: '205', // TV Shows
     orderBy: 'date',
@@ -148,25 +154,50 @@ const getTorrentLink = (episode) => {
       matches = results
     }
 
-    return selectTorrent(matches)
+    return selectTorrent(episode, matches)
   })
-  .catch(util.wrapAndThrowError('Error searching Pirate bay for torrents'))
+  .catch(Promise.TimeoutError, util.wrapHandlingError('Timed out searching for torrents'))
+  .catch(util.wrapHandlingError('Error searching for torrents'))
 }
 
-const downloadTorrent = (directory) => (magnetLink) => {
+const downloadTorrent = (episode, directory) => (magnetLink) => {
   return new Promise((resolve, reject) => {
+    queue.update(episode.id, {
+      state: queue.DOWNLOADING_TORRENT,
+      info: {
+        progress: 0,
+        timeRemaining: null,
+      },
+    })
+
     webTorrent.add(magnetLink, { path: directory }, (torrent) => {
+      const statusPollingId = setInterval(() => {
+        queue.update(episode.id, {
+          info: {
+            progress: torrent.progress, // from 0 to 1
+            timeRemaining: torrent.timeRemaining, // in milliseconds
+          },
+        })
+      }, 1000)
+
       torrent.on('done', () => {
-        const filePaths = _.map(torrent.files, 'path')
-        console.log('file paths:', filePaths)
+        clearInterval(statusPollingId)
+        queue.update(episode.id, { state: queue.REMOVING_TORRENT, info: null })
+        const filePaths = _.map(torrent.files, (file) => {
+          return path.join(directory, file.path)
+        })
         torrent.destroy(() => {
           resolve(filePaths)
         })
       })
+
+      torrent.on('error', (error) => {
+        reject(new util.HandlingError('Error downloading torrent', error.message))
+      })
     })
 
     webTorrent.on('error', (error) => {
-      reject(util.handlingError('Error downloading torrent', error.message))
+      reject(new util.HandlingError('Error downloading torrent', error.message))
     })
   })
 }
@@ -175,14 +206,14 @@ const downloadFile = (episode) => {
   const directory = util.getDirectories().downloads
 
   return getTorrentLink(episode)
-  .then(downloadTorrent(directory))
+  .then(downloadTorrent(episode, directory))
   .then(getFileMatchingEpisode(episode))
   .catch(() => {
     return promptForFile(episode, directory)
   })
 }
 
-module.exports = (handlers, episode) => ({
+module.exports = (episode) => ({
   download () { return downloadFile(episode) },
-  select () { return getFileFromDisk(handlers, episode) },
+  select () { return getFileFromDisk(episode) },
 })

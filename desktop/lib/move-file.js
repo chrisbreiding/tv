@@ -7,16 +7,19 @@ const trash = require('trash')
 
 const fs = Promise.promisifyAll(require('fs-extra'))
 
+const queue = require('./episode-queue')
 const util = require('./util')
 
 const ensureSeasonDirectory = (episode, directories, filePath) => {
   const newDirectory = path.join(directories.tvShows, episode.show.fileName, `Season ${episode.season}`)
   return fs.ensureDirAsync(newDirectory)
     .return([filePath, newDirectory])
-    .catch(util.wrapAndThrowError(`Failed to make directory *${util.tildeify(newDirectory)}*`))
+    .catch(util.wrapHandlingError(`Failed to make directory *${util.tildeify(newDirectory)}*`))
 }
 
 const copyFile = (episode) => ([filePath, newDirectory]) => {
+  queue.update(episode.id, { state: queue.COPYING_FILE })
+
   const extension = path.extname(filePath)
   const newFileName = sanitize(episode.fileName)
   const newFilePath = path.join(newDirectory, `${newFileName}${extension}`)
@@ -24,17 +27,16 @@ const copyFile = (episode) => ([filePath, newDirectory]) => {
   return fs.renameAsync(filePath, newFilePath)
   .return([filePath, newFilePath])
   .catch((error) => {
-    // TODO: if this fails, it still creates an empty file. need to clean that
-    //       up, along with any directories that were created along the way,
-    //       but not if those directories already existed
-    throw util.handlingError(
+    throw new util.HandlingError(
       `Error copying file`,
       `Failed to move *${util.tildeify(filePath)}*\nto\n*${util.tildeify(newFilePath)}*\n\n${error.message}`
     )
   })
 }
 
-const trashOriginal = (directories) => ([filePath, newFilePath]) => {
+const trashOriginal = (episode, directories) => ([filePath, newFilePath]) => {
+  queue.update(episode.id, { state: queue.TRASHING_TORRENT_FILES })
+
   // assumes file will only ever be in downloads or one level deep
   let toDelete = path.dirname(filePath)
   if (toDelete === directories.downloads) {
@@ -42,7 +44,7 @@ const trashOriginal = (directories) => ([filePath, newFilePath]) => {
   }
   return Promise.resolve(trash([toDelete]))
   .return([filePath, newFilePath])
-  .catch(util.wrapAndThrowError(`Error removing *${util.tildeify(toDelete)}*`))
+  .catch(util.wrapHandlingError(`Error removing *${util.tildeify(toDelete)}*`))
 }
 
 module.exports = (episode) => (filePath) => {
@@ -50,5 +52,5 @@ module.exports = (episode) => (filePath) => {
 
   return ensureSeasonDirectory(episode, directories, filePath)
   .then(copyFile(episode))
-  .then(trashOriginal(directories))
+  .then(trashOriginal(episode, directories))
 }

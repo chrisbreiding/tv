@@ -1,0 +1,14 @@
+@mixin buttonize-color($color, $hover-color: '') {
+  color: $color;
+  transition: all .25s ease;
+
+  &:hover,
+  &:focus,
+  &:active {
+    @if $hover-color {
+      color: $hover-color;
+    } @else {
+      color: lighten($color, 20%);
+    }
+  }
+}

@@ -1,75 +1,86 @@
 'use strict'
 
-const _ = require('lodash')
 const Promise = require('bluebird')
 
-const runPreflight = require('./run-preflight')
 const getFile = require('./get-file')
-const moveFile = require('./move-file')
 const ipc = require('./ipc')
+const moveFile = require('./move-file')
 const plex = require('./plex')
+const queue = require('./episode-queue')
+const runPreflight = require('./run-preflight')
 const util = require('./util')
 
-const handlers = {}
-
-const sendHandlingNotice = (episode, isHandling) => {
-  ipc.send('handling:episode', episode, isHandling)
-}
-
-const sendNotification = (notification) => {
-  return ipc.send('notification', notification)
-}
-
-const notifySuccess = (episode) => ([filePath, newFilePath]) => {
-  return sendNotification({
-    title: `Finished handling episode for **${episode.show.displayName}**`,
-    message: `*${util.tildeify(filePath)}*\n  renamed and moved to\n*${util.tildeify(newFilePath)}*`,
-    type: 'success',
+const notifyCanceled = (episode) => (error) => {
+  queue.update(episode.id, {
+    state: queue.CANCELED,
+    info: { reason: error.message },
   })
+}
+
+const notifySuccess = (episode, moveOnly) => ([from, to]) => {
+  const title = `Finished handling episode for **${episode.show.displayName}**`
+  const message = moveOnly ?
+    `*${util.tildeify(from)}*\nrenamed and moved to\n*${util.tildeify(to)}*` :
+    `*${episode.fileName}*\ndownloaded and moved to\n*${util.tildeify(to)}*`
+
+  queue.update(episode.id, {
+    state: queue.FINISHED,
+    info: { title, message },
+  })
+}
+
+const maybeRefreshPlex = () => {
+  if (queue.isEmpty()) {
+    return plex.refresh()
+    .then(() => {
+      ipc.send('notification', {
+        title: 'Refreshing Plex TV Shows',
+        type: 'success',
+      })
+    })
+  }
+}
+
+const notifyError = (episode) => (error) => {
+  queue.update(episode.id, { state: queue.ERROR, error })
 }
 
 const notHandlingError = (error) => !error.isHandlingError
 
 const massageUncaughtError = (episode) => (error) => {
-  error.title = 'Unexpected error while handling episode'
-  error.message = `${episode.fileName}\n\n${error.stack}`
-  error.type = 'error'
-  throw error
+  throw new util.HandlingError(
+    'Unexpected error while handling episode',
+    `${episode.fileName}\n\n${error.stack}`
+  )
 }
 
-const notifyErrors = (errors) => {
-  return errors.map(sendNotification)
+const notifyErrors = (episode) => (errors) => {
+  const message = 'Multiple errors while handling episode'
+  const stack = `${episode.fileName}\n\n${errors.map((error) => error.stack).join('\n\n')}`
+  throw new util.HandlingError(message, stack)
 }
 
-module.exports = (episode) => {
-  if (handlers[episode.id]) return
+module.exports = (episode, moveOnly) => {
+  if (queue.has(episode.id)) return
 
-  // TODO: make this more complex, with reference to the current state
-  // need to store a queue that the front end can ask for when it loads
-  handlers[episode.id] = episode
-  sendHandlingNotice(episode, true)
+  queue.add(episode.id, {
+    episode,
+    state: queue.STARTED,
+    info: {},
+    error: {},
+    filePath: '',
+  })
 
   runPreflight()
-  // TODO: fork here if user already has file and just wants to rename/move it
-  .then(getFile(handlers, episode).download)
+  .then(getFile(episode)[moveOnly ? 'select' : 'download'])
   .then(moveFile(episode))
-  .then(notifySuccess(episode))
-  .then(() => {
-    delete handlers[episode.id]
-    sendHandlingNotice(episode, false)
-    if (!_.size(handlers)) {
-      return plex.refresh()
-      .then(() => sendNotification({
-        title: 'Refreshing Plex TV Shows',
-        type: 'success',
-      }))
-    }
-  })
-  .catch(Promise.AggregateError, notifyErrors)
+  .then(notifySuccess(episode, moveOnly))
+  .then(maybeRefreshPlex)
+  .catch(util.CancelationError, notifyCanceled(episode))
+  .catch(Promise.AggregateError, notifyErrors(episode))
   .catch(notHandlingError, massageUncaughtError(episode))
-  .catch(sendNotification)
-  .then(() => {
-    delete handlers[episode.id]
-    sendHandlingNotice(episode, false)
+  .catch(notifyError(episode))
+  .finally(() => {
+    queue.remove(episode.id)
   })
 }

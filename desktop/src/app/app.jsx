@@ -1,19 +1,17 @@
-import _ from 'lodash'
 import { action, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import ipc from '../lib/ipc'
 
-import Loader from './loader'
 import Notifications from './notifications'
 import PlexCredentials from './plex-credentials'
+import Queue from './queue'
 import TorrentPicker from './torrent-picker'
 import Settings from './settings'
 import state from './state'
 
 @observer
 class App extends Component {
-  @observable handlingEpisodes = observable.map()
   @observable requestingPlexCredentials = false
   @observable torrents = []
 
@@ -22,12 +20,12 @@ class App extends Component {
       state.addNotification(notification)
     }))
 
-    ipc.on('handling:episode', action('handling:episode', (episode, isHandling) => {
-      if (isHandling) {
-        this.handlingEpisodes.set(episode.id, episode)
-      } else {
-        this.handlingEpisodes.delete(episode.id)
-      }
+    ipc.on('queue:episode:added', action('queue:episode:added', (queueItem) => {
+      state.addQueueItem(queueItem)
+    }))
+
+    ipc.on('queue:episode:updated', action('queue:episode:updated', (queueItem) => {
+      state.updateQueueItem(queueItem)
     }))
 
     ipc.on('get:plex:credentials:request', action('plex:credentials:requested', () => {
@@ -68,14 +66,8 @@ class App extends Component {
       )
     }
 
-    if (this.handlingEpisodes.size) {
-      return (
-        <Loader message={`Handling Episode${this.handlingEpisodes.size > 1 ? 's' : ''}`}>
-          {_.map(this.handlingEpisodes.values(), (episode) => (
-            <p key={episode.id}>{episode.fileName}</p>
-          ))}
-        </Loader>
-      )
+    if (state.hasQueueItems) {
+      return <Queue />
     }
 
     return <Settings />

@@ -56,7 +56,7 @@ const refresh = () => {
     })
   })
   .catch((error) => {
-    throw util.handlingError('Could not refresh Plex', error.message) // eslint-disable-line no-console
+    throw new util.HandlingError('Could not refresh Plex', error.message)
   })
 }
 

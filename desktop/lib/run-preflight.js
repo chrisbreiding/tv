@@ -6,7 +6,7 @@ const fs = Promise.promisifyAll(require('fs-extra'))
 const util = require('./util')
 
 const directoryError = (name) => {
-  return util.handlingError(`Error handling episode: must set **${name}** directory`)
+  return new util.HandlingError(`Error handling episode: must set **${name}** directory`)
 }
 
 const verifyBaseDirectoriesSet = (directories) => {
@@ -25,11 +25,11 @@ const verifyBaseDirectoriesSet = (directories) => {
 const directoryExists = (directoryPath, name) => {
   return fs.statAsync(directoryPath)
   .catch(() => {
-    throw util.handlingError(`The ${name} directory, **${directoryPath}**, does not exist`)
+    throw new util.HandlingError(`The ${name} directory, **${directoryPath}**, does not exist`)
   })
   .then((stats) => {
     if (!stats.isDirectory()) {
-      throw util.handlingError(`The ${name} directory, **${directoryPath}**, is not a directory`)
+      throw new util.HandlingError(`The ${name} directory, **${directoryPath}**, is not a directory`)
     }
   })
 }

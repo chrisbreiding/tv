@@ -33,14 +33,14 @@ class Settings extends Component {
         <h1>Settings</h1>
         <label>Downloads Directory</label>
         <div className='fieldset'>
-          <p>{this.downloadsDirectory}</p>
+          <p>{this.downloadsDirectory || '\u00A0'}</p>
           <button onClick={this._selectDirectory('downloads')}>
             Select
           </button>
         </div>
         <label>TV Shows Directory</label>
         <div className='fieldset'>
-          <p>{this.tvShowsDirectory}</p>
+          <p>{this.tvShowsDirectory || '\u00A0'}</p>
           <button onClick={this._selectDirectory('tvShows')}>
             Select
           </button>
@@ -50,7 +50,7 @@ class Settings extends Component {
     )
   }
 
-  @action _selectDirectory = (directory) => () => {
+  _selectDirectory = (directory) => action('select:directory', () => {
     this.selectingDirectory = true
     ipc('select:directory', directory).then(action('selected:directory', (directoryPath) => {
       if (directoryPath) {
@@ -58,7 +58,7 @@ class Settings extends Component {
       }
       this.selectingDirectory = false
     }))
-  }
+  })
 }
 
 export default Settings

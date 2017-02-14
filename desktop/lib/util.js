@@ -38,17 +38,28 @@ const tildeify = (directory) => {
   return directory.replace(homedir, '~')
 }
 
-const handlingError = (title, message = '', type = 'error') => {
-  const error = new Error()
-  error.isHandlingError = true
-  error.title = title
-  error.message = message
-  error.type = type
-  return error
+class CancelationError extends Error {
+  constructor (message, stack) {
+    super(message)
+    this.isCancellationError = true
+    if (stack) this.stack = stack
+  }
 }
 
-const wrapAndThrowError = (title, type) => (error) => {
-  throw handlingError(title, error.message, type)
+class HandlingError extends Error {
+  constructor (message, stack) {
+    super(message)
+    this.isHandlingError = true
+    if (stack) this.stack = stack
+  }
+}
+
+const wrapCancelationError = (message) => () => {
+  throw new CancelationError(message)
+}
+
+const wrapHandlingError = (message) => (error) => {
+  throw new HandlingError(message, error.message)
 }
 
 const getPlexToken = () => {
@@ -67,8 +78,10 @@ module.exports = {
   updateWindowSettings,
   logError,
   tildeify,
-  handlingError,
-  wrapAndThrowError,
+  CancelationError,
+  HandlingError,
+  wrapCancelationError,
+  wrapHandlingError,
   getPlexToken,
   setPlexToken,
 }
