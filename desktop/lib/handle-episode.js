@@ -13,7 +13,7 @@ const util = require('./util')
 const notifyCanceled = (episode) => (error) => {
   return queue.update(episode.id, {
     state: queue.CANCELED,
-    info: { reason: error.message },
+    info: { title: error.message },
   })
 }
 
