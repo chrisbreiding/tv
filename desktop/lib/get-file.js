@@ -57,11 +57,7 @@ const matchesEpisode = (episode, name) => {
   )
 }
 
-const getFileMatchingEpisode = (episode, directory) => (filePaths) => {
-  if (!filePaths.length) {
-    throw new Error('No file found')
-  }
-
+const getFileMatchingEpisode = (episode, directory) => (filePaths = []) => {
   const matchingFilePaths = _.filter(filePaths, (filePath) => {
     const fileName = path.basename(filePath)
     return (
