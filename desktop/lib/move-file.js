@@ -24,7 +24,7 @@ const copyFile = (episode) => ([filePath, newDirectory]) => {
   const newFileName = sanitize(episode.fileName)
   const newFilePath = path.join(newDirectory, `${newFileName}${extension}`)
 
-  return fs.renameAsync(filePath, newFilePath)
+  return fs.copyAsync(filePath, newFilePath)
   .return([filePath, newFilePath])
   .catch((error) => {
     throw new util.HandlingError(
