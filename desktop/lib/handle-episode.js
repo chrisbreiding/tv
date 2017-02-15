@@ -11,7 +11,7 @@ const runPreflight = require('./run-preflight')
 const util = require('./util')
 
 const notifyCanceled = (episode) => (error) => {
-  queue.update(episode.id, {
+  return queue.update(episode.id, {
     state: queue.CANCELED,
     info: { reason: error.message },
   })
@@ -23,7 +23,7 @@ const notifySuccess = (episode, moveOnly) => ([from, to]) => {
     `*${util.tildeify(from)}*\nrenamed and moved to\n*${util.tildeify(to)}*` :
     `*${episode.fileName}*\ndownloaded and moved to\n*${util.tildeify(to)}*`
 
-  queue.update(episode.id, {
+  return queue.update(episode.id, {
     state: queue.FINISHED,
     info: { title, message },
   })

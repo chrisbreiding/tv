@@ -31,7 +31,6 @@ const request = (requestName, id, ...args) => {
 const send = (eventName, ...args) => {
   return window.ensure().then((win) => {
     win.webContents.send(eventName, ...args)
-    return null
   })
 }
 

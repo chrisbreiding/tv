@@ -8,11 +8,13 @@ module.exports = {
     queue[id] = data
     queue[id].id = id
     ipc.send('queue:episode:added', data)
+    return null
   },
 
   update (id, partialData) {
     queue[id] = _.extend(queue[id], partialData)
     ipc.send('queue:episode:updated', queue[id])
+    return null
   },
 
   remove (id) {
