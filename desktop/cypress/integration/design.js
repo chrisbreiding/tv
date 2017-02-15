@@ -97,7 +97,7 @@ describe('design', () => {
       state: 'ERROR',
       error: {
         message: 'Could not download torrent blah blah',
-        stack: 'Could not download torrent blah blah',
+        details: 'Could not download torrent blah blah',
       },
     })
     ipc.on.withArgs('queue:episode:updated').yield(null, {

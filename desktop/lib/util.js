@@ -39,18 +39,18 @@ const tildeify = (directory) => {
 }
 
 class CancelationError extends Error {
-  constructor (message, stack) {
+  constructor (message, details) {
     super(message)
     this.isCancellationError = true
-    if (stack) this.stack = stack
+    this.details = details
   }
 }
 
 class HandlingError extends Error {
-  constructor (message, stack) {
+  constructor (message, details) {
     super(message)
     this.isHandlingError = true
-    if (stack) this.stack = stack
+    this.details = details
   }
 }
 

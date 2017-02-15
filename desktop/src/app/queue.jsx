@@ -52,10 +52,10 @@ const displayFinished = ({ title, message }) => (
   </p>
 )
 
-const displayError = ({ message, stack } = {}) => (
+const displayError = ({ message, details } = {}) => (
   <p className='status'>
     Error
-    <button onClick={showInfo(message, stack, 'error')}>
+    <button onClick={showInfo(message, details, 'error')}>
       <i className='fa fa-info-circle' />
     </button>
   </p>

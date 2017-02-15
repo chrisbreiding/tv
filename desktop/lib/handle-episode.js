@@ -41,8 +41,11 @@ const maybeRefreshPlex = () => {
   }
 }
 
-const notifyError = (episode) => (error) => {
-  queue.update(episode.id, { state: queue.ERROR, error })
+const notifyError = (episode) => ({ message, details }) => {
+  return queue.update(episode.id, {
+    state: queue.ERROR,
+    error: { message, details },
+  })
 }
 
 const notHandlingError = (error) => !error.isHandlingError
@@ -55,9 +58,15 @@ const massageUncaughtError = (episode) => (error) => {
 }
 
 const notifyErrors = (episode) => (errors) => {
+  if (errors.length === 1) {
+    throw new util.HandlingError(errors[0].message, errors[0].details)
+  }
+
   const message = 'Multiple errors while handling episode'
-  const stack = `${episode.fileName}\n\n${errors.map((error) => error.stack).join('\n\n')}`
-  throw new util.HandlingError(message, stack)
+  const details = `${episode.fileName}\n\n${errors.map((error) => {
+    return error.details ? `${error.message}\n\n${error.details}` : error.message
+  }).join('\n\n--------------\n\n')}`
+  throw new util.HandlingError(message, details)
 }
 
 module.exports = (episode, moveOnly) => {
