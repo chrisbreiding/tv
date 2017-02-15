@@ -13,11 +13,11 @@ const on = (requestName, callback) => {
   })
 }
 
-const request = (requestName, ...args) => {
+const request = (requestName, id, ...args) => {
   return window.ensure().then((win) => {
     return new Promise((resolve, reject) => {
-      win.webContents.send(`${requestName}:request`, ...args)
-      ipcMain.once(`${requestName}:response`, (event, error, response) => {
+      win.webContents.send(`${requestName}:request`, id, ...args)
+      ipcMain.once(`${requestName}:response:${id}`, (event, error, response) => {
         if (error) {
           reject(_.extend(new Error(''), error))
         } else {

@@ -1,26 +1,42 @@
 $canceled-color: darken($neutral-color, 20%);
 
 .queue {
-  li {
+  max-width: 40em;
+
+  .main {
     align-items: center;
     border-top: solid 1px #000;
     display: flex;
     justify-content: space-between;
     padding: 0.6em 0;
 
-    &:first-child {
-      border-top: none;
+    > * {
+      flex-grow: 0;
+      flex-shrink: 0;
     }
+  }
+
+  li:first-child .main {
+    border-top: none;
   }
 
   .status-icon {
     margin-right: 0.6em;
+    padding-left: 0.4em;
+    width: 1.4em;
 
     i {
       @extend .#{$fa-css-prefix}-refresh;
       @extend .#{$fa-css-prefix}-spin;
       color: $primary-color;
     }
+  }
+
+  .status-select-torrent .status-icon i,
+  .status-select-file .status-icon i {
+    @extend .#{$fa-css-prefix}-exclamation-circle;
+    animation: none;
+    color: $warning-color;
   }
 
   .status-canceled .status-icon i {
@@ -45,11 +61,15 @@ $canceled-color: darken($neutral-color, 20%);
     background: $primary-color;
     border-radius: 3px;
     color: $light-color;
-    flex-grow: 0;
     font-size: 0.9em;
     padding: 0.1em 0.2em;
     text-align: center;
     width: 2.8em;
+  }
+
+  .status-select-torrent .ep-num,
+  .status-select-file .ep-num {
+    background: $warning-color;
   }
 
   .status-canceled .ep-num {
@@ -66,7 +86,6 @@ $canceled-color: darken($neutral-color, 20%);
 
   .name,
   .status {
-    flex-shrink: 0;
     font-size: 0.9em;
     margin-left: 0.8em;
     overflow: hidden;
@@ -80,7 +99,13 @@ $canceled-color: darken($neutral-color, 20%);
   }
 
   .download-progress {
-    font-size: 0.8em;
+    span {
+      display: block;
+    }
+
+    span:first-child {
+      font-size: 0.9em;
+    }
 
     .meter {
       background: #000;
@@ -88,7 +113,7 @@ $canceled-color: darken($neutral-color, 20%);
       height: 2px;
       margin-top: 0.4em;
 
-      div {
+      span {
         background-color: $secondary-color;
         border-radius: 2px;
         height: 2px;
@@ -120,8 +145,76 @@ $canceled-color: darken($neutral-color, 20%);
     text-align: right;
     width: 2em;
 
+    .cancel {
+      visibility: hidden;
+    }
+
     button {
       @include buttonize-color(darken($light-color, 30%), $light-color);
+    }
+  }
+}
+
+.torrent-picker {
+  font-size: 0.9em;
+  overflow: auto;
+
+  table {
+    background: $darkest-color;
+    color: darken($light-color, 20%);
+  }
+
+  tbody tr {
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  th, td {
+    padding: 0.4em 0.6em;
+  }
+
+  .name span,
+  .upload-date span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .name {
+    max-width: 20em;
+  }
+
+  td.seeders,
+  td.verified {
+    color: $success-color;
+  }
+
+  td.leechers {
+    color: $error-color;
+  }
+}
+
+.file-picker {
+  font-size: 0.9em;
+  overflow: auto;
+
+  ul {
+    background: $darkest-color;
+    color: darken($light-color, 20%);
+  }
+
+  li {
+    padding: 0.4em 0.6em;
+    cursor: pointer;
+    line-height: 1.5;
+    word-wrap: break-word;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
     }
   }
 }

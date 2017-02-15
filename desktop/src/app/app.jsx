@@ -6,34 +6,52 @@ import ipc from '../lib/ipc'
 import Notifications from './notifications'
 import PlexCredentials from './plex-credentials'
 import Queue from './queue'
-import TorrentPicker from './torrent-picker'
 import Settings from './settings'
 import state from './state'
 
 @observer
 class App extends Component {
   @observable requestingPlexCredentials = false
-  @observable torrents = []
 
   componentDidMount () {
-    ipc.on('notification', action('received:notification', (notification) => {
+    ipc.on('notification', action((notification) => {
       state.addNotification(notification)
     }))
 
-    ipc.on('queue:episode:added', action('queue:episode:added', (queueItem) => {
+    ipc.on('queue:episode:added', action((queueItem) => {
       state.addQueueItem(queueItem)
     }))
 
-    ipc.on('queue:episode:updated', action('queue:episode:updated', (queueItem) => {
+    ipc.on('queue:episode:updated', action((queueItem) => {
       state.updateQueueItem(queueItem)
     }))
 
-    ipc.on('get:plex:credentials:request', action('plex:credentials:requested', () => {
+    ipc.on('get:plex:credentials:request', action(() => {
       this.requestingPlexCredentials = true
     }))
 
-    ipc.on('select:torrent:request', action('select:torrent:requested', (torrents) => {
-      this.torrents = torrents
+    ipc.on('select:torrent:request', action((id, torrents) => {
+      const clear = action(() => {
+        state.updateQueueItem({ id, torrents: [], onCancel: null, onSelect: null })
+      })
+      const respond = (...args) => ipc.send(`select:torrent:response:${id}`, ...args)
+
+      state.updateQueueItem({ id, torrents,
+        onCancel ()        { clear(); respond({ message: 'User canceled' }) },
+        onSelect (torrent) { clear(); respond(null, torrent) },
+      })
+    }))
+
+    ipc.on('select:file:request', action((id, files) => {
+      const clear = action(() => {
+        state.updateQueueItem({ id, files: [], onCancel: null, onSelect: null })
+      })
+      const respond = (...args) => ipc.send(`select:file:response:${id}`, ...args)
+
+      state.updateQueueItem({ id, files,
+        onCancel ()     { clear(); respond({ message: 'User canceled' }) },
+        onSelect (file) { clear(); respond(null, file) },
+      })
     }))
   }
 
@@ -47,16 +65,6 @@ class App extends Component {
   }
 
   _content () {
-    if (this.torrents.length) {
-      return (
-        <TorrentPicker
-          torrents={this.torrents}
-          onCancel={this._cancelSelectTorrent}
-          onSubmit={this._sendSelectedTorrent}
-        />
-      )
-    }
-
     if (this.requestingPlexCredentials) {
       return (
         <PlexCredentials
@@ -81,16 +89,6 @@ class App extends Component {
   @action _sendPlexCredentials = (credentials) => {
     this.requestingPlexCredentials = false
     ipc.send('get:plex:credentials:response', null, credentials)
-  }
-
-  @action _cancelSelectTorrent = () => {
-    this.torrents = []
-    ipc.send('select:torrent:response', { message: 'User canceled' })
-  }
-
-  @action _sendSelectedTorrent = (torrent) => {
-    this.torrents = []
-    ipc.send('select:torrent:response', null, torrent)
   }
 }
 

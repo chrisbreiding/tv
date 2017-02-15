@@ -14,7 +14,7 @@ class Settings extends Component {
   @observable selectingDirectory = false
 
   componentDidMount () {
-    ipc('get:directories').then(action('got:directories', ({ downloads, tvShows }) => {
+    ipc('get:directories').then(action(({ downloads, tvShows }) => {
       this.downloadsDirectory = downloads
       this.tvShowsDirectory = tvShows
       this.isLoading = false

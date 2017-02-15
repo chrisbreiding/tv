@@ -66,9 +66,6 @@ module.exports = (episode, moveOnly) => {
   queue.add(episode.id, {
     episode,
     state: queue.STARTED,
-    info: {},
-    error: {},
-    filePath: '',
   })
 
   runPreflight()

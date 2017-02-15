@@ -21,11 +21,18 @@ describe('design', () => {
       })
   })
 
-  it('torrent picker', () => {
-    ipc.on.withArgs('select:torrent:request').yield(null, torrents)
+  it('loading', () => {})
+
+  it('settings', () => {
+    setTimeout(() => {
+      ipc.once.withArgs('get:directories:response').yield(null, null, {
+        downloads: '~/path/to/downloads',
+        tvShows: '~/path/to/shows',
+      })
+    })
   })
 
-  it('queue', () => {
+  it.only('queue', () => {
     const addEpisode = (id, season, episode_number, displayName) => {
       ipc.on.withArgs('queue:episode:added').yield(null, {
         id,
@@ -41,8 +48,10 @@ describe('design', () => {
     }
 
     addEpisode(1, 4, 3, 'The Show About Nothing')
+    addEpisode(6, 1, 1, 'The Show About Five-O')
     addEpisode(2, 20, 23, 'The Show with the Coffee Shop')
-    addEpisode(3, 12, 8, 'The Show with the Radio Show Psychiatrist')
+    addEpisode(5, 7, 10, 'The Show with the Airport')
+    addEpisode(3, 12, 20, 'The Show with the Radio Show Psychiatrist')
     addEpisode(4, 3, 1, 'The Show in the Court')
 
     let progress = 0
@@ -98,5 +107,19 @@ describe('design', () => {
         title: 'Canceled selecting torrent',
       },
     })
+    ipc.on.withArgs('queue:episode:updated').yield(null, {
+      id: 5,
+      state: 'SELECT_TORRENT',
+    })
+    ipc.on.withArgs('select:torrent:request').yield(null, 5, torrents)
+    ipc.on.withArgs('queue:episode:updated').yield(null, {
+      id: 6,
+      state: 'SELECT_FILE',
+    })
+    ipc.on.withArgs('select:file:request').yield(null, 6, [
+      { path: '1', relativePath: '/path/to/The.Show.About.Five-Os01e01.mkv' },
+      { path: '2', relativePath: '/path/to/The.Show.About.Five-O.101.VERY.lOng.and.PRObabLY.CAUSing.UI.T0.Scroll.A.BIT.avi' },
+      { path: '3', relativePath: '/path/to/The.Show.About.Five-O.s1e1.Redneck.Party.YOLO.avi' },
+    ])
   })
 })

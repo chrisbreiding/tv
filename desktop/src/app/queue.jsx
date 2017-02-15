@@ -3,6 +3,8 @@ import { action } from 'mobx'
 import { observer } from 'mobx-react'
 import React from 'react'
 import Tooltip from '@cypress/react-tooltip'
+import FilePicker from './file-picker'
+import TorrentPicker from './torrent-picker'
 
 import state from './state'
 import util from './util'
@@ -19,12 +21,12 @@ const downloadProgress = (info) => {
 
   const percentage = Math.round(info.progress * 100)
   return (
-    <div className='status download-progress'>
-      <p>Downloading: {percentage}% / {util.msToTime(info.timeRemaining)}</p>
-      <div className='meter'>
-        <div style={{ width: `${percentage}%` }} />
-      </div>
-    </div>
+    <p className='status download-progress'>
+      <span>Downloading: {percentage}% / {util.msToTime(info.timeRemaining)}</span>
+      <span className='meter'>
+        <span style={{ width: `${percentage}%` }} />
+      </span>
+    </p>
   )
 }
 
@@ -95,8 +97,36 @@ const actionButton = (queueItem) => {
         </Tooltip>
       )
     default:
-      return null
+      return (
+        <Tooltip title='Cancel'>
+          <button className='cancel' onClick={() => {}}>
+            <i className='fa fa-ban' />
+          </button>
+        </Tooltip>
+      )
   }
+}
+
+const torrentPicker = (queueItem) => {
+  if (!queueItem.torrents.length) return null
+
+  return (
+    <TorrentPicker
+      torrents={queueItem.torrents}
+      onSelect={queueItem.onSelect}
+    />
+  )
+}
+
+const filePicker = (queueItem) => {
+  if (!queueItem.files.length) return null
+
+  return (
+    <FilePicker
+      files={queueItem.files}
+      onSelect={queueItem.onSelect}
+    />
+  )
 }
 
 const QueueItem = observer(({ queueItem }) => {
@@ -106,15 +136,19 @@ const QueueItem = observer(({ queueItem }) => {
 
   return (
     <li className={`status-${statusClass(queueItem.state)}`}>
-      <p className='status-icon'><i className='fa' /></p>
-      <p className='ep-num'>{epNum}</p>
-      <p className='name'>
-        <Tooltip title={showName}>
-          <span>{showName}</span>
-        </Tooltip>
-      </p>
-      {status(queueItem)}
-      <p className='action'>{actionButton(queueItem)}</p>
+      <div className='main'>
+        <p className='status-icon'><i className='fa' /></p>
+        <p className='ep-num'>{epNum}</p>
+        <p className='name'>
+          <Tooltip title={showName}>
+            <span>{showName}</span>
+          </Tooltip>
+        </p>
+        {status(queueItem)}
+        <p className='action'>{actionButton(queueItem)}</p>
+      </div>
+      {torrentPicker(queueItem)}
+      {filePicker(queueItem)}
     </li>
   )
 })

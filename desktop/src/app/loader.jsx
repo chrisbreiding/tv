@@ -1,12 +1,11 @@
 import React from 'react'
 
-const Loader = ({ children, message }) => (
+const Loader = ({ message }) => (
   <main className='loading'>
     <p>
       <span><i className='fa fa-soccer-ball-o fa-spin'></i></span>
       {message}...
     </p>
-    {children}
   </main>
 )
 

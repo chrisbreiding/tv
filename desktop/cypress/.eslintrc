@@ -1,6 +1,15 @@
 {
   "env": {
-    "mocha": true
+    "mocha": true,
+    "node": true
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "globals": {
     "cy": true,

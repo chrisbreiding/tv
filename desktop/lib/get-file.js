@@ -23,6 +23,19 @@ const hasVideoExtension = (fileName) => {
   return new RegExp(`(${videoExtensions.join('|')})$`).test(fileName)
 }
 
+const selectFile = (episode, directory, filePaths) => {
+  queue.update(episode.id, { state: queue.SELECT_FILE })
+
+  const files = _.map(filePaths, (filePath) => ({
+    path: filePath,
+    relativePath: filePath.replace(directory, ''),
+  }))
+
+  return ipc.request('select:file', episode.id, files)
+  .then((file) => file.path)
+  .catch(util.wrapCancelationError('Canceled selecting file'))
+}
+
 const matchesEpisode = (episode, name) => {
   name = standardizeName(name)
   const showName = standardizeName(episode.show.searchName)
@@ -45,12 +58,12 @@ const matchesEpisode = (episode, name) => {
   )
 }
 
-const getFileMatchingEpisode = (episode) => (filePaths) => {
+const getFileMatchingEpisode = (episode, directory) => (filePaths) => {
   if (!filePaths.length) {
     throw new Error('No file found')
   }
 
-  const files = _.filter(filePaths, (filePath) => {
+  const matchingFilePaths = _.filter(filePaths, (filePath) => {
     const fileName = path.basename(filePath)
     return (
       !_.includes(fileName, 'sample') &&
@@ -59,49 +72,25 @@ const getFileMatchingEpisode = (episode) => (filePaths) => {
     )
   })
 
-  if (files.length === 1) {
-    return files[0]
+  if (matchingFilePaths.length === 1) {
+    return matchingFilePaths[0]
   } else {
-    throw new Error('No file found')
+    return selectFile(episode, directory, matchingFilePaths)
   }
 }
 
-const findFile = (episode, downloadsDirectory) => {
+const getVideoFiles = (episode, downloadsDirectory) => {
   return glob(`${downloadsDirectory}/**/*.+(${videoExtensions.join('|')})`, {
     nocase: true,
     nodir: true,
-  })
-  .then(getFileMatchingEpisode(episode))
-}
-
-const promptForFile = (episode, downloadsDirectory) => {
-  return new Promise((resolve, reject) => {
-    queue.update(episode.id, { state: queue.USER_SELECTING_FILE })
-
-    dialog.showOpenDialog({
-      title: 'Select Show',
-      buttonLabel: 'Select',
-      defaultPath: downloadsDirectory,
-      filters: [
-        { name: 'Movies', extensions: videoExtensions },
-      ],
-    }, (filePaths) => {
-      if (filePaths && filePaths[0]) {
-        resolve(filePaths[0])
-      } else {
-        reject(new util.CancelationError(`Canceled handling episode for **${episode.show.displayName}**`))
-      }
-    })
   })
 }
 
 const getFileFromDisk = (episode) => {
   const directory = util.getDirectories().downloads
 
-  return findFile(episode, directory)
-  .catch(() => {
-    return promptForFile(episode, directory)
-  })
+  return getVideoFiles(episode, directory)
+  .then(getFileMatchingEpisode(episode, directory))
   .then((filePath) => {
     const otherEpisodeUsingFile = queue.find({ filePath })
 
@@ -118,9 +107,9 @@ const getFileFromDisk = (episode) => {
 }
 
 const selectTorrent = (episode, torrents) => {
-  queue.update(episode.id, { state: queue.USER_SELECTING_TORRENT })
+  queue.update(episode.id, { state: queue.SELECT_TORRENT })
 
-  return ipc.request('select:torrent', torrents)
+  return ipc.request('select:torrent', episode.id, torrents)
   .then((torrent) => torrent.magnetLink)
   .catch(util.wrapCancelationError('Canceled selecting torrent'))
 }
@@ -207,10 +196,7 @@ const downloadFile = (episode) => {
 
   return getTorrentLink(episode)
   .then(downloadTorrent(episode, directory))
-  .then(getFileMatchingEpisode(episode))
-  .catch(() => {
-    return promptForFile(episode, directory)
-  })
+  .then(getFileMatchingEpisode(episode, directory))
 }
 
 module.exports = (episode) => ({
