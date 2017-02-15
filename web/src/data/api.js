@@ -23,11 +23,16 @@ function request (endpoint, method = 'get', props = {}) {
   }, props));
 }
 
+function pingDesktop (callback) {
+  return axios.get(`${desktopBaseUrl}/ping`)
+  .then(() => callback(true))
+  .catch(() => callback(false))
+}
+
 export default {
-  pingDesktop () {
-    return axios.get(`${desktopBaseUrl}/ping`)
-    .then(() => true)
-    .catch(() => false)
+  pollDesktopConnection (callback) {
+    setInterval(() => pingDesktop(callback), 10000)
+    pingDesktop(callback)
   },
 
   handleEpisode (episode) {

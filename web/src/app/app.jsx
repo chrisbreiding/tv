@@ -28,7 +28,7 @@ export default class App extends Component {
 
     migrate().then(() => this.setState({ ready: true }));
 
-    api.pingDesktop().then(action('ping:desktop', (desktopRunning) => {
+    api.pollDesktopConnection(action('ping:desktop', (desktopRunning) => {
       uiState.desktopRunning = desktopRunning;
     }));
   }
