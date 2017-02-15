@@ -1,7 +1,6 @@
 'use strict'
 
 const _ = require('lodash')
-const { dialog } = require('electron')
 const path = require('path')
 const Promise = require('bluebird')
 const TF = require('teeeff')
