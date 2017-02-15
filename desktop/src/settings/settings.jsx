@@ -3,7 +3,7 @@ import { action, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 
-import Loader from './loader'
+import Loader from '../lib/loader'
 import ipc from '../lib/ipc'
 
 @observer

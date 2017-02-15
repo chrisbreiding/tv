@@ -4,10 +4,10 @@ import React, { Component } from 'react'
 import ipc from '../lib/ipc'
 
 import Notifications from './notifications'
-import PlexCredentials from './plex-credentials'
-import Queue from './queue'
-import Settings from './settings'
-import state from './state'
+import PlexCredentials from '../plex/plex-credentials'
+import Queue from '../queue/queue'
+import Settings from '../settings/settings'
+import state from '../lib/state'
 
 @observer
 class App extends Component {

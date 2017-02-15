@@ -32,7 +32,7 @@ describe('design', () => {
     })
   })
 
-  it.only('queue', () => {
+  it('queue', () => {
     const addEpisode = (id, season, episode_number, displayName) => {
       ipc.on.withArgs('queue:episode:added').yield(null, {
         id,

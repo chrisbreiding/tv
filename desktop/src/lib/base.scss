@@ -31,6 +31,11 @@ h2 {
   margin-bottom: 1em;
 }
 
+main {
+  padding: 1em;
+  width: 100%;
+}
+
 p {
   color: darken($light-color, 20%);
   line-height: 1.5;
@@ -88,24 +93,4 @@ input {
   align-items: center;
   display: flex;
   margin-bottom: 0.8em;
-}
-
-.cancel {
-  background: lighten($dark-color, 20%);
-  border: solid 1px lighten($dark-color, 20%);
-  border-radius: 3px;
-  color: $neutral-color;
-  outline: none;
-  margin-right: 0.5em;
-  padding: .4em .6em;
-  transition: all .2s ease;
-  text-decoration: none;
-
-  &:hover,
-  &:focus,
-  &:active {
-    background: lighten($dark-color, 40%);
-    border-color: lighten($dark-color, 40%);
-    color: $light-color;
-  }
 }

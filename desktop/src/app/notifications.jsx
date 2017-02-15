@@ -5,7 +5,7 @@ import { action, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 
-import state from './state'
+import state from '../lib/state'
 
 const md = new Markdown()
 

@@ -3,11 +3,12 @@ import { action } from 'mobx'
 import { observer } from 'mobx-react'
 import React from 'react'
 import Tooltip from '@cypress/react-tooltip'
+
 import FilePicker from './file-picker'
 import TorrentPicker from './torrent-picker'
 
-import state from './state'
-import util from './util'
+import state from '../lib/state'
+import util from '../lib/util'
 
 const DOWNLOADING_TORRENT = 'DOWNLOADING_TORRENT'
 const FINISHED = 'FINISHED'

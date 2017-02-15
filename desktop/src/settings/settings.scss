@@ -1,0 +1,24 @@
+.settings {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 30em;
+  padding: 20px;
+  position: relative;
+
+  .fieldset p {
+    background: $darkest-color;
+    border: solid 1px lighten($dark-color, 20%);
+    flex-grow: 2;
+    margin-right: 0.3em;
+    min-width: 14em;
+    overflow-x: auto;
+    padding: 0.3em 0.6em;
+  }
+
+  &.selecting .cover {
+    display: block;
+  }
+}
