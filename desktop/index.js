@@ -42,7 +42,7 @@ ipc.on('select:directory', (respond, directory) => {
   dialog.showOpenDialog({
     title: `Select ${_.startCase(directory)} Directory`,
     buttonLabel: 'Select',
-    properties: ['openDirectory'],
+    properties: ['openDirectory', 'createDirectory'],
   }, (directoryPaths) => {
     if (!directoryPaths || !directoryPaths.length) {
       return respond()
