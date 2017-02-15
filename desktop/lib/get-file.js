@@ -1,6 +1,7 @@
 'use strict'
 
 const _ = require('lodash')
+const { dialog } = require('electron')
 const path = require('path')
 const Promise = require('bluebird')
 const TF = require('teeeff')
@@ -57,7 +58,30 @@ const matchesEpisode = (episode, name) => {
   )
 }
 
+const promptForFile = (episode, directory) => {
+  return new Promise((resolve, reject) => {
+    dialog.showOpenDialog({
+      title: 'Select Episode Video File',
+      buttonLabel: 'Select',
+      defaultPath: directory,
+      filters: [
+        { name: 'Movies', extensions: videoExtensions },
+      ],
+    }, (filePaths) => {
+      if (filePaths && filePaths[0]) {
+        resolve(filePaths[0])
+      } else {
+        reject(new util.CancelationError(`Canceled selecting video file`))
+      }
+    })
+  })
+}
+
 const getFileMatchingEpisode = (episode, directory) => (filePaths = []) => {
+  if (!filePaths.length) {
+    return promptForFile(episode, directory)
+  }
+
   const matchingFilePaths = _.filter(filePaths, (filePath) => {
     const fileName = path.basename(filePath)
     return (
