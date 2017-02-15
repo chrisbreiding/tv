@@ -29,8 +29,8 @@ module.exports = {
     return !!queue[id]
   },
 
-  isEmpty () {
-    return !_.size(queue)
+  size () {
+    return _.size(queue)
   },
 
   STARTED: 'STARTED',

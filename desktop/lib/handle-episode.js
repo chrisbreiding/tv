@@ -30,10 +30,12 @@ const notifySuccess = (episode, moveOnly) => ([from, to]) => {
 }
 
 const maybeRefreshPlex = () => {
-  if (queue.isEmpty()) {
+  // size doesn't go to 0 until later, so assume the queue is finished
+  // when there's 1 left
+  if (queue.size() === 1) {
     return plex.refresh()
     .then(() => {
-      ipc.send('notification', {
+      return ipc.send('notification', {
         title: 'Refreshing Plex TV Shows',
         type: 'success',
       })
