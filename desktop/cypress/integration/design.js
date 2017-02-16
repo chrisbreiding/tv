@@ -127,15 +127,15 @@ describe('design', () => {
       state: 'FINISHED',
       info: {
         title: 'Finished handling episode for *The Show with the Coffee Shop*',
-        message: '~/some/path/blah.blah.mkv*\nrenamed and moved to\n*~/some/other/path/So Nice - s2e01 - Yes.mkv*',
+        message: '*~/some/path/blah.blah.mkv*\n\nrenamed and moved to\n\n*~/some/other/path/So Nice - s2e01 - Yes.mkv*',
       },
     })
     ipc.on.withArgs('queue:episode:updated').yield(null, {
       id: 3,
-      state: 'ERROR',
-      error: {
+      state: 'FAILED',
+      info: {
+        title: 'Could not download torrent blah blah',
         message: 'Could not download torrent blah blah',
-        details: 'Could not download torrent blah blah',
       },
     })
     ipc.on.withArgs('queue:episode:updated').yield(null, {
@@ -148,16 +148,18 @@ describe('design', () => {
     ipc.on.withArgs('queue:episode:updated').yield(null, {
       id: 5,
       state: 'SELECT_TORRENT',
+      items: torrents,
     })
-    ipc.on.withArgs('select:torrent:request').yield(null, 5, torrents)
+    ipc.on.withArgs('select:torrent:request').yield(null, 5)
     ipc.on.withArgs('queue:episode:updated').yield(null, {
       id: 6,
       state: 'SELECT_FILE',
+      items: [
+        { path: '1', relativePath: '/path/to/The.Show.About.Five-Os01e01.mkv' },
+        { path: '2', relativePath: '/path/to/The.Show.About.Five-O.101.VERY.lOng.and.PRObabLY.CAUSing.UI.T0.Scroll.A.BIT.avi' },
+        { path: '3', relativePath: '/path/to/The.Show.About.Five-O.s1e1.Redneck.Party.YOLO.avi' },
+      ],
     })
-    ipc.on.withArgs('select:file:request').yield(null, 6, [
-      { path: '1', relativePath: '/path/to/The.Show.About.Five-Os01e01.mkv' },
-      { path: '2', relativePath: '/path/to/The.Show.About.Five-O.101.VERY.lOng.and.PRObabLY.CAUSing.UI.T0.Scroll.A.BIT.avi' },
-      { path: '3', relativePath: '/path/to/The.Show.About.Five-O.s1e1.Redneck.Party.YOLO.avi' },
-    ])
+    ipc.on.withArgs('select:file:request').yield(null, 6)
   })
 })
