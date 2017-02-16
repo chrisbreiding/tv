@@ -32,8 +32,13 @@ h2 {
 }
 
 main {
+  background: $dark-color;
+  bottom: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
   padding: 1em;
-  width: 100%;
 }
 
 p {

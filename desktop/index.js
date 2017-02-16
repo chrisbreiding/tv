@@ -4,6 +4,7 @@ const _ = require('lodash')
 const { app, dialog } = require('electron')
 
 const ipc = require('./lib/ipc')
+const queue = require('./lib/episode-queue')
 const server = require('./lib/server')
 const util = require('./lib/util')
 const handleEpisode = require('./lib/handle-episode')
@@ -52,6 +53,10 @@ ipc.on('select:directory', (respond, directory) => {
     util.setDirectory(directory, directoryPath)
     respond(null, util.tildeify(directoryPath))
   })
+})
+
+ipc.on('fetch:queue', (respond) => {
+  respond(null, queue.items())
 })
 
 server.on('handle:episode', (episode) => {

@@ -1,4 +1,9 @@
 .plex-credentials {
+  form {
+    margin: 0 auto;
+    max-width: 25em;
+  }
+
   h1 {
     margin: 0;
   }
@@ -18,5 +23,6 @@
 
   input {
     display: block;
+    flex-grow: 2;
   }
 }

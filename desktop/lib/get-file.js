@@ -24,15 +24,18 @@ const hasVideoExtension = (fileName) => {
 }
 
 const selectFile = (episode, directory, filePaths) => {
-  queue.update(episode.id, { state: queue.SELECT_FILE })
-
   const files = _.map(filePaths, (filePath) => ({
     path: filePath,
     relativePath: filePath.replace(directory, ''),
   }))
 
-  return ipc.request('select:file', episode.id, files)
-  .then((file) => file.path)
+  queue.update(episode.id, { state: queue.SELECT_FILE, files })
+
+  return ipc.request('select:file', episode.id)
+  .then((file) => {
+    queue.update(episode.id, { files: [] })
+    return file.path
+  })
   .catch(util.wrapCancelationError('Canceled selecting file'))
 }
 
@@ -126,10 +129,13 @@ const getFileFromDisk = (episode) => {
 }
 
 const selectTorrent = (episode, torrents) => {
-  queue.update(episode.id, { state: queue.SELECT_TORRENT })
+  queue.update(episode.id, { state: queue.SELECT_TORRENT, torrents })
 
-  return ipc.request('select:torrent', episode.id, torrents)
-  .then((torrent) => torrent.magnetLink)
+  return ipc.request('select:torrent', episode.id)
+  .then((torrent) => {
+    queue.update(episode.id, { torrents: [] })
+    return torrent.magnetLink
+  })
   .catch(util.wrapCancelationError('Canceled selecting torrent'))
 }
 

@@ -33,6 +33,10 @@ module.exports = {
     return _.size(queue)
   },
 
+  items () {
+    return _.values(queue)
+  },
+
   STARTED: 'STARTED',
   SEARCHING_TORRENTS: 'SEARCHING_TORRENTS',
   SELECT_TORRENT: 'SELECT_TORRENT',
@@ -43,5 +47,5 @@ module.exports = {
   TRASHING_TORRENT_FILES: 'TRASHING_TORRENT_FILES',
   FINISHED: 'FINISHED',
   CANCELED: 'CANCELED',
-  ERROR: 'ERROR',
+  FAILED: 'FAILED',
 }

@@ -5,19 +5,13 @@ import { action, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 
-import state from '../lib/state'
+import ipc from '../lib/ipc'
 
 const md = new Markdown()
 
 @observer
 class Notification extends Component {
   @observable isExpanded = false
-
-  componentDidMount () {
-    if (this.props.notification.type !== 'error') {
-      this.autoRemoveTimeout = setTimeout(this._remove, 10000)
-    }
-  }
 
   render () {
     const { message, title, type } = this.props.notification
@@ -32,7 +26,7 @@ class Notification extends Component {
             <i className='fa fa-fw'></i>
           </button>
           <p dangerouslySetInnerHTML={{ __html: md.render(title) }}></p>
-          <button onClick={this._remove}>
+          <button onClick={this.props.onRemove}>
             <i className='fa fa-remove'></i>
           </button>
         </div>
@@ -41,22 +35,55 @@ class Notification extends Component {
     )
   }
 
+  componentDidMount () {
+    if (this.props.notification.type !== 'error') {
+      this.autoRemoveTimeout = setTimeout(this.props.onRemove, 10000)
+    }
+  }
+
   @action _toggleExpanded = () => {
     clearTimeout(this.autoRemoveTimeout)
     this.isExpanded = !this.isExpanded
   }
-
-  @action _remove = () => {
-    state.removeNotification(this.props.notification.id)
-  }
 }
 
-const Notifications = observer(() => (
-  <ul className='notifications'>
-    {_.map(state.notifications, (notification) => (
-      <Notification key={notification.id} notification={notification} />
-    ))}
-  </ul>
-))
+@observer
+class Notifications extends Component {
+  @observable notifications = []
+
+  render () {
+    return (
+      <ul className='notifications'>
+        {_.map(this.notifications, (notification) => (
+          <Notification
+            key={notification.id}
+            notification={notification}
+            onRemove={this._remove(notification.id)}
+          />
+        ))}
+      </ul>
+    )
+  }
+
+  componentDidMount () {
+    ipc.on('notification', action((notification) => {
+      this._add(notification)
+    }))
+  }
+
+  _add (notification) {
+    if (!notification) return
+
+    notification.id = _.uniqueId()
+    notification.title = notification.title || ''
+    notification.message = notification.message || ''
+    this.notifications.push(notification)
+  }
+
+  _remove = (id) => action(() => {
+    const index = _.findIndex(this.notifications, { id })
+    this.notifications.splice(index, 1)
+  })
+}
 
 export default Notifications

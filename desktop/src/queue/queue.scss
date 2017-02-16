@@ -17,6 +17,10 @@ $canceled-color: darken($neutral-color, 20%);
     }
   }
 
+  > ul {
+    padding-bottom: 1em;
+  }
+
   li:first-child .main {
     border-top: none;
   }
@@ -33,10 +37,16 @@ $canceled-color: darken($neutral-color, 20%);
     }
   }
 
+  @keyframes pulsate {
+    0%   { transform: scale(0.8, 0.8); }
+    50%  { transform: scale(1.4, 1.4); }
+    100% { transform: scale(0.8, 0.8); }
+  }
+
   .status-select-torrent .status-icon i,
   .status-select-file .status-icon i {
-    @extend .#{$fa-css-prefix}-exclamation-circle;
-    animation: none;
+    @extend .#{$fa-css-prefix}-warning;
+    animation: pulsate 2s infinite ease-out;
     color: $warning-color;
   }
 
@@ -47,13 +57,13 @@ $canceled-color: darken($neutral-color, 20%);
   }
 
   .status-finished .status-icon i {
-    @extend .#{$fa-css-prefix}-check;
+    @extend .#{$fa-css-prefix}-check-circle;
     animation: none;
     color: $success-color;
   }
 
-  .status-error .status-icon i {
-    @extend .#{$fa-css-prefix}-warning;
+  .status-failed .status-icon i {
+    @extend .#{$fa-css-prefix}-exclamation-circle;
     animation: none;
     color: $error-color;
   }
@@ -81,7 +91,7 @@ $canceled-color: darken($neutral-color, 20%);
     background: $success-color;
   }
 
-  .status-error .ep-num {
+  .status-failed .ep-num {
     background: $error-color;
   }
 
@@ -138,7 +148,7 @@ $canceled-color: darken($neutral-color, 20%);
     @include buttonize-color($success-color);
   }
 
-  .status-error .status button {
+  .status-failed .status button {
     @include buttonize-color($error-color);
   }
 
@@ -152,6 +162,26 @@ $canceled-color: darken($neutral-color, 20%);
 
     button {
       @include buttonize-color(darken($light-color, 30%), $light-color);
+    }
+  }
+
+  .info {
+    background: $darkest-color;
+    font-size: 0.9em;
+    padding: 0.6em 1em;
+
+    h3 {
+      color: $light-color;
+    }
+
+    div {
+      border-top: solid 1px lighten($dark-color, 40%);
+      margin-top: 0.4em;
+      padding-top: 0.4em;
+    }
+
+    div:empty {
+      display: none;
     }
   }
 }

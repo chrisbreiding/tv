@@ -1,168 +1,95 @@
 import _ from 'lodash'
-import { action } from 'mobx'
+import { action, observable } from 'mobx'
 import { observer } from 'mobx-react'
-import React from 'react'
-import Tooltip from '@cypress/react-tooltip'
+import React, { Component } from 'react'
 
-import FilePicker from './file-picker'
-import TorrentPicker from './torrent-picker'
+import QueueItem from './queue-item'
+import QueueItemModel from './queue-item-model'
 
-import state from '../lib/state'
-import util from '../lib/util'
+import ipc from '../lib/ipc'
 
-const DOWNLOADING_TORRENT = 'DOWNLOADING_TORRENT'
-const FINISHED = 'FINISHED'
-const CANCELED = 'CANCELED'
-const ERROR = 'ERROR'
+const SELECT_TORRENT = 'SELECT_TORRENT'
+const SELECT_FILE = 'SELECT_FILE'
 
-const statusClass = (state) => _.kebabCase(state.toLowerCase())
+@observer
+class Queue extends Component {
+  @observable queue = observable.map()
 
-const downloadProgress = (info) => {
-  if (!info) return 'Downloading'
+  render () {
+    if (!this.queue.size) return null
 
-  const percentage = Math.round(info.progress * 100)
-  return (
-    <p className='status download-progress'>
-      <span>Downloading: {percentage}% / {util.msToTime(info.timeRemaining)}</span>
-      <span className='meter'>
-        <span style={{ width: `${percentage}%` }} />
-      </span>
-    </p>
-  )
-}
+    return (
+      <main className='queue'>
+        <h1>Queue</h1>
+        <ul>
+          {_.map(this.queue.values(), (queueItem) => (
+            <QueueItem
+              key={queueItem.id}
+              queueItem={queueItem}
+              onRemove={this._remove(queueItem.id)}
+            />
+          ))}
+        </ul>
+      </main>
+    )
+  }
 
-const showInfo = (title, message, type) => action('show:queue:error', () => {
-  state.addNotification({ title, message, type })
-})
+  componentDidMount () {
+    ipc('fetch:queue').then(action((queueItems) => {
+      console.log(queueItems)
+      _.each(queueItems, (queueItem) => {
+        this._add(queueItem)
+        if (queueItem.state === SELECT_TORRENT) {
+          this._handleSelect(queueItem.id, 'torrent')
+        } else if (queueItem.state === SELECT_FILE) {
+          this._handleSelect(queueItem.id, 'file')
+        }
+      })
+    }))
 
-const displayCanceled = ({ title }) => (
-  <p className='status'>
-    Canceled
-    <button onClick={showInfo(title, null, 'info')}>
-      <i className='fa fa-info-circle' />
-    </button>
-  </p>
-)
+    ipc.on('queue:episode:added', action((queueItem) => {
+      this._add(queueItem)
+    }))
 
-const displayFinished = ({ title, message }) => (
-  <p className='status'>
-    Finished
-    <button onClick={showInfo(title, message, 'success')}>
-      <i className='fa fa-info-circle' />
-    </button>
-  </p>
-)
+    ipc.on('queue:episode:updated', action((queueItem) => {
+      this._update(queueItem)
+    }))
 
-const displayError = ({ message, details } = {}) => (
-  <p className='status'>
-    Error
-    <button onClick={showInfo(message, details, 'error')}>
-      <i className='fa fa-info-circle' />
-    </button>
-  </p>
-)
+    ipc.on('select:torrent:request', action((id) => {
+      this._handleSelect(id, 'torrent')
+    }))
 
-const status = ({ error, info, state }) => {
-  switch (state) {
-    case DOWNLOADING_TORRENT:
-      return downloadProgress(info)
-    case CANCELED:
-      return displayCanceled(info)
-    case FINISHED:
-      return displayFinished(info)
-    case ERROR:
-      return displayError(error)
-    default:
-      return (
-        <p className='status'>
-          {_.startCase(state.toLowerCase())}
-        </p>
-      )
+    ipc.on('select:file:request', action((id) => {
+      this._handleSelect(id, 'file')
+    }))
+  }
+
+  _add (queueItem) {
+    this.queue.set(queueItem.id, new QueueItemModel(queueItem))
+  }
+
+  @action _update (queueItem) {
+    if (this.queue.has(queueItem.id)) {
+      _.extend(this.queue.get(queueItem.id), queueItem)
+    }
+  }
+
+  _remove = (id) => () => {
+    this.queue.delete(id)
+  }
+
+  _handleSelect (id, type) {
+    const respond = (...args) => {
+      this._update({ id, onCancel: null, onSelect: null })
+      ipc.send(`select:${type}:response:${id}`, ...args)
+    }
+
+    this._update({
+      id,
+      onCancel ()          { respond({ message: 'User canceled' }) },
+      onSelect (selection) { respond(null, selection) },
+    })
   }
 }
-
-const remove = (queueItem) => () => {
-  state.removeQueueItem(queueItem)
-}
-
-const actionButton = (queueItem) => {
-  switch (queueItem.state) {
-    case CANCELED:
-    case FINISHED:
-    case ERROR:
-      return (
-        <Tooltip title='Remove'>
-          <button onClick={remove(queueItem)}>
-            <i className='fa fa-remove' />
-          </button>
-        </Tooltip>
-      )
-    default:
-      return (
-        <Tooltip title='Cancel'>
-          <button className='cancel' onClick={() => {}}>
-            <i className='fa fa-ban' />
-          </button>
-        </Tooltip>
-      )
-  }
-}
-
-const torrentPicker = (queueItem) => {
-  if (!queueItem.torrents.length) return null
-
-  return (
-    <TorrentPicker
-      torrents={queueItem.torrents}
-      onSelect={queueItem.onSelect}
-    />
-  )
-}
-
-const filePicker = (queueItem) => {
-  if (!queueItem.files.length) return null
-
-  return (
-    <FilePicker
-      files={queueItem.files}
-      onSelect={queueItem.onSelect}
-    />
-  )
-}
-
-const QueueItem = observer(({ queueItem }) => {
-  const { episode } = queueItem
-  const epNum = `${episode.season}${util.pad(episode.episode_number)}`
-  const showName = episode.show.displayName
-
-  return (
-    <li className={`status-${statusClass(queueItem.state)}`}>
-      <div className='main'>
-        <p className='status-icon'><i className='fa' /></p>
-        <p className='ep-num'>{epNum}</p>
-        <p className='name'>
-          <Tooltip title={showName}>
-            <span>{showName}</span>
-          </Tooltip>
-        </p>
-        {status(queueItem)}
-        <p className='action'>{actionButton(queueItem)}</p>
-      </div>
-      {torrentPicker(queueItem)}
-      {filePicker(queueItem)}
-    </li>
-  )
-})
-
-const Queue = observer(() => (
-  <main className='queue'>
-    <h1>Queue</h1>
-    <ul>
-      {_.map(state.queue.values(), (queueItem) => (
-        <QueueItem key={queueItem.id} queueItem={queueItem} />
-      ))}
-    </ul>
-  </main>
-))
 
 export default Queue
