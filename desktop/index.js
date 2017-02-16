@@ -3,6 +3,7 @@
 const _ = require('lodash')
 const { app, dialog } = require('electron')
 
+const eventBus = require('./lib/event-bus')
 const ipc = require('./lib/ipc')
 const queue = require('./lib/episode-queue')
 const server = require('./lib/server')
@@ -65,4 +66,8 @@ server.on('handle:episode', (episode) => {
     app.focus()
     handleEpisode(episode)
   })
+})
+
+eventBus.on('focus', () => {
+  app.focus()
 })

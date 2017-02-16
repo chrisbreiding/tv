@@ -9,11 +9,16 @@ const WebTorrent = require('webtorrent')
 
 const glob = Promise.promisify(require('glob'))
 
+const eventBus = require('./event-bus')
 const ipc = require('./ipc')
 const queue = require('./episode-queue')
 const util = require('./util')
 
 const webTorrent = new WebTorrent()
+
+const focusApp = () => {
+  eventBus.emit('focus')
+}
 
 const videoExtensions = ['mkv', 'avi', 'mp4', 'm4v']
 const standardizeName = (name) => name.replace(/[ \'\"\.\-]/g, '').toLowerCase()
@@ -30,6 +35,8 @@ const selectFile = (episode, directory, filePaths) => {
   }))
 
   queue.update(episode.id, { state: queue.SELECT_FILE, files })
+  focusApp()
+
 
   return ipc.request('select:file', episode.id)
   .then((file) => {
@@ -130,6 +137,8 @@ const getFileFromDisk = (episode) => {
 
 const selectTorrent = (episode, torrents) => {
   queue.update(episode.id, { state: queue.SELECT_TORRENT, torrents })
+  focusApp()
+
 
   return ipc.request('select:torrent', episode.id)
   .then((torrent) => {
