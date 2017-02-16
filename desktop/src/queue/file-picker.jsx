@@ -6,6 +6,7 @@ const FilePicker = ({ files, onSelect }) => (
     <ul>
       {_.map(files, (file) => (
         <li key={file.path} onClick={() => onSelect(file)}>
+          <i className='fa fa-file-movie-o' />
           {file.relativePath}
         </li>
       ))}
