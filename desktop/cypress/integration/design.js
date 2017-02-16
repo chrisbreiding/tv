@@ -32,6 +32,44 @@ describe('design', () => {
     })
   })
 
+  it('notifications', () => {
+    const notify = (notification) => {
+      ipc.on.withArgs('notification').yield(null, notification)
+    }
+
+    notify({
+      title: 'This is a good one with details',
+      message: 'These are the\n\n**details**',
+      type: 'success',
+    })
+    notify({
+      title: 'This is a good one without details',
+      type: 'success',
+    })
+    notify({
+      title: 'This is a neutral one with details',
+      message: 'These are the\n\n**details**',
+      type: 'info',
+    })
+    notify({
+      title: 'This is a neutral one without details',
+      type: 'info',
+    })
+    notify({
+      title: 'This is a bad one with details',
+      message: 'These are the\n\n**details**',
+      type: 'error',
+    })
+    notify({
+      title: 'This is a bad one without details',
+      type: 'error',
+    })
+  })
+
+  it('plex credentials', () => {
+    ipc.on.withArgs('get:plex:credentials:request').yield()
+  })
+
   it('queue', () => {
     const addEpisode = (id, season, episode_number, displayName) => {
       ipc.on.withArgs('queue:episode:added').yield(null, {
