@@ -43,7 +43,7 @@ const maybeRefreshPlex = () => {
   }
 }
 
-const notifyError = (episode) => ({ message, details }) => {
+const notifyError = (episode) => ({ message, details, isCancellationError }) => {
   return queue.update(episode.id, {
     state: queue.FAILED,
     info: { title: message, message: details },
@@ -84,7 +84,7 @@ module.exports = (episode, moveOnly) => {
   .then(moveFile(episode))
   .then(notifySuccess(episode, moveOnly))
   .then(maybeRefreshPlex)
-  .catch(util.CancelationError, notifyCanceled(episode))
+  .catch({ isCancellationError: true }, notifyCanceled(episode))
   .catch(Promise.AggregateError, notifyErrors(episode))
   .catch(notHandlingError, massageUncaughtError(episode))
   .catch(notifyError(episode))

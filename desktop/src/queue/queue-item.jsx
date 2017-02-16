@@ -7,13 +7,9 @@ import Tooltip from '@cypress/react-tooltip'
 
 import FilePicker from './file-picker'
 import TorrentPicker from './torrent-picker'
+import { states } from './queue-item-model'
 
 import util from '../lib/util'
-
-const DOWNLOADING_TORRENT = 'DOWNLOADING_TORRENT'
-const FINISHED = 'FINISHED'
-const CANCELED = 'CANCELED'
-const FAILED = 'FAILED'
 
 const statusClass = (state) => _.kebabCase(state.toLowerCase())
 
@@ -33,9 +29,9 @@ const DownloadProgress = ({ info }) => {
 
 const StatusInfoButton = ({ state, onToggle }) => {
   switch (state) {
-    case CANCELED:
-    case FINISHED:
-    case FAILED:
+    case states.CANCELED:
+    case states.FINISHED:
+    case states.FAILED:
       return (
         <button onClick={onToggle}>
           <i className='fa fa-info-circle' />
@@ -48,7 +44,7 @@ const StatusInfoButton = ({ state, onToggle }) => {
 
 const Status = ({ state, info, onToggleInfo }) => {
   switch (state) {
-    case DOWNLOADING_TORRENT:
+    case states.DOWNLOADING_TORRENT:
       return <DownloadProgress info={info} />
     default:
       return (
@@ -60,11 +56,11 @@ const Status = ({ state, info, onToggleInfo }) => {
   }
 }
 
-const ActionButton = ({ queueItem, onRemove }) => {
+const ActionButton = observer(({ queueItem, onRemove }) => {
   switch (queueItem.state) {
-    case CANCELED:
-    case FINISHED:
-    case FAILED:
+    case states.CANCELED:
+    case states.FINISHED:
+    case states.FAILED:
       return (
         <Tooltip title='Remove'>
           <button onClick={onRemove}>
@@ -72,16 +68,19 @@ const ActionButton = ({ queueItem, onRemove }) => {
           </button>
         </Tooltip>
       )
-    default:
+    case states.SELECT_TORRENT:
+    case states.SELECT_FILE:
       return (
         <Tooltip title='Cancel'>
-          <button className='cancel' onClick={() => {}}>
+          <button className='cancel' onClick={queueItem.onCancel}>
             <i className='fa fa-ban' />
           </button>
         </Tooltip>
       )
+    default:
+      return null
   }
-}
+})
 
 const md = new Markdown()
 
@@ -96,26 +95,27 @@ const Info = ({ info, showing }) => {
   )
 }
 
-const torrentPicker = (queueItem) => {
-  if (!queueItem.torrents.length) return null
+const Picker = ({ state, items, onSelect }) => {
+  if (!items.length) return null
 
-  return (
-    <TorrentPicker
-      torrents={queueItem.torrents}
-      onSelect={queueItem.onSelect}
-    />
-  )
-}
-
-const filePicker = (queueItem) => {
-  if (!queueItem.files.length) return null
-
-  return (
-    <FilePicker
-      files={queueItem.files}
-      onSelect={queueItem.onSelect}
-    />
-  )
+  switch (state) {
+    case states.SELECT_TORRENT:
+      return (
+        <TorrentPicker
+          torrents={items}
+          onSelect={onSelect}
+        />
+      )
+    case states.SELECT_FILE:
+      return (
+        <FilePicker
+          files={items}
+          onSelect={onSelect}
+        />
+      )
+    default:
+      return null
+  }
 }
 
 @observer
@@ -144,8 +144,7 @@ class QueueItem extends Component {
           </p>
         </div>
         <Info info={info} showing={this.showingInfo} />
-        {torrentPicker(queueItem)}
-        {filePicker(queueItem)}
+        <Picker {...queueItem} />
       </li>
     )
   }

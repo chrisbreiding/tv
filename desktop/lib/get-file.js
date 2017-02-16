@@ -20,6 +20,8 @@ const focusApp = () => {
   eventBus.emit('focus')
 }
 
+const notCancelationError = (error) => !error.isCancellationError
+
 const videoExtensions = ['mkv', 'avi', 'mp4', 'm4v']
 const standardizeName = (name) => name.replace(/[ \'\"\.\-]/g, '').toLowerCase()
 const pad = (num) => num < 10 ? `0${num}` : `${num}`
@@ -34,16 +36,21 @@ const selectFile = (episode, directory, filePaths) => {
     relativePath: filePath.replace(directory, ''),
   }))
 
-  queue.update(episode.id, { state: queue.SELECT_FILE, files })
+  queue.update(episode.id, { state: queue.SELECT_FILE, items: files })
   focusApp()
 
+  const clear = () => queue.update(episode.id, { items: [] })
 
   return ipc.request('select:file', episode.id)
   .then((file) => {
-    queue.update(episode.id, { files: [] })
+    clear()
     return file.path
   })
-  .catch(util.wrapCancelationError('Canceled selecting file'))
+  .catch({ message: 'cancel' }, () => {
+    clear()
+    throw new util.CancelationError('Canceled selecting file')
+  })
+  .catch(notCancelationError, util.wrapHandlingError('Error selecting file'))
 }
 
 const matchesEpisode = (episode, name) => {
@@ -88,10 +95,6 @@ const promptForFile = (episode, directory) => {
 }
 
 const getFileMatchingEpisode = (episode, directory) => (filePaths = []) => {
-  if (!filePaths.length) {
-    return promptForFile(episode, directory)
-  }
-
   const matchingFilePaths = _.filter(filePaths, (filePath) => {
     const fileName = path.basename(filePath)
     return (
@@ -103,6 +106,8 @@ const getFileMatchingEpisode = (episode, directory) => (filePaths = []) => {
 
   if (matchingFilePaths.length === 1) {
     return matchingFilePaths[0]
+  } else if (!matchingFilePaths.length) {
+    return promptForFile(episode, directory)
   } else {
     return selectFile(episode, directory, matchingFilePaths)
   }
@@ -136,16 +141,21 @@ const getFileFromDisk = (episode) => {
 }
 
 const selectTorrent = (episode, torrents) => {
-  queue.update(episode.id, { state: queue.SELECT_TORRENT, torrents })
+  queue.update(episode.id, { state: queue.SELECT_TORRENT, items: torrents })
   focusApp()
 
+  const clear = () => queue.update(episode.id, { items: [] })
 
   return ipc.request('select:torrent', episode.id)
   .then((torrent) => {
-    queue.update(episode.id, { torrents: [] })
+    clear()
     return torrent.magnetLink
   })
-  .catch(util.wrapCancelationError('Canceled selecting torrent'))
+  .catch({ message: 'cancel' }, () => {
+    clear()
+    throw new util.CancelationError('Canceled selecting torrent')
+  })
+  .catch(notCancelationError, util.wrapHandlingError('Error selecting torrent'))
 }
 
 const getTorrentLink = (episode) => {
@@ -180,7 +190,7 @@ const getTorrentLink = (episode) => {
     return selectTorrent(episode, matches)
   })
   .catch(Promise.TimeoutError, util.wrapHandlingError('Timed out searching for torrents'))
-  .catch(util.wrapHandlingError('Error searching for torrents'))
+  .catch(notCancelationError, util.wrapHandlingError('Error searching for torrents'))
 }
 
 const downloadTorrent = (episode, directory) => (magnetLink) => {

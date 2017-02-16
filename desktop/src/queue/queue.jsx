@@ -4,12 +4,9 @@ import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 
 import QueueItem from './queue-item'
-import QueueItemModel from './queue-item-model'
+import QueueItemModel, { states } from './queue-item-model'
 
 import ipc from '../lib/ipc'
-
-const SELECT_TORRENT = 'SELECT_TORRENT'
-const SELECT_FILE = 'SELECT_FILE'
 
 @observer
 class Queue extends Component {
@@ -36,12 +33,11 @@ class Queue extends Component {
 
   componentDidMount () {
     ipc('fetch:queue').then(action((queueItems) => {
-      console.log(queueItems)
       _.each(queueItems, (queueItem) => {
         this._add(queueItem)
-        if (queueItem.state === SELECT_TORRENT) {
+        if (queueItem.state === states.SELECT_TORRENT) {
           this._handleSelect(queueItem.id, 'torrent')
-        } else if (queueItem.state === SELECT_FILE) {
+        } else if (queueItem.state === states.SELECT_FILE) {
           this._handleSelect(queueItem.id, 'file')
         }
       })
@@ -86,7 +82,7 @@ class Queue extends Component {
 
     this._update({
       id,
-      onCancel ()          { respond({ message: 'User canceled' }) },
+      onCancel ()          { respond({ message: 'cancel' }) },
       onSelect (selection) { respond(null, selection) },
     })
   }
