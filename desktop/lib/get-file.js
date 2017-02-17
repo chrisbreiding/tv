@@ -180,7 +180,10 @@ const getTorrentLink = (episode) => {
         return matches[0].magnetLink
       }
     } else {
-      matches = results
+      matches = _(results)
+        .sortBy((result) => Number(result.seeders))
+        .reverse()
+        .value()
     }
 
     if (!matches.length) {
