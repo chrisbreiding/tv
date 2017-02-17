@@ -36,10 +36,10 @@ const selectFile = (episode, directory, filePaths) => {
     relativePath: filePath.replace(directory, ''),
   }))
 
-  queue.update(episode.id, { state: queue.SELECT_FILE, items: files })
+  queue.update({ id: episode.id, state: queue.SELECT_FILE, items: files })
   focusApp()
 
-  const clear = () => queue.update(episode.id, { items: [] })
+  const clear = () => queue.update({ id: episode.id, items: [] })
 
   return ipc.request('select:file', episode.id)
   .then((file) => {
@@ -134,17 +134,17 @@ const getFileFromDisk = (episode) => {
         `Tried to use *${util.tildeify(filePath)}*\nfor **${episode.fileName}**,\nbut being used for **${otherEpisodeUsingFile.fileName}**`
       )
     } else {
-      queue.update(episode.id, { filePath })
+      queue.update({ id: episode.id, filePath })
       return filePath
     }
   })
 }
 
 const selectTorrent = (episode, torrents) => {
-  queue.update(episode.id, { state: queue.SELECT_TORRENT, items: torrents })
+  queue.update({ id: episode.id, state: queue.SELECT_TORRENT, items: torrents })
   focusApp()
 
-  const clear = () => queue.update(episode.id, { items: [] })
+  const clear = () => queue.update({ id: episode.id, items: [] })
 
   return ipc.request('select:torrent', episode.id)
   .then((torrent) => {
@@ -159,7 +159,7 @@ const selectTorrent = (episode, torrents) => {
 }
 
 const getTorrentLink = (episode) => {
-  queue.update(episode.id, { state: queue.SEARCHING_TORRENTS })
+  queue.update({ id: episode.id, state: queue.SEARCHING_TORRENTS })
 
   const search = TF.search(episode.show.searchName, {
     category: '205', // TV Shows
@@ -195,7 +195,8 @@ const getTorrentLink = (episode) => {
 
 const downloadTorrent = (episode, directory) => (magnetLink) => {
   return new Promise((resolve, reject) => {
-    queue.update(episode.id, {
+    queue.update({
+      id: episode.id,
       state: queue.DOWNLOADING_TORRENT,
       info: {
         progress: 0,
@@ -205,7 +206,8 @@ const downloadTorrent = (episode, directory) => (magnetLink) => {
 
     webTorrent.add(magnetLink, { path: directory }, (torrent) => {
       const statusPollingId = setInterval(() => {
-        queue.update(episode.id, {
+        queue.update({
+          id: episode.id,
           info: {
             progress: torrent.progress, // from 0 to 1
             timeRemaining: torrent.timeRemaining, // in milliseconds
@@ -215,7 +217,7 @@ const downloadTorrent = (episode, directory) => (magnetLink) => {
 
       torrent.on('done', () => {
         clearInterval(statusPollingId)
-        queue.update(episode.id, { state: queue.REMOVING_TORRENT, info: null })
+        queue.update({ id: episode.id, state: queue.REMOVING_TORRENT, info: null })
         const filePaths = _.map(torrent.files, (file) => {
           return path.join(directory, file.path)
         })

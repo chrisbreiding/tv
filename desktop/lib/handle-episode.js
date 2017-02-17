@@ -11,7 +11,8 @@ const runPreflight = require('./run-preflight')
 const util = require('./util')
 
 const notifyCanceled = (episode) => (error) => {
-  return queue.update(episode.id, {
+  return queue.update({
+    id: episode.id,
     state: queue.CANCELED,
     info: { title: error.message },
   })
@@ -23,7 +24,8 @@ const notifySuccess = (episode, moveOnly) => ([from, to]) => {
     `*${util.tildeify(from)}*\nrenamed and moved to\n*${util.tildeify(to)}*` :
     `*${episode.fileName}*\ndownloaded and moved to\n*${util.tildeify(to)}*`
 
-  return queue.update(episode.id, {
+  return queue.update({
+    id: episode.id,
     state: queue.FINISHED,
     info: { title, message },
   })
@@ -44,7 +46,8 @@ const maybeRefreshPlex = () => {
 }
 
 const notifyError = (episode) => ({ message, details }) => {
-  return queue.update(episode.id, {
+  return queue.update({
+    id: episode.id,
     state: queue.FAILED,
     info: { title: message, message: details },
   })
@@ -74,7 +77,8 @@ const notifyErrors = (episode) => (errors) => {
 module.exports = (episode, moveOnly) => {
   if (queue.has(episode.id)) return
 
-  queue.add(episode.id, {
+  queue.add({
+    id: episode.id,
     episode,
     state: queue.STARTED,
   })

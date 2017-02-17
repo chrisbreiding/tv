@@ -1,24 +1,29 @@
 const _ = require('lodash')
 const ipc = require('./ipc')
 
-const queue = {}
+let queue = []
 
 module.exports = {
-  add (id, data) {
-    queue[id] = data
-    queue[id].id = id
+  add (data) {
+    queue.push(data)
     ipc.send('queue:episode:added', data)
     return null
   },
 
-  update (id, partialData) {
-    queue[id] = _.extend(queue[id], partialData)
-    ipc.send('queue:episode:updated', queue[id])
+  update (partialData) {
+    const { id } = partialData
+    const item = _.find(queue, { id })
+    if (!item) {
+      console.error(`Tried to update queue item (with id '${id}') that does not exist`) // eslint-disable-line no-console
+      return
+    }
+    _.extend(item, partialData)
+    ipc.send('queue:episode:updated', item)
     return null
   },
 
   remove (id) {
-    delete queue[id]
+    queue = _.filter(queue, (item) => item.id !== id)
   },
 
   find (query) {
@@ -26,15 +31,15 @@ module.exports = {
   },
 
   has (id) {
-    return !!queue[id]
+    return !!this.find({ id })
   },
 
   size () {
-    return _.size(queue)
+    return queue.length
   },
 
   items () {
-    return _.values(queue)
+    return queue
   },
 
   STARTED: 'STARTED',

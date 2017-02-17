@@ -18,7 +18,7 @@ const ensureSeasonDirectory = (episode, directories, filePath) => {
 }
 
 const copyFile = (episode) => ([filePath, newDirectory]) => {
-  queue.update(episode.id, { state: queue.COPYING_FILE })
+  queue.update({ id: episode.id, state: queue.COPYING_FILE })
 
   const extension = path.extname(filePath)
   const newFileName = sanitize(episode.fileName)
@@ -35,7 +35,7 @@ const copyFile = (episode) => ([filePath, newDirectory]) => {
 }
 
 const trashOriginal = (episode, directories) => ([filePath, newFilePath]) => {
-  queue.update(episode.id, { state: queue.TRASHING_TORRENT_FILES })
+  queue.update({ id: episode.id, state: queue.TRASHING_TORRENT_FILES })
 
   // assumes file will only ever be in downloads or one level deep
   let toDelete = path.dirname(filePath)
