@@ -73,9 +73,12 @@ class Queue extends Component {
   }
 
   _handleCancelCallback (queueItem) {
-    queueItem.onCancel = this._isCancelable(queueItem) ?
-      this._cancel(queueItem) :
-      null
+    if (this._isCancelable(queueItem)) {
+      queueItem.onCancel = () => {
+        queueItem.onCancel = null
+        ipc.send(`cancel:queue:item:${queueItem.id}`)
+      }
+    }
   }
 
   _isCancelable (queueItem) {
@@ -83,10 +86,6 @@ class Queue extends Component {
       queueItem.state === states.SEARCHING_TORRENTS ||
       queueItem.state === states.DOWNLOADING_TORRENT
     )
-  }
-
-  _cancel = (queueItem) => () => {
-    ipc.send(`cancel:queue:item:${queueItem.id}`)
   }
 
   _remove = (id) => () => {
