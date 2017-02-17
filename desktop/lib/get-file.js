@@ -170,7 +170,7 @@ const getTorrentLink = (episode) => {
   .timeout(10000)
   .then((results) => {
     let matches = _(results)
-      .filter((result) =>  matchesEpisode(episode, result.name))
+      .filter((result) => matchesEpisode(episode, result.name))
       .sortBy((result) => Number(result.seeders))
       .reverse()
       .value()
@@ -181,6 +181,10 @@ const getTorrentLink = (episode) => {
       }
     } else {
       matches = results
+    }
+
+    if (!matches.length) {
+      throw new util.HandlingError('Could not find any torrents for episode')
     }
 
     return selectTorrent(episode, matches)
