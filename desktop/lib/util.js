@@ -46,6 +46,12 @@ class CancelationError extends Error {
   }
 }
 
+const wrapCancelationError = (message) => () => {
+  throw new CancelationError(message)
+}
+
+const notCancelationError = (error) => !error.isCancellationError
+
 class HandlingError extends Error {
   constructor (message, details, stack) {
     super(message)
@@ -53,10 +59,6 @@ class HandlingError extends Error {
     this.details = details
     this.stack = stack
   }
-}
-
-const wrapCancelationError = (message) => () => {
-  throw new CancelationError(message)
 }
 
 const wrapHandlingError = (message) => (error) => {
@@ -71,6 +73,30 @@ const setPlexToken = (token) => {
   return config.set('plexToken', token)
 }
 
+const pad = (num) => num < 10 ? `0${num}` : `${num}`
+const standardizeName = (name) => name.replace(/[ \'\"\.\-]/g, '').toLowerCase()
+const matchesEpisodeName = (episode, name) => {
+  name = standardizeName(name)
+  const showName = standardizeName(episode.show.searchName)
+  const season = episode.season
+  const epNum = episode.episode_number
+  const paddedSeason = pad(season)
+  const paddedEpNum = pad(epNum)
+  const seasonAndEpisodes = [
+    `${season}${epNum}`,
+    `${season}${paddedEpNum}`,
+    `${paddedSeason}${paddedEpNum}`,
+    `s${season}e${epNum}`,
+    `s${season}e${paddedEpNum}`,
+    `s${paddedSeason}e${paddedEpNum}`,
+  ]
+
+  return (
+    _.includes(name, showName) &&
+    _.some(seasonAndEpisodes, _.partial(_.includes, name))
+  )
+}
+
 module.exports = {
   isDev,
   getDirectories,
@@ -80,9 +106,12 @@ module.exports = {
   logError,
   tildeify,
   CancelationError,
-  HandlingError,
   wrapCancelationError,
+  notCancelationError,
+  HandlingError,
   wrapHandlingError,
   getPlexToken,
   setPlexToken,
+  pad,
+  matchesEpisodeName,
 }
