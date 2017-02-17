@@ -35,8 +35,12 @@ export default {
     pingDesktop(callback)
   },
 
-  handleEpisode (episode) {
-    return axios.post(desktopBaseUrl, { episode })
+  moveEpisode (episode) {
+    return axios.post(`${desktopBaseUrl}/move`, { episode })
+  },
+
+  downloadEpisode (episode) {
+    return axios.post(`${desktopBaseUrl}/download`, { episode })
   },
 
   getShows () {

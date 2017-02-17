@@ -1,12 +1,12 @@
 'use strict'
 
 const bodyParser = require('body-parser')
-const { EventEmitter } = require('events')
 const express = require('express')
 const Promise = require('bluebird')
 
+const eventBus = require('./event-bus')
+
 const allowedDomains = /^(https?:\/\/tv\.crbapps\.com|http:\/\/localhost:800\d)/
-const emitter = new EventEmitter()
 const app = express()
 
 app.use((req, res, next) => {
@@ -22,18 +22,21 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json())
 
-app.post('/', (req, res) => {
-  emitter.emit('handle:episode', req.body.episode)
-  res.sendStatus(200)
-})
-
 app.get('/ping', (req, res) => {
   res.sendStatus(200)
 })
 
-module.exports = {
-  on: emitter.on.bind(emitter),
+app.post('/move', (req, res) => {
+  eventBus.emit('handle:episode', req.body.episode, true)
+  res.sendStatus(200)
+})
 
+app.post('/download', (req, res) => {
+  eventBus.emit('handle:episode', req.body.episode, false)
+  res.sendStatus(200)
+})
+
+module.exports = {
   start () {
     return new Promise((resolve, reject) => {
       this.server = app.listen(4192, () => {

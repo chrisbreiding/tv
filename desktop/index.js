@@ -60,11 +60,11 @@ ipc.on('fetch:queue', (respond) => {
   respond(null, queue.items())
 })
 
-server.on('handle:episode', (episode) => {
+eventBus.on('handle:episode', (episode, moveOnly) => {
   window.ensure()
   .then(() => {
     app.focus()
-    handleEpisode(episode)
+    handleEpisode(episode, moveOnly)
   })
 })
 

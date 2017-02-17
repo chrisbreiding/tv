@@ -43,7 +43,7 @@ const maybeRefreshPlex = () => {
   }
 }
 
-const notifyError = (episode) => ({ message, details, isCancellationError }) => {
+const notifyError = (episode) => ({ message, details }) => {
   return queue.update(episode.id, {
     state: queue.FAILED,
     info: { title: message, message: details },
