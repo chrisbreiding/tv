@@ -21,8 +21,8 @@ const notifyCanceled = (episode) => (error) => {
 const notifySuccess = (episode, moveOnly) => ([from, to]) => {
   const title = `Finished handling episode for **${episode.show.displayName}**`
   const message = moveOnly ?
-    `*${util.tildeify(from)}*\nrenamed and moved to\n*${util.tildeify(to)}*` :
-    `*${episode.fileName}*\ndownloaded and moved to\n*${util.tildeify(to)}*`
+    `*${util.tildeify(from)}*\n\nrenamed and moved to\n\n*${util.tildeify(to)}*` :
+    `*${episode.fileName}*\n\ndownloaded and moved to\n\n*${util.tildeify(to)}*`
 
   return queue.update({
     id: episode.id,
