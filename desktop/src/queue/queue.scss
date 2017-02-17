@@ -208,7 +208,8 @@ $canceled-color: darken($neutral-color, 20%);
   }
 
   .name span,
-  .upload-date span {
+  .upload-date span,
+  .uploader {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;

@@ -42,14 +42,9 @@ const selectFile = (episode, directory, filePaths) => {
   const clear = () => queue.update({ id: episode.id, items: [] })
 
   return ipc.request('select:file', episode.id)
-  .then((file) => {
-    clear()
-    return file.path
-  })
-  .catch({ message: 'cancel' }, () => {
-    clear()
-    throw new util.CancelationError('Canceled selecting file')
-  })
+  .tap(clear)
+  .get('path')
+  .catch({ message: 'cancel' }, util.wrapCancelationError('Canceled selecting file'))
   .catch(notCancelationError, util.wrapHandlingError('Error selecting file'))
 }
 
@@ -147,14 +142,9 @@ const selectTorrent = (episode, torrents) => {
   const clear = () => queue.update({ id: episode.id, items: [] })
 
   return ipc.request('select:torrent', episode.id)
-  .then((torrent) => {
-    clear()
-    return torrent.magnetLink
-  })
-  .catch({ message: 'cancel' }, () => {
-    clear()
-    throw new util.CancelationError('Canceled selecting torrent')
-  })
+  .tap(clear)
+  .get('magnetLink')
+  .catch({ message: 'cancel' }, util.wrapCancelationError('Canceled selecting torrent'))
   .catch(notCancelationError, util.wrapHandlingError('Error selecting torrent'))
 }
 

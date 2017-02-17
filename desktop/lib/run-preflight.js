@@ -24,9 +24,7 @@ const verifyBaseDirectoriesSet = (directories) => {
 
 const directoryExists = (directoryPath, name) => {
   return fs.statAsync(directoryPath)
-  .catch(() => {
-    throw new util.HandlingError(`The ${name} directory, **${directoryPath}**, does not exist`)
-  })
+  .catch(util.wrapHandlingError(`The ${name} directory, **${directoryPath}**, does not exist`))
   .then((stats) => {
     if (!stats.isDirectory()) {
       throw new util.HandlingError(`The ${name} directory, **${directoryPath}**, is not a directory`)
