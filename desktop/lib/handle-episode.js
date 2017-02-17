@@ -32,9 +32,7 @@ const notifySuccess = (episode, moveOnly) => ([from, to]) => {
 }
 
 const maybeRefreshPlex = () => {
-  // size doesn't go to 0 until later, so assume the queue is finished
-  // when there's 1 left
-  if (queue.size() === 1) {
+  if (!queue.size() && queue.numSucceeded() > 0) {
     return plex.refresh()
     .then(() => {
       return ipc.send('notification', {
@@ -87,12 +85,12 @@ module.exports = (episode, moveOnly) => {
   .then(getFile(episode)[moveOnly ? 'select' : 'download'])
   .then(moveFile(episode))
   .then(notifySuccess(episode, moveOnly))
-  .then(maybeRefreshPlex)
   .catch({ isCancellationError: true }, notifyCanceled(episode))
   .catch(Promise.AggregateError, notifyErrors(episode))
   .catch(notHandlingError, massageUncaughtError(episode))
   .catch(notifyError(episode))
   .finally(() => {
     queue.remove(episode.id)
+    return maybeRefreshPlex()
   })
 }

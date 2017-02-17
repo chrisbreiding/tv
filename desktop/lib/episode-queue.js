@@ -2,6 +2,7 @@ const _ = require('lodash')
 const ipc = require('./ipc')
 
 let queue = []
+let numSucceeded = 0
 
 module.exports = {
   add (data) {
@@ -19,11 +20,18 @@ module.exports = {
     }
     _.extend(item, partialData)
     ipc.send('queue:episode:updated', item)
+    if (item.state === this.FINISHED) {
+      numSucceeded++
+    }
     return null
   },
 
   remove (id) {
     queue = _.filter(queue, (item) => item.id !== id)
+  },
+
+  clear () {
+    numSucceeded = 0
   },
 
   find (query) {
@@ -36,6 +44,10 @@ module.exports = {
 
   size () {
     return queue.length
+  },
+
+  numSucceeded () {
+    return numSucceeded
   },
 
   items () {
