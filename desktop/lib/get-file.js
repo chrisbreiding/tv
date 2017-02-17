@@ -152,15 +152,18 @@ const selectTorrent = (episode, torrents) => {
 const getTorrentLink = (episode) => {
   queue.update({ id: episode.id, state: queue.SEARCHING_TORRENTS })
 
+  const off = () => ipc.off(`cancel:queue:item:${episode.id}`)
+
   return new Promise((resolve, reject) => {
-    TF.search(episode.show.searchName, {
+    const search = TF.search(episode.show.searchName, {
       category: '205', // TV Shows
       orderBy: 'date',
       sortBy: 'desc',
       filter: { verified: false },
     })
-    .then((results) => resolve(results))
-    .catch((error) => reject(error))
+    Promise.resolve(search)
+    .then((results) => { off(); resolve(results) })
+    .catch((error) => { off(); reject(error) })
 
     ipc.once(`cancel:queue:item:${episode.id}`, () => {
       queue.update({ id: episode.id, state: queue.CANCELING })
@@ -194,9 +197,7 @@ const getTorrentLink = (episode) => {
   })
   .catch(Promise.TimeoutError, util.wrapHandlingError('Timed out searching for torrents'))
   .catch(notCancelationError, util.wrapHandlingError('Error searching for torrents'))
-  .finally(() => {
-    ipc.off(`cancel:queue:item:${episode.id}`)
-  })
+  .finally(off)
 }
 
 const downloadTorrent = (episode, directory) => (magnetLink) => {
