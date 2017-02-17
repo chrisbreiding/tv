@@ -27,8 +27,10 @@ const DownloadProgress = ({ info }) => {
   )
 }
 
-const StatusInfoButton = ({ state, onToggle }) => {
-  switch (state) {
+const StatusInfoButton = observer(({ queueItem, onToggle }) => {
+  if (!queueItem.info || !queueItem.info.title) return null
+
+  switch (queueItem.state) {
     case states.CANCELED:
     case states.FINISHED:
     case states.FAILED:
@@ -40,21 +42,21 @@ const StatusInfoButton = ({ state, onToggle }) => {
     default:
       return null
   }
-}
+})
 
-const Status = ({ state, info, onToggleInfo }) => {
-  switch (state) {
+const Status = observer(({ queueItem, onToggleInfo }) => {
+  switch (queueItem.state) {
     case states.DOWNLOADING_TORRENT:
-      return <DownloadProgress info={info} />
+      return <DownloadProgress info={queueItem.info} />
     default:
       return (
         <p className='status'>
-          {_.startCase(state.toLowerCase())}
-          <StatusInfoButton state={state} onToggle={onToggleInfo} />
+          {_.startCase(queueItem.state.toLowerCase())}
+          <StatusInfoButton queueItem={queueItem} onToggle={onToggleInfo} />
         </p>
       )
   }
-}
+})
 
 const ActionButton = observer(({ queueItem, onRemove }) => {
   switch (queueItem.state) {
@@ -68,6 +70,8 @@ const ActionButton = observer(({ queueItem, onRemove }) => {
           </button>
         </Tooltip>
       )
+    case states.SEARCHING_TORRENTS:
+    case states.DOWNLOADING_TORRENT:
     case states.SELECT_TORRENT:
     case states.SELECT_FILE:
       return (
@@ -84,8 +88,9 @@ const ActionButton = observer(({ queueItem, onRemove }) => {
 
 const md = new Markdown()
 
-const Info = ({ info, showing }) => {
-  if (!info || !showing) return null
+const Info = ({ queueItem, showing }) => {
+  const { info } = queueItem
+  if (!info || !info.title || !showing) return null
 
   return (
     <div className='info'>
@@ -95,7 +100,8 @@ const Info = ({ info, showing }) => {
   )
 }
 
-const Picker = ({ state, items, onSelect }) => {
+const Picker = observer(({ queueItem }) => {
+  const { state, items, onSelect } = queueItem
   if (!items.length) return null
 
   switch (state) {
@@ -116,7 +122,7 @@ const Picker = ({ state, items, onSelect }) => {
     default:
       return null
   }
-}
+})
 
 @observer
 class QueueItem extends Component {
@@ -124,7 +130,7 @@ class QueueItem extends Component {
 
   render () {
     const { queueItem, onRemove } = this.props
-    const { episode, info } = queueItem
+    const { episode } = queueItem
     const epNum = `${episode.season}${util.pad(episode.episode_number)}`
     const showName = episode.show.displayName
 
@@ -138,13 +144,13 @@ class QueueItem extends Component {
               <span>{showName}</span>
             </Tooltip>
           </p>
-          <Status {...queueItem} onToggleInfo={this._toggleInfo} />
+          <Status queueItem={queueItem} onToggleInfo={this._toggleInfo} />
           <p className='action'>
             <ActionButton queueItem={queueItem} onRemove={onRemove} />
           </p>
         </div>
-        <Info info={info} showing={this.showingInfo} />
-        <Picker {...queueItem} />
+        <Info queueItem={queueItem} showing={this.showingInfo} />
+        <Picker queueItem={queueItem} />
       </li>
     )
   }

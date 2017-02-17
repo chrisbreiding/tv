@@ -61,13 +61,32 @@ class Queue extends Component {
   }
 
   _add (queueItem) {
+    this._handleCancelCallback(queueItem)
     this.queue.set(queueItem.id, new QueueItemModel(queueItem))
   }
 
   @action _update (queueItem) {
     if (this.queue.has(queueItem.id)) {
+      this._handleCancelCallback(queueItem)
       _.extend(this.queue.get(queueItem.id), queueItem)
     }
+  }
+
+  _handleCancelCallback (queueItem) {
+    queueItem.onCancel = this._isCancelable(queueItem) ?
+      this._cancel(queueItem) :
+      null
+  }
+
+  _isCancelable (queueItem) {
+    return (
+      queueItem.state === states.SEARCHING_TORRENTS ||
+      queueItem.state === states.DOWNLOADING_TORRENT
+    )
+  }
+
+  _cancel = (queueItem) => () => {
+    ipc.send(`cancel:queue:item:${queueItem.id}`)
   }
 
   _remove = (id) => () => {

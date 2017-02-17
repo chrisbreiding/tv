@@ -13,6 +13,9 @@ const on = (requestName, callback) => {
   })
 }
 
+const once = ipcMain.once.bind(ipcMain)
+const off = ipcMain.removeAllListeners.bind(ipcMain)
+
 const request = (requestName, id, ...args) => {
   return window.ensure().then((win) => {
     return new Promise((resolve, reject) => {
@@ -36,6 +39,8 @@ const send = (eventName, ...args) => {
 
 module.exports = {
   on,
+  once,
+  off,
   request,
   send,
 }

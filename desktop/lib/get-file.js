@@ -5,6 +5,7 @@ const { dialog } = require('electron')
 const path = require('path')
 const Promise = require('bluebird')
 const TF = require('teeeff')
+const trash = require('trash')
 const WebTorrent = require('webtorrent')
 
 const glob = Promise.promisify(require('glob'))
@@ -151,27 +152,32 @@ const selectTorrent = (episode, torrents) => {
 const getTorrentLink = (episode) => {
   queue.update({ id: episode.id, state: queue.SEARCHING_TORRENTS })
 
-  const search = TF.search(episode.show.searchName, {
-    category: '205', // TV Shows
-    orderBy: 'date',
-    sortBy: 'desc',
-    filter: { verified: false },
-  })
+  return new Promise((resolve, reject) => {
+    TF.search(episode.show.searchName, {
+      category: '205', // TV Shows
+      orderBy: 'date',
+      sortBy: 'desc',
+      filter: { verified: false },
+    })
+    .then((results) => resolve(results))
+    .catch((error) => reject(error))
 
-  return Promise.resolve(search)
+    ipc.once(`cancel:queue:item:${episode.id}`, () => {
+      queue.update({ id: episode.id, state: queue.CANCELING })
+      reject(new util.CancelationError('Canceled searching for torrents'))
+    })
+  })
   .timeout(10000)
   .then((results) => {
     let matches = _(results)
-      .filter((result) => {
-        return matchesEpisode(episode, result.name)
-      })
+      .filter((result) =>  matchesEpisode(episode, result.name))
       .sortBy((result) => Number(result.seeders))
       .reverse()
       .value()
 
     if (matches.length) {
       if (Number(matches[0].seeders) > 100) {
-        return Promise.resolve(matches[0].magnetLink)
+        return matches[0].magnetLink
       }
     } else {
       matches = results
@@ -181,10 +187,13 @@ const getTorrentLink = (episode) => {
   })
   .catch(Promise.TimeoutError, util.wrapHandlingError('Timed out searching for torrents'))
   .catch(notCancelationError, util.wrapHandlingError('Error searching for torrents'))
+  .finally(() => {
+    ipc.off(`cancel:queue:item:${episode.id}`)
+  })
 }
 
 const downloadTorrent = (episode, directory) => (magnetLink) => {
-  return new Promise((resolve, reject) => {
+  const download = new Promise((resolve, reject) => {
     queue.update({
       id: episode.id,
       state: queue.DOWNLOADING_TORRENT,
@@ -194,8 +203,10 @@ const downloadTorrent = (episode, directory) => (magnetLink) => {
       },
     })
 
+    let statusPollingId
+
     webTorrent.add(magnetLink, { path: directory }, (torrent) => {
-      const statusPollingId = setInterval(() => {
+      statusPollingId = setInterval(() => {
         queue.update({
           id: episode.id,
           info: {
@@ -217,14 +228,34 @@ const downloadTorrent = (episode, directory) => (magnetLink) => {
       })
 
       torrent.on('error', (error) => {
+        clearInterval(statusPollingId)
         reject(new util.HandlingError('Error downloading torrent', error.message))
+      })
+
+      ipc.once(`cancel:queue:item:${episode.id}`, () => {
+        queue.update({ id: episode.id, state: queue.CANCELING })
+        clearInterval(statusPollingId)
+        const filePaths = _.map(torrent.files, (file) => {
+          return path.join(directory, file.path)
+        })
+        torrent.destroy(() => {
+          // TODO: this destroys the files, but not any containing directories
+          trash(filePaths)
+          reject(new util.CancelationError('Canceled downloading torrent'))
+        })
       })
     })
 
     webTorrent.on('error', (error) => {
+      clearInterval(statusPollingId)
       reject(new util.HandlingError('Error downloading torrent', error.message))
     })
   })
+  .finally(() => {
+    ipc.off(`cancel:queue:item:${episode.id}`)
+  })
+
+  return download
 }
 
 const downloadFile = (episode) => {

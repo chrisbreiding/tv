@@ -14,13 +14,15 @@ class QueueItemModel {
     this.state = props.state
     this.episode = props.episode
 
-    if (props.info) this.info = props.info
-    if (props.items) this.items = props.items
+    if (props.info !== undefined) this.info = props.info
+    if (props.items !== undefined) this.items = props.items
+    if (props.onCancel !== undefined) this.onCancel = props.onCancel
   }
 }
 
 export const states = {
   SELECT_TORRENT: 'SELECT_TORRENT',
+  SEARCHING_TORRENTS: 'SEARCHING_TORRENTS',
   DOWNLOADING_TORRENT: 'DOWNLOADING_TORRENT',
   SELECT_FILE: 'SELECT_FILE',
   FINISHED: 'FINISHED',
