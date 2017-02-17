@@ -47,10 +47,11 @@ class CancelationError extends Error {
 }
 
 class HandlingError extends Error {
-  constructor (message, details) {
+  constructor (message, details, stack) {
     super(message)
     this.isHandlingError = true
     this.details = details
+    this.stack = stack
   }
 }
 
@@ -59,7 +60,7 @@ const wrapCancelationError = (message) => () => {
 }
 
 const wrapHandlingError = (message) => (error) => {
-  throw new HandlingError(message, error.message)
+  throw new HandlingError(message, error.message, error.stack)
 }
 
 const getPlexToken = () => {

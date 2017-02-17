@@ -43,7 +43,16 @@ const maybeRefreshPlex = () => {
   }
 }
 
-const notifyError = (episode) => ({ message, details }) => {
+const notifyError = (episode) => ({ message, details, stack }) => {
+  if (util.isDev) {
+    /* eslint-disable no-console */
+    console.error('Handling failure:')
+    console.error(message)
+    console.error(details)
+    console.error(stack)
+    /* eslint-enable no-console */
+  }
+
   return queue.update({
     id: episode.id,
     state: queue.FAILED,
