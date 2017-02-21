@@ -3,11 +3,7 @@ import { observer } from 'mobx-react'
 import React from 'react'
 import { Link } from 'react-router'
 
-function makeViewLink (link, searchName) {
-  return link
-    .replace(/%s/g, searchName)
-    .replace(/\[searchName]/g, searchName)
-}
+import util from '../lib/util'
 
 export default observer(({ id, searchName, viewLink }) => {
   return (
@@ -25,7 +21,7 @@ export default observer(({ id, searchName, viewLink }) => {
         </li>
         {_.map((viewLink || '').split(','), (link) => (
           <li key={link}>
-            <a href={makeViewLink(link, searchName)} title="View" target="_blank">
+            <a href={util.viewLink(link, searchName)} title="View" target="_blank">
               <i className="fa fa-eye"></i>
             </a>
           </li>

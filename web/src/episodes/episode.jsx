@@ -1,9 +1,12 @@
 import _ from 'lodash';
 import cs from 'classnames';
 import React, { Component } from 'react';
+
 import date from '../lib/date';
 import uiState from '../lib/ui-state';
 import api from '../data/api';
+import settingsStore from '../settings/settings-store';
+import util from '../lib/util';
 
 export default class Episode extends Component {
   constructor (props) {
@@ -78,9 +81,23 @@ export default class Episode extends Component {
   _options () {
     if (!uiState.desktopRunning) return null
 
+    const { episode, show } = this.props
+    const epNum = `s${util.pad(episode.season)}e${util.pad(episode.episode_number)}`
+
     return (
       <div className='options'>
         <ul>
+          {_.map((settingsStore.view_link || '').split(','), (link) => (
+            <li key={link}>
+              <a
+                href={`${util.viewLink(link, show.search_name, epNum)}`}
+                title="Search for episode"
+                target="_blank"
+              >
+                <i className="fa fa-search"></i>
+              </a>
+            </li>
+          ))}
           <li>
             <button title='Move episode' onClick={this._moveEpisode}>
               <i className='fa fa-random' />
