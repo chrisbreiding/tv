@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 
 import util from '../lib/util'
 
-export default observer(({ id, searchName, viewLink }) => {
+export default observer(({ id, searchName, searchLink }) => {
   return (
     <div className="options">
       <ul>
@@ -19,10 +19,10 @@ export default observer(({ id, searchName, viewLink }) => {
             <i className="fa fa-edit"></i>
           </Link>
         </li>
-        {_.map((viewLink || '').split(','), (link) => (
+        {_.map((searchLink || '').split(','), (link) => (
           <li key={link}>
-            <a href={util.viewLink(link, searchName)} title="View" target="_blank">
-              <i className="fa fa-eye"></i>
+            <a href={util.searchLink(link, searchName)} title="Search" target="_blank">
+              <i className="fa fa-search"></i>
             </a>
           </li>
         ))}

@@ -16,8 +16,8 @@ export default class Settings extends Component {
       <Modal className="settings" onClose={this._close} footerContent={this._controls()}>
         <form className="form" onSubmit={this._save}>
           <fieldset>
-            <label>View Link</label>
-            <AutoFocusedInput ref="viewLink" defaultValue={settingsStore.view_link} />
+            <label>Search Link</label>
+            <AutoFocusedInput ref="searchLink" defaultValue={settingsStore.search_link} />
           </fieldset>
         </form>
       </Modal>
@@ -36,7 +36,7 @@ export default class Settings extends Component {
   _save = (e) => {
     e.preventDefault();
     updateSettings({
-      view_link: this.refs.viewLink.value,
+      search_link: this.refs.searchLink.value,
     });
     this._close();
   }

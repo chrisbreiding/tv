@@ -87,11 +87,11 @@ export default class Episode extends Component {
     return (
       <div className='options'>
         <ul>
-          {_.map((settingsStore.view_link || '').split(','), (link) => (
+          {_.map((settingsStore.search_link || '').split(','), (link) => (
             <li key={link}>
               <a
-                href={`${util.viewLink(link, show.search_name, epNum)}`}
-                title="Search for episode"
+                href={`${util.searchLink(link, show.search_name, epNum)}`}
+                title="Search"
                 target="_blank"
               >
                 <i className="fa fa-search"></i>
@@ -99,12 +99,12 @@ export default class Episode extends Component {
             </li>
           ))}
           <li>
-            <button title='Move episode' onClick={this._moveEpisode}>
+            <button title='Move' onClick={this._moveEpisode}>
               <i className='fa fa-random' />
             </button>
           </li>
           <li>
-            <button title='Download episode' onClick={this._downloadEpisode}>
+            <button title='Download' onClick={this._downloadEpisode}>
               <i className='fa fa-cloud-download' />
             </button>
           </li>

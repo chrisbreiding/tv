@@ -25,7 +25,7 @@ export default class Shows extends Component {
      key={show.id}
      show={show}
      type={this.props.type}
-     viewLink={this.props.settings.view_link}
+     searchLink={this.props.settings.search_link}
     />;
   }
 }

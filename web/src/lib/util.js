@@ -1,4 +1,4 @@
-const viewLink = (link, searchName, episodeNumber) => {
+const  searchLink = (link, searchName, episodeNumber) => {
   const name = episodeNumber ? `${searchName} ${episodeNumber}` : searchName
 
   return link
@@ -9,6 +9,6 @@ const viewLink = (link, searchName, episodeNumber) => {
 const pad = (num) => num < 10 ? `0${num}` : `${num}`
 
 export default {
-  viewLink,
+  searchLink,
   pad,
 }
