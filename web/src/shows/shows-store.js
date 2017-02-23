@@ -13,7 +13,7 @@ class ShowsStore {
   }
 
   hasSourceShow (sourceShow) {
-    return !!this.shows.find((show) => show.source_id === sourceShow.id)
+    return !!this.shows.find((show) => show.sourceId === sourceShow.id)
   }
 
   @computed get recent () {
@@ -46,8 +46,8 @@ class ShowsStore {
   }
 
   _sortAlphabetically (a, b) {
-    const aName = a.display_name.toLowerCase();
-    const bName = b.display_name.toLowerCase();
+    const aName = a.displayName.toLowerCase();
+    const bName = b.displayName.toLowerCase();
     if (aName < bName) return -1;
     if (aName > bName) return 1;
     return 0;

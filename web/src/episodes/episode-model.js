@@ -11,14 +11,14 @@ function toTwoDigitString (num) {
 export default class EpisodeModel {
   @observable id;
   @observable season;
-  @observable episode_number;
+  @observable number;
   @observable title;
   @observable airdate;
 
   constructor (episode) {
     this.id = episode.id;
     this.season = episode.season;
-    this.episode_number = episode.episode_number;
+    this.number = episode.episode_number;
     this.title = _.trim(episode.title);
     this.airdate = moment(episode.airdate);
   }
@@ -36,8 +36,8 @@ export default class EpisodeModel {
 
   @computed get longEpisodeNumber () {
     let season = toTwoDigitString(this.season);
-    let episodeNumber = toTwoDigitString(this.episode_number);
-    return `s${season}e${episodeNumber}`;
+    let number = toTwoDigitString(this.number);
+    return `s${season}e${number}`;
   }
 
   @computed get shortEpisodeNumber () {
@@ -62,7 +62,7 @@ export default class EpisodeModel {
     return {
       id: this.id,
       season: this.season,
-      episode_number: this.episode_number,
+      episode_number: this.number,
       title: this.title,
       airdate: this.airdate.toISOString(),
     };

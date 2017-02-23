@@ -64,10 +64,10 @@ export default class SearchResults extends Component {
   _addShow (show) {
     const name = show.name;
     addShow({
-      display_name: name,
-      search_name: name,
-      file_name: name,
-      source_id: show.id,
+      displayName: name,
+      searchName: name,
+      fileName: name,
+      sourceId: show.id,
     });
 
     this.props.router.push('/');

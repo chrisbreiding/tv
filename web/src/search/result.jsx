@@ -15,8 +15,8 @@ export default observer(({ exists, show, onAddShow }) => {
         <img src={show.banner} />
         <h4>{show.name}</h4>
         <dl>
-          <dt className={cs({ 'no-value': !show.first_aired })}>First Aired</dt>
-          <dd>{date.shortString(show.first_aired)}</dd>
+          <dt className={cs({ 'no-value': !show.firstAired })}>First Aired</dt>
+          <dd>{date.shortString(show.firstAired)}</dd>
 
           <dt className={cs({ 'no-value': !show.network })}>Network</dt>
           <dd>{show.network}</dd>

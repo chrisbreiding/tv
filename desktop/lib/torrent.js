@@ -47,7 +47,7 @@ const getLink = (episode) => {
   const off = () => ipc.off(`cancel:queue:item:${episode.id}`)
 
   return new Promise((resolve, reject) => {
-    const epNum = `s${util.pad(episode.season)}e${util.pad(episode.episode_number)}`
+    const epNum = `s${util.pad(episode.season)}e${util.pad(episode.number)}`
     search(episode, `${episode.show.searchName} ${epNum}`)
     .then((results) => {
       return results.length ? results : search(episode, episode.show.searchName)
@@ -65,7 +65,11 @@ const getLink = (episode) => {
       throw new util.HandlingError('Could not find any torrents for episode')
     }
 
-    const firstResult = results[0]
+    const matches = _.filter(results, (result) => {
+      return util.matchesEpisodeName(episode, result.name)
+    })
+
+    const firstResult = matches[0] || results[0]
     if (
       util.matchesEpisodeName(episode, firstResult.name) &&
       (results.length === 1 || Number(firstResult.seeders) > 100)

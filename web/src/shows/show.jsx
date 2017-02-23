@@ -7,8 +7,8 @@ export default observer(({ show, type, searchLink }) => (
   <li key={show.id}>
     <h3>
       <span>
-        {show.display_name}
-        <Options id={show.id} searchName={show.search_name} searchLink={searchLink} />
+        {show.displayName}
+        <Options id={show.id} searchName={show.searchName} searchLink={searchLink} />
       </span>
     </h3>
     <Episodes show={show} episodes={show[`${type}Episodes`]} threshold={3} />

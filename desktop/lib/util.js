@@ -79,7 +79,7 @@ const matchesEpisodeName = (episode, name) => {
   name = standardizeName(name)
   const showName = standardizeName(episode.show.searchName)
   const season = episode.season
-  const epNum = episode.episode_number
+  const epNum = episode.number
   const paddedSeason = pad(season)
   const paddedEpNum = pad(epNum)
   const seasonAndEpisodes = [

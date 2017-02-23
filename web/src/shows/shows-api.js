@@ -6,6 +6,7 @@ import api from '../data/api';
 import date from '../lib/date';
 import messagesStore from '../messages/messages-store';
 import showsStore from './shows-store';
+import util from '../lib/util'
 
 function getShowsFromCache () {
   return cache.get(SHOWS);
@@ -44,8 +45,8 @@ const loadShows = action('loadShows', () => {
 });
 
 const addShow = action('addShow', (showToAdd) => {
-  const message = messagesStore.add(`Adding ${showToAdd.display_name}...`);
-  api.addShow(showToAdd).then(action('showAdded', ({ show, episodes }) => {
+  const message = messagesStore.add(`Adding ${showToAdd.displayName}...`);
+  api.addShow(util.keysToSnakeCase(showToAdd)).then(action('showAdded', ({ show, episodes }) => {
     const showWithEpisodes = showsStore.showsWithEpisodes([show], episodes)[0];
     showsStore.addShow(showWithEpisodes);
     cache.set(SHOWS, showsStore.serialize());
@@ -54,7 +55,7 @@ const addShow = action('addShow', (showToAdd) => {
 });
 
 const updateShow = action('updateShow', (showProps) => {
-  api.updateShow(showProps);
+  api.updateShow(util.keysToSnakeCase(showProps));
   showsStore.updateShow(showProps);
   cache.set(SHOWS, showsStore.serialize());
 });

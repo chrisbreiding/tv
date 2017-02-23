@@ -34,7 +34,7 @@ function sortAscending (a, b) {
   if (!dateComparison) {
     const seasonComparison = a.season - b.season;
     if (!seasonComparison) {
-      return a.episode_number - b.episode_number;
+      return a.number - b.number;
     }
   }
   return dateComparison;

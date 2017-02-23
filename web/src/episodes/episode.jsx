@@ -63,7 +63,7 @@ export default class Episode extends Component {
 
   _fileName () {
     const { episode, show } = this.props;
-    return `${show.file_name} - ${episode.longEpisodeNumber} - ${episode.fileSafeTitle}`
+    return `${show.fileName} - ${episode.longEpisodeNumber} - ${episode.fileSafeTitle}`
   }
 
   _showFileName = () => {
@@ -82,15 +82,15 @@ export default class Episode extends Component {
     if (!uiState.desktopRunning) return null
 
     const { episode, show } = this.props
-    const epNum = `s${util.pad(episode.season)}e${util.pad(episode.episode_number)}`
+    const epNum = `s${util.pad(episode.season)}e${util.pad(episode.number)}`
 
     return (
       <div className='options'>
         <ul>
-          {_.map((settingsStore.search_link || '').split(','), (link) => (
+          {_.map((settingsStore.searchLink || '').split(','), (link) => (
             <li key={link}>
               <a
-                href={`${util.searchLink(link, show.search_name, epNum)}`}
+                href={`${util.searchLink(link, show.searchName, epNum)}`}
                 title="Search"
                 target="_blank"
               >
@@ -124,13 +124,18 @@ export default class Episode extends Component {
   _episodeDetails () {
     const { episode, show } = this.props
 
-    return _.extend(episode.serialize(), {
+    return {
+      id: episode.id,
+      season: episode.season,
+      number: episode.number,
+      title: episode.title,
+      airdate: episode.airdate.toISOString(),
       fileName: this._fileName(),
       show: {
-        displayName: show.display_name,
-        searchName: show.search_name,
-        fileName: show.file_name,
+        displayName: show.displayName,
+        searchName: show.searchName,
+        fileName: show.fileName,
       },
-    })
+    }
   }
 }

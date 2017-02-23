@@ -6,18 +6,18 @@ import { sortAscending } from '../episodes/util';
 
 export default class ShowModel {
   @observable id;
-  @observable display_name;
-  @observable search_name;
-  @observable file_name;
-  @observable source_id;
-  @observable episode_ids;
+  @observable displayName;
+  @observable searchName;
+  @observable fileName;
+  @observable sourceId;
+  @observable episodeIds;
 
   constructor (show) {
     this.id = show.id;
-    this.display_name = show.display_name;
-    this.search_name = show.search_name;
-    this.file_name = show.file_name;
-    this.source_id = show.source_id;
+    this.displayName = show.display_name;
+    this.searchName = show.search_name;
+    this.fileName = show.file_name;
+    this.sourceId = show.source_id;
     this.episodes = _.map(show.episodes, (episode) => new EpisodeModel(episode));
   }
 
@@ -62,10 +62,10 @@ export default class ShowModel {
   serialize () {
     return {
       id: this.id,
-      display_name: this.display_name,
-      search_name: this.search_name,
-      file_name: this.file_name,
-      source_id: this.source_id,
+      display_name: this.displayName,
+      search_name: this.searchName,
+      file_name: this.fileName,
+      source_id: this.sourceId,
       episodes: _.map(this.episodes, (episode) => episode.serialize()),
     };
   }

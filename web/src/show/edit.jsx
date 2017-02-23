@@ -24,17 +24,17 @@ export default class EditShow extends Component {
           <form className="form" onSubmit={this._save}>
             <fieldset>
               <label>Display Name</label>
-              <AutoFocusedInput ref="displayName" defaultValue={show.display_name} />
+              <AutoFocusedInput ref="displayName" defaultValue={show.displayName} />
             </fieldset>
 
             <fieldset>
               <label>Search Name</label>
-              <Input ref="searchName" defaultValue={show.search_name} />
+              <Input ref="searchName" defaultValue={show.searchName} />
             </fieldset>
 
             <fieldset>
               <label>File Name</label>
-              <Input ref="fileName" defaultValue={show.file_name} />
+              <Input ref="fileName" defaultValue={show.fileName} />
             </fieldset>
 
             <button className="hide">Hidden here so submit on enter works</button>
@@ -64,7 +64,7 @@ export default class EditShow extends Component {
 
     return (
       <Modal onOk={this._confirmDelete} onCancel={this._cancelDelete}>
-        <p>Delete {this.show.display_name}?</p>
+        <p>Delete {this.show.displayName}?</p>
       </Modal>
     );
   }
@@ -83,9 +83,9 @@ export default class EditShow extends Component {
 
     updateShow({
       id: this.show.id,
-      display_name: this.refs.displayName.value,
-      search_name: this.refs.searchName.value,
-      file_name: this.refs.fileName.value,
+      displayName: this.refs.displayName.value,
+      searchName: this.refs.searchName.value,
+      fileName: this.refs.fileName.value,
     });
     this._close();
   }

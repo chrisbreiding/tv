@@ -17,7 +17,7 @@ export default class Settings extends Component {
         <form className="form" onSubmit={this._save}>
           <fieldset>
             <label>Search Link</label>
-            <AutoFocusedInput ref="searchLink" defaultValue={settingsStore.search_link} />
+            <AutoFocusedInput ref="searchLink" defaultValue={settingsStore.searchLink} />
           </fieldset>
         </form>
       </Modal>
@@ -27,7 +27,7 @@ export default class Settings extends Component {
   _controls () {
     return (
       <div className="controls">
-        <p>Last updated: {date.longString(settingsStore.last_updated)}</p>
+        <p>Last updated: {date.longString(settingsStore.lastUpdated)}</p>
         <button type="submit" onClick={this._save}>Save</button>
       </div>
     );
@@ -36,7 +36,7 @@ export default class Settings extends Component {
   _save = (e) => {
     e.preventDefault();
     updateSettings({
-      search_link: this.refs.searchLink.value,
+      searchLink: this.refs.searchLink.value,
     });
     this._close();
   }

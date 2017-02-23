@@ -17,7 +17,7 @@ export default withRouter(observer(function Show ({ params, router }) {
   return (
     <Modal
       className="all-episodes"
-      headerContent={<h2>{show.display_name}</h2>}
+      headerContent={<h2>{show.displayName}</h2>}
       onClose={() => router.push('/')}
     >
       <ul>

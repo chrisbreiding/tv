@@ -39,11 +39,14 @@ const loadSettings = action('loadSettings', () => {
       }
       cache.set(DATE_SETTINGS_UPDATED, date.todayObject());
     });
-});
+})
 
 const updateSettings = (settings) => {
-  api.updateSettings(settings).then(() => {
-    setSettings(settings);
+  const settingsProps = {
+    view_link: settings.searchLink,
+  }
+  api.updateSettings(settingsProps).then(() => {
+    setSettings(settingsProps);
     cache.set(SETTINGS, settingsStore.serialize());
   });
 };

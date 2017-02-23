@@ -131,7 +131,7 @@ class QueueItem extends Component {
   render () {
     const { queueItem, onRemove } = this.props
     const { episode } = queueItem
-    const epNum = `${episode.season}${util.pad(episode.episode_number)}`
+    const epNum = `${episode.season}${util.pad(episode.number)}`
     const showName = episode.show.displayName
 
     return (

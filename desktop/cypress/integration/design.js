@@ -71,14 +71,14 @@ describe('design', () => {
   })
 
   it('queue', () => {
-    const addEpisode = (id, season, episode_number, displayName) => {
+    const addEpisode = (id, season, number, displayName) => {
       ipc.on.withArgs('queue:episode:added').yield(null, {
         id,
         state: 'STARTED',
         episode: {
           id,
           season,
-          episode_number,
+          number,
           show: { displayName },
         },
         info: {},
