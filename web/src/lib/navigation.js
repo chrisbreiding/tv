@@ -1,9 +1,9 @@
-import { updatePath } from 'redux-simple-router';
+import { updatePath } from 'redux-simple-router'
 
 export function navigateHome () {
-  return updatePath('/shows');
+  return updatePath('/shows')
 }
 
 export function navigateTo (path) {
-  return updatePath(path);
+  return updatePath(path)
 }

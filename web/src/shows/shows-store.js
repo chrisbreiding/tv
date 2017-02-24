@@ -1,12 +1,12 @@
-import _ from 'lodash';
-import { computed, observable } from 'mobx';
+import _ from 'lodash'
+import { computed, observable } from 'mobx'
 
-import ShowModel from './show-model';
-import { indexed } from '../episodes/util';
+import ShowModel from './show-model'
+import { indexed } from '../episodes/util'
 
 class ShowsStore {
-  @observable shows = [];
-  @observable isLoading = false;
+  @observable shows = []
+  @observable isLoading = false
 
   getShowById (id) {
     return this.shows.find((show) => show.id === id)
@@ -20,41 +20,41 @@ class ShowsStore {
     return _(this.shows)
       .filter({ hasRecent: true })
       .sort(this._sortByAirdateDescending)
-      .value();
+      .value()
   }
 
   _sortByAirdateDescending (a, b) {
-    return b.lastEpisode.airdate - a.lastEpisode.airdate;
+    return b.lastEpisode.airdate - a.lastEpisode.airdate
   }
 
   @computed get upcoming () {
     return _(this.shows)
       .filter({ hasUpcoming: true })
       .sort(this._sortByAirdateAscending)
-      .value();
+      .value()
   }
 
   _sortByAirdateAscending (a, b) {
-    return a.nextEpisode.airdate - b.nextEpisode.airdate;
+    return a.nextEpisode.airdate - b.nextEpisode.airdate
   }
 
   @computed get offAir () {
     return _(this.shows)
       .filter({ isOffAir: true })
       .sort(this._sortAlphabetically)
-      .value();
+      .value()
   }
 
   _sortAlphabetically (a, b) {
-    const aName = a.displayName.toLowerCase();
-    const bName = b.displayName.toLowerCase();
-    if (aName < bName) return -1;
-    if (aName > bName) return 1;
-    return 0;
+    const aName = a.displayName.toLowerCase()
+    const bName = b.displayName.toLowerCase()
+    if (aName < bName) return -1
+    if (aName > bName) return 1
+    return 0
   }
 
   showsWithEpisodes (shows, episodes) {
-    const episodesIndex = indexed(episodes);
+    const episodesIndex = indexed(episodes)
     return _.map(shows, (show) => {
       return _(show)
         .extend({
@@ -62,24 +62,24 @@ class ShowsStore {
         })
         .omit('episode_ids')
         .value()
-    });
+    })
   }
 
   setShows (shows) {
-    this.shows = _.map(shows, (show) => new ShowModel(show));
+    this.shows = _.map(shows, (show) => new ShowModel(show))
   }
 
   addShow (show) {
-    this.shows.push(new ShowModel(show));
+    this.shows.push(new ShowModel(show))
   }
 
   updateShow (showProps) {
-    const show = this.getShowById(showProps.id);
-    _.extend(show, showProps);
+    const show = this.getShowById(showProps.id)
+    _.extend(show, showProps)
   }
 
   deleteShow ({ id }) {
-    _.remove(this.shows, (show) => show.id === id);
+    _.remove(this.shows, (show) => show.id === id)
   }
 
   serialize () {
@@ -95,8 +95,8 @@ class ShowsStore {
   }
 
   deserialize (shows) {
-    return _.map(shows, (show) => new ShowModel(show));
+    return _.map(shows, (show) => new ShowModel(show))
   }
 }
 
-export default new ShowsStore();
+export default new ShowsStore()

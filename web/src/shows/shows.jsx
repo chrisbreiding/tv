@@ -1,15 +1,15 @@
-import _ from 'lodash';
-import { observer } from 'mobx-react';
-import React, { Component } from 'react';
-import Show from './show';
+import _ from 'lodash'
+import { observer } from 'mobx-react'
+import React, { Component } from 'react'
+import Show from './show'
 
 @observer
 export default class Shows extends Component {
   render () {
-    const { label, type, showsStore, settings } = this.props;
-    const shows = showsStore[type];
+    const { label, type, showsStore, settings } = this.props
+    const shows = showsStore[type]
     if (!shows.length || !_.keys(settings).length) {
-      return null;
+      return null
     }
 
     return (
@@ -17,7 +17,7 @@ export default class Shows extends Component {
         <h2>{label}</h2>
         <ul>{_.map(shows, this._show)}</ul>
       </div>
-    );
+    )
   }
 
   _show = (show) => {
@@ -26,6 +26,6 @@ export default class Shows extends Component {
      show={show}
      type={this.props.type}
      searchLink={this.props.settings.searchLink}
-    />;
+    />
   }
 }

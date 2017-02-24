@@ -1,37 +1,37 @@
-import _ from 'lodash';
-import cs from 'classnames';
-import React, { Component } from 'react';
+import _ from 'lodash'
+import cs from 'classnames'
+import React, { Component } from 'react'
 
-import date from '../lib/date';
-import uiState from '../lib/ui-state';
-import api from '../data/api';
-import settingsStore from '../settings/settings-store';
-import util from '../lib/util';
+import date from '../lib/date'
+import uiState from '../lib/ui-state'
+import api from '../data/api'
+import settingsStore from '../settings/settings-store'
+import util from '../lib/util'
 
 export default class Episode extends Component {
   constructor (props) {
-    super(props);
+    super(props)
 
-    this.state = { showingFileName: false };
+    this.state = { showingFileName: false }
   }
 
   componentDidMount () {
     this.handler = () => {
       if (this.state.showingFileName) {
-        this.setState({ showingFileName: false });
+        this.setState({ showingFileName: false })
       }
-    };
-    document.body.addEventListener('click', this.handler);
+    }
+    document.body.addEventListener('click', this.handler)
   }
 
   componentWillUnmount () {
-    document.body.removeEventListener('click', this.handler);
+    document.body.removeEventListener('click', this.handler)
   }
 
   render () {
-    const { episode } = this.props;
+    const { episode } = this.props
 
-    const airdate = episode.airdate;
+    const airdate = episode.airdate
     const className = cs({
       'episode-single': true,
       today: date.isToday(airdate),
@@ -42,7 +42,7 @@ export default class Episode extends Component {
       future: date.isFuture(airdate),
       'far-future': date.isFarFuture(airdate),
       'show-file-name': this.state.showingFileName,
-    });
+    })
 
     return (
       <li className={className}>
@@ -58,24 +58,24 @@ export default class Episode extends Component {
           {this._fileName()}
         </span>
       </li>
-    );
+    )
   }
 
   _fileName () {
-    const { episode, show } = this.props;
+    const { episode, show } = this.props
     return `${show.fileName} - ${episode.longEpisodeNumber} - ${episode.fileSafeTitle}`
   }
 
   _showFileName = () => {
     this.setState({ showingFileName: true }, () => {
-      let text = this.refs.fileName;
-      let selection = window.getSelection();
-      let range = document.createRange();
+      let text = this.refs.fileName
+      let selection = window.getSelection()
+      let range = document.createRange()
 
-      range.selectNodeContents(text);
-      selection.removeAllRanges();
-      selection.addRange(range);
-    });
+      range.selectNodeContents(text)
+      selection.removeAllRanges()
+      selection.addRange(range)
+    })
   }
 
   _options () {

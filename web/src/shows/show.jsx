@@ -1,7 +1,7 @@
-import { observer } from 'mobx-react';
-import React from 'react';
-import Episodes from '../episodes/episodes';
-import Options from './show-options';
+import { observer } from 'mobx-react'
+import React from 'react'
+import Episodes from '../episodes/episodes'
+import Options from './show-options'
 
 export default observer(({ show, type, searchLink }) => (
   <li key={show.id}>
@@ -13,4 +13,4 @@ export default observer(({ show, type, searchLink }) => (
     </h3>
     <Episodes show={show} episodes={show[`${type}Episodes`]} threshold={3} />
   </li>
-));
+))

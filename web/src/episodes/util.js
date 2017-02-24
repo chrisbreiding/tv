@@ -1,43 +1,43 @@
-import _ from 'lodash';
+import _ from 'lodash'
 
 function indexed (episodes) {
   return _.reduce(episodes, (coll, episode) => {
-    coll[episode.id] = episode;
-    return coll;
-  }, {});
+    coll[episode.id] = episode
+    return coll
+  }, {})
 }
 
 function inSeasons (episodes) {
   const seasons = _.reduce(episodes, (coll, episode) => {
-    const seasonNumber = episode.season;
-    const index = _.findIndex(coll, { season: seasonNumber });
+    const seasonNumber = episode.season
+    const index = _.findIndex(coll, { season: seasonNumber })
     if (index > -1) {
-      coll[index].episodes.push(episode);
+      coll[index].episodes.push(episode)
     } else {
       coll.push({
         season: seasonNumber,
         episodes: [episode],
-      });
+      })
     }
-    return coll;
-  }, []);
+    return coll
+  }, [])
 
-  return _.sortBy(seasons, 'season');
+  return _.sortBy(seasons, 'season')
 }
 
 function sortAscending (a, b) {
-  const dateComparison = a.airdate - b.airdate;
+  const dateComparison = a.airdate - b.airdate
   if (!dateComparison) {
-    const seasonComparison = a.season - b.season;
+    const seasonComparison = a.season - b.season
     if (!seasonComparison) {
-      return a.number - b.number;
+      return a.number - b.number
     }
   }
-  return dateComparison;
+  return dateComparison
 }
 
 export {
   indexed,
   inSeasons,
   sortAscending,
-};
+}

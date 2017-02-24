@@ -1,13 +1,13 @@
-import React, { createClass } from 'react';
+import React, { createClass } from 'react'
 
 export default createClass({
 
   componentDidMount () {
-    document.body.className += 'modal-dialog-present';
+    document.body.className += 'modal-dialog-present'
   },
 
   componentWillUnmount () {
-    document.body.className = '';
+    document.body.className = ''
   },
 
   render () {
@@ -30,28 +30,28 @@ export default createClass({
           </footer>
         </div>
       </div>
-    );
+    )
   },
 
   _cancelButton () {
-    if (!this.props.onCancel) { return null; }
+    if (!this.props.onCancel) { return null }
 
-    return <button className="cancel" onClick={this.props.onCancel}>Cancel</button>;
+    return <button className="cancel" onClick={this.props.onCancel}>Cancel</button>
   },
 
   _okButton () {
-    if (!this.props.onOk) { return null; }
+    if (!this.props.onOk) { return null }
 
-    return <button className="ok" onClick={this.props.onOk}>OK</button>;
+    return <button className="ok" onClick={this.props.onOk}>OK</button>
   },
 
   _closeButton () {
-    if (!this.props.onClose) { return null; }
+    if (!this.props.onClose) { return null }
 
     return (
       <button className="close" title="Close" onClick={this.props.onClose}>
         <i className="fa fa-times"></i>
       </button>
-    );
+    )
   },
-});
+})

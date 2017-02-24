@@ -1,8 +1,8 @@
-import { observer } from 'mobx-react';
-import cs from 'classnames';
-import React from 'react';
+import { observer } from 'mobx-react'
+import cs from 'classnames'
+import React from 'react'
 
-import date from '../lib/date';
+import date from '../lib/date'
 
 export default observer(({ exists, show, onAddShow }) => {
   return (
@@ -26,5 +26,5 @@ export default observer(({ exists, show, onAddShow }) => {
         </dl>
       </div>
     </li>
-  );
-});
+  )
+})

@@ -255,7 +255,7 @@ describe('Kitchen Sink', function(){
       cy
         .get('.action-focus').focus()
         .should('have.class', 'focus')
-          .prev().should('have.attr', 'style', 'color: orange;')
+          .prev().should('have.attr', 'style', 'color: orange')
 
     })
 
@@ -265,7 +265,7 @@ describe('Kitchen Sink', function(){
       cy
         .get('.action-blur').type('I\'m about to blur').blur()
         .should('have.class', 'error')
-          .prev().should('have.attr', 'style', 'color: red;')
+          .prev().should('have.attr', 'style', 'color: red')
 
     })
 

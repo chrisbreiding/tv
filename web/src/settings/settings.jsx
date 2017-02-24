@@ -1,12 +1,12 @@
-import { observer } from 'mobx-react';
-import React, { Component } from 'react';
-import { withRouter } from 'react-router';
+import { observer } from 'mobx-react'
+import React, { Component } from 'react'
+import { withRouter } from 'react-router'
 
-import Modal from '../modal/modal';
-import date from '../lib/date';
-import { AutoFocusedInput } from '../lib/form';
+import Modal from '../modal/modal'
+import date from '../lib/date'
+import { AutoFocusedInput } from '../lib/form'
 import { updateSettings } from './settings-api'
-import settingsStore from './settings-store';
+import settingsStore from './settings-store'
 
 @withRouter
 @observer
@@ -21,7 +21,7 @@ export default class Settings extends Component {
           </fieldset>
         </form>
       </Modal>
-    );
+    )
   }
 
   _controls () {
@@ -30,18 +30,18 @@ export default class Settings extends Component {
         <p>Last updated: {date.longString(settingsStore.lastUpdated)}</p>
         <button type="submit" onClick={this._save}>Save</button>
       </div>
-    );
+    )
   }
 
   _save = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     updateSettings({
       searchLink: this.refs.searchLink.value,
-    });
-    this._close();
+    })
+    this._close()
   }
 
   _close = () => {
-    this.props.router.push('/');
+    this.props.router.push('/')
   }
 }

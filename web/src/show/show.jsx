@@ -1,18 +1,18 @@
-import _ from 'lodash';
-import { observer } from 'mobx-react';
-import React from 'react';
-import { withRouter } from 'react-router';
+import _ from 'lodash'
+import { observer } from 'mobx-react'
+import React from 'react'
+import { withRouter } from 'react-router'
 
-import Modal from '../modal/modal';
-import Episodes from '../episodes/episodes';
-import { inSeasons, sortAscending } from '../episodes/util';
-import showsStore from '../shows/shows-store';
+import Modal from '../modal/modal'
+import Episodes from '../episodes/episodes'
+import { inSeasons, sortAscending } from '../episodes/util'
+import showsStore from '../shows/shows-store'
 
 export default withRouter(observer(function Show ({ params, router }) {
-  const show = showsStore.getShowById(Number(params.id));
-  if (!show) return null;
+  const show = showsStore.getShowById(Number(params.id))
+  if (!show) return null
 
-  const seasons = inSeasons(show.episodes);
+  const seasons = inSeasons(show.episodes)
 
   return (
     <Modal
@@ -31,10 +31,10 @@ export default withRouter(observer(function Show ({ params, router }) {
                   episodes={_(season.episodes).sort(sortAscending).value()}
                 />
               </li>
-            );
+            )
           })
         }
       </ul>
     </Modal>
-  );
-}));
+  )
+}))

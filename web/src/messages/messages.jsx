@@ -1,12 +1,12 @@
-import _ from 'lodash';
-import React from 'react';
-import messagesStore from './messages-store';
+import _ from 'lodash'
+import React from 'react'
+import messagesStore from './messages-store'
 
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react'
 
 export default observer(() => {
-  const messages = messagesStore.messages;
-  if (!messages.length) return null;
+  const messages = messagesStore.messages
+  if (!messages.length) return null
 
   return (
     <ul className="messages">
@@ -14,5 +14,5 @@ export default observer(() => {
         <li key={message}>{message}</li>
       ))}
     </ul>
-  );
-});
+  )
+})

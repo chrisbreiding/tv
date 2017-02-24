@@ -1,8 +1,8 @@
-import { observer } from 'mobx-react';
-import React, { Component } from 'react';
-import { withRouter } from 'react-router';
-import Modal from '../modal/modal';
-import { AutoFocusedInput } from '../lib/form';
+import { observer } from 'mobx-react'
+import React, { Component } from 'react'
+import { withRouter } from 'react-router'
+import Modal from '../modal/modal'
+import { AutoFocusedInput } from '../lib/form'
 
 @withRouter
 @observer
@@ -18,15 +18,15 @@ export default class Search extends Component {
         </form>
         {this.props.children}
       </Modal>
-    );
+    )
   }
 
   _search = (e) => {
-    e.preventDefault();
-    this.props.router.push(`/search/${this.refs.query.value}`);
+    e.preventDefault()
+    this.props.router.push(`/search/${this.refs.query.value}`)
   }
 
   _close = () => {
-    this.props.router.push('/');
+    this.props.router.push('/')
   }
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 export default (props) => {
   return (
@@ -6,5 +6,5 @@ export default (props) => {
       <i className="fa fa-spin fa-soccer-ball-o"></i>
       {props.children}
     </span>
-  );
-};
+  )
+}

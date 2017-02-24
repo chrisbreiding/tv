@@ -1,25 +1,25 @@
-import { observer } from 'mobx-react';
-import React, { Component } from 'react';
+import { observer } from 'mobx-react'
+import React, { Component } from 'react'
 
-import { loadShows } from '../shows/shows-api';
-import showsStore from '../shows/shows-store';
-import { loadSettings } from '../settings/settings-api';
-import settingsStore from '../settings/settings-store';
-import Shows from '../shows/shows';
-import Loader from '../loader/loader';
+import { loadShows } from '../shows/shows-api'
+import showsStore from '../shows/shows-store'
+import { loadSettings } from '../settings/settings-api'
+import settingsStore from '../settings/settings-store'
+import Shows from '../shows/shows'
+import Loader from '../loader/loader'
 
 @observer
 export default class TimePeriods extends Component {
   componentWillMount () {
-    loadShows();
-    loadSettings();
+    loadShows()
+    loadSettings()
   }
 
   render () {
     if (showsStore.isLoading || settingsStore.isLoading) {
       return <p className="full-screen-centered">
        <Loader>Loading shows...</Loader>
-      </p>;
+      </p>
     } else {
       return (
         <div>
@@ -43,7 +43,7 @@ export default class TimePeriods extends Component {
           />
           {this.props.children}
         </div>
-      );
+      )
     }
   }
 }

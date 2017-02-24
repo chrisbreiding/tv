@@ -1,13 +1,13 @@
-import {  observable } from 'mobx';
-import moment from 'moment';
+import {  observable } from 'mobx'
+import moment from 'moment'
 
 class SettingsStore {
-  @observable lastUpdated;
-  @observable searchLink = '';
-  @observable isLoading = false;
+  @observable lastUpdated
+  @observable searchLink = ''
+  @observable isLoading = false
 
   setSettings (settings) {
-    if (settings.last_updated) this.lastUpdated = moment(settings.last_updated);
+    if (settings.last_updated) this.lastUpdated = moment(settings.last_updated)
     if (settings.view_link) this.searchLink = settings.view_link
   }
 
@@ -15,8 +15,8 @@ class SettingsStore {
     return {
       last_updated: this.lastUpdated.toISOString(),
       view_link: this.searchLink,
-    };
+    }
   }
 }
 
-export default new SettingsStore();
+export default new SettingsStore()

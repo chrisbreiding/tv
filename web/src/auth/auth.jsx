@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router';
+import React, { Component } from 'react'
+import { withRouter } from 'react-router'
 
-import cache from '../data/cache';
-import { getApiKey, setApiKey } from '../data/api';
-import { AutoFocusedInput } from '../lib/form';
+import cache from '../data/cache'
+import { getApiKey, setApiKey } from '../data/api'
+import { AutoFocusedInput } from '../lib/form'
 
 @withRouter
 export default class Auth extends Component {
@@ -23,14 +23,14 @@ export default class Auth extends Component {
           </footer>
         </form>
       </div>
-    );
+    )
   }
 
   _submit (e) {
-    e.preventDefault();
-    setApiKey(this.refs.apiKey.value);
+    e.preventDefault()
+    setApiKey(this.refs.apiKey.value)
     cache.clear().then(() => {
-      this.props.router.push('/');
-    });
+      this.props.router.push('/')
+    })
   }
 }
