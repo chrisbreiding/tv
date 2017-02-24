@@ -7,10 +7,6 @@ function indexed (episodes) {
   }, {});
 }
 
-function get (id) {
-  return this.episodes[id];
-}
-
 function inSeasons (episodes) {
   const seasons = _.reduce(episodes, (coll, episode) => {
     const seasonNumber = episode.season;
@@ -42,7 +38,6 @@ function sortAscending (a, b) {
 
 export {
   indexed,
-  get,
   inSeasons,
   sortAscending,
 };

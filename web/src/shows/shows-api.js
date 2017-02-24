@@ -1,9 +1,7 @@
 import { action } from 'mobx';
-import moment from 'moment';
 
-import cache, { SHOWS, DATE_SHOWS_UPDATED } from '../data/cache';
+import cache, { SHOWS } from '../data/cache';
 import api from '../data/api';
-import date from '../lib/date';
 import messagesStore from '../messages/messages-store';
 import showsStore from './shows-store';
 import util from '../lib/util'
@@ -12,36 +10,35 @@ function getShowsFromCache () {
   return cache.get(SHOWS);
 }
 
+function saveShowsToCache () {
+  cache.set(SHOWS, showsStore.serialize());
+}
+
 function getShowsFromApi () {
-  return api.getShows().then(({ shows, episodes }) => {
-    const showsWithEpisodes = showsStore.showsWithEpisodes(shows, episodes);
-    cache.set(SHOWS, showsWithEpisodes);
-    return showsWithEpisodes;
-  });
+  return api.getShows()
+  .then(({ shows, episodes }) => {
+    return showsStore.showsWithEpisodes(shows, episodes);
+  })
+  .then(updateShows(true))
 }
 
-function evaluateCache (shows) {
-  return shows || getShowsFromApi();
-}
-
-const updateShows = action('updateShows', (shows) => {
+const updateShows = (updateCache) => action('updateShows', (shows) => {
   showsStore.setShows(shows);
   showsStore.isLoading = false;
+  if (updateCache) {
+    saveShowsToCache()
+  }
 });
 
 const loadShows = action('loadShows', () => {
   showsStore.isLoading = true;
 
-  getShowsFromCache()
-    .then(evaluateCache)
-    .then(updateShows)
-    .then(() => cache.get(DATE_SHOWS_UPDATED))
-    .then((dateUpdated) => {
-      if (dateUpdated && !date.isToday(moment(dateUpdated.date))) {
-        getShowsFromApi().then(updateShows);
-      }
-      cache.set(DATE_SHOWS_UPDATED, date.todayObject());
-    });
+  getShowsFromCache().then((shows) => {
+    if (shows) {
+      updateShows(false)(shows)
+    }
+    return getShowsFromApi()
+  })
 });
 
 const addShow = action('addShow', (showToAdd) => {
@@ -49,7 +46,7 @@ const addShow = action('addShow', (showToAdd) => {
   api.addShow(util.keysToSnakeCase(showToAdd)).then(action('showAdded', ({ show, episodes }) => {
     const showWithEpisodes = showsStore.showsWithEpisodes([show], episodes)[0];
     showsStore.addShow(showWithEpisodes);
-    cache.set(SHOWS, showsStore.serialize());
+    saveShowsToCache()
     messagesStore.remove(message);
   }));
 });
@@ -57,13 +54,13 @@ const addShow = action('addShow', (showToAdd) => {
 const updateShow = action('updateShow', (showProps) => {
   api.updateShow(util.keysToSnakeCase(showProps));
   showsStore.updateShow(showProps);
-  cache.set(SHOWS, showsStore.serialize());
+  saveShowsToCache()
 });
 
 const deleteShow = action('deleteShow', (show) => {
   api.deleteShow(show);
   showsStore.deleteShow(show);
-  cache.set(SHOWS, showsStore.serialize());
+  saveShowsToCache()
 });
 
 export {

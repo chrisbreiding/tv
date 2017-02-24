@@ -83,7 +83,15 @@ class ShowsStore {
   }
 
   serialize () {
-    return _.map(this.shows, (show) => show.serialize());
+    return _([
+      this.recent.slice(),
+      this.upcoming.slice(),
+      this.offAir.slice(),
+    ])
+      .flatten()
+      .uniqBy('id')
+      .map((show) => show.serialize())
+      .value()
   }
 
   deserialize (shows) {

@@ -4,6 +4,10 @@ const migrations = {
   1 () {
     return localforage.clear();
   },
+
+  2 () {
+    return localforage.clear();
+  },
 };
 
 function run (version) {
@@ -17,4 +21,4 @@ export default function () {
   return run(currentDataVersion + 1).then((newVersion) => {
     localStorage.dataVersion = newVersion;
   });
-};
+}

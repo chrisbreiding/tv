@@ -60,13 +60,21 @@ export default class ShowModel {
   }
 
   serialize () {
+    const episodes = _(this.episodes)
+      .filter((episode) => {
+        return episode.isRecent || episode.isUpcoming
+      })
+      .map((episode) => episode.serialize())
+      .take(4)
+      .value()
+
     return {
       id: this.id,
       display_name: this.displayName,
       search_name: this.searchName,
       file_name: this.fileName,
       source_id: this.sourceId,
-      episodes: _.map(this.episodes, (episode) => episode.serialize()),
+      episodes,
     };
   }
 }
