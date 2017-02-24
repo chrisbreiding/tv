@@ -36,7 +36,7 @@ export default createClass({
     e.preventDefault()
 
     this.setState({
-      collapsed: !this.state.collapsed
+      collapsed: !this.state.collapsed,
     })
   },
 })
