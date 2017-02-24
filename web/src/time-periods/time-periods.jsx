@@ -17,9 +17,11 @@ export default class TimePeriods extends Component {
 
   render () {
     if (showsStore.isLoading || settingsStore.isLoading) {
-      return <p className="full-screen-centered">
-       <Loader>Loading shows...</Loader>
-      </p>
+      return (
+        <div className="full-screen-centered">
+          <Loader>Loading shows...</Loader>
+        </div>
+      )
     } else {
       return (
         <div>
