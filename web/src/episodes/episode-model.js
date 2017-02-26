@@ -1,11 +1,22 @@
 import _ from 'lodash'
-import { computed, observable } from 'mobx'
+import { asReference, computed, observable } from 'mobx'
 import moment from 'moment'
+import util from '../lib/util'
 
-let recentDaysCutoff = localStorage.recentDaysCutoff || 5
+const recentDaysCutoff = localStorage.recentDaysCutoff || 5
 
-function toTwoDigitString (num) {
-  return num < 10 ? `0${num}` : `${num}`
+const epochISOString = moment.utc([1970, 0, 1]).toISOString()
+const farFarFutureMs = moment([2077, 11, 31]).valueOf()
+
+const nullDate = {
+  isSame () { return false },
+  isBefore () { return false },
+  isBetween () { return false },
+  isAfter () { return true },
+  toISOString () { return epochISOString },
+  format () { return 'TBA' },
+  // so comparisons put it ahead of anything else
+  valueOf () { return farFarFutureMs },
 }
 
 export default class EpisodeModel {
@@ -13,14 +24,17 @@ export default class EpisodeModel {
   @observable season
   @observable number
   @observable title
-  @observable airdate
+  @observable airdate = asReference(null)
 
   constructor (episode) {
     this.id = episode.id
     this.season = episode.season
     this.number = episode.episode_number
     this.title = _.trim(episode.title)
-    this.airdate = moment(episode.airdate)
+
+    const airdate = moment(episode.airdate)
+    // if year is before 1975, it's a null date set to unix epoch
+    this.airdate = airdate.year() < 1975 ? nullDate : airdate
   }
 
   @computed get isRecent () {
@@ -35,15 +49,11 @@ export default class EpisodeModel {
   }
 
   @computed get longEpisodeNumber () {
-    let season = toTwoDigitString(this.season)
-    let number = toTwoDigitString(this.number)
-    return `s${season}e${number}`
+    return `s${util.pad(this.season)}e${util.pad(this.number)}`
   }
 
   @computed get shortEpisodeNumber () {
-    return this.longEpisodeNumber
-     .replace('s0', '')
-     .replace(/[se]/g, '')
+    return `${this.season}${util.pad(this.number)}`
   }
 
   @computed get fileSafeTitle () {

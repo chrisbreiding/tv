@@ -39,14 +39,14 @@ const dateUtils = {
     return date.format('MMM D, YYYY h:mma')
   },
 
-  status (momentDateate) {
-    return dateUtils.isToday(momentDateate)     ? 'today upcoming' :
-           dateUtils.isFarPast(momentDateate)   ? 'far-past' :
-           dateUtils.isPast(momentDateate)      ? 'past' :
-           dateUtils.isRecent(momentDateate)    ? 'recent' :
-           dateUtils.isFarFuture(momentDateate) ? 'far-future' :
-           dateUtils.isFuture(momentDateate)    ? 'future' :
-                                         'upcoming'
+  status (momentDate) {
+    return dateUtils.isToday(momentDate)     ? 'today upcoming' :
+           dateUtils.isFarPast(momentDate)   ? 'far-past'       :
+           dateUtils.isPast(momentDate)      ? 'past'           :
+           dateUtils.isRecent(momentDate)    ? 'recent'         :
+           dateUtils.isFarFuture(momentDate) ? 'far-future'     :
+           dateUtils.isFuture(momentDate)    ? 'future'         :
+                                               'upcoming'
   },
 
   todayObject () {

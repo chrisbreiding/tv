@@ -51,7 +51,7 @@ export default class Episode extends Component {
         </span>
         <span className="airdate">{date.shortString(episode.airdate)}</span>
         <span className="title">
-          <span onClick={this._showFileName}>{episode.title}</span>
+          <span onClick={this._showFileName}>{episode.title || 'TBA'}</span>
           {this._options()}
         </span>
         <span className="file-name" ref="fileName">
