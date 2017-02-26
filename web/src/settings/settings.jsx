@@ -1,3 +1,4 @@
+import { action, reaction, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
@@ -11,6 +12,19 @@ import settingsStore from './settings-store'
 @withRouter
 @observer
 export default class Settings extends Component {
+  @observable searchLink = settingsStore.searchLink
+
+  componentDidMount () {
+    this.dispose = reaction(
+      () => settingsStore.searchLink,
+      action((searchLink) => this.searchLink = searchLink)
+    )
+  }
+
+  componentWillUnmount () {
+    this.dispose()
+  }
+
   render () {
     return (
       <Modal className="settings">
@@ -19,7 +33,11 @@ export default class Settings extends Component {
           <form className="form" onSubmit={this._save}>
             <fieldset>
               <label>Search Link</label>
-              <AutoFocusedInput ref="searchLink" defaultValue={settingsStore.searchLink} />
+              <AutoFocusedInput
+                ref="searchLink"
+                value={this.searchLink}
+                onChange={this._updateSearchLink}
+              />
             </fieldset>
           </form>
         </Modal.Content>
@@ -29,6 +47,10 @@ export default class Settings extends Component {
         </Modal.Footer>
       </Modal>
     )
+  }
+
+  @action _updateSearchLink = () => {
+    this.searchLink = this.refs.searchLink.value
   }
 
   _save = (e) => {
