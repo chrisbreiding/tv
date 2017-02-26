@@ -13,23 +13,21 @@ import settingsStore from './settings-store'
 export default class Settings extends Component {
   render () {
     return (
-      <Modal className="settings" onClose={this._close} footerContent={this._controls()}>
-        <form className="form" onSubmit={this._save}>
-          <fieldset>
-            <label>Search Link</label>
-            <AutoFocusedInput ref="searchLink" defaultValue={settingsStore.searchLink} />
-          </fieldset>
-        </form>
+      <Modal className="settings">
+        <Modal.Header onClose={this._close} />
+        <Modal.Content>
+          <form className="form" onSubmit={this._save}>
+            <fieldset>
+              <label>Search Link</label>
+              <AutoFocusedInput ref="searchLink" defaultValue={settingsStore.searchLink} />
+            </fieldset>
+          </form>
+        </Modal.Content>
+        <Modal.Footer>
+          <p>Last updated: {date.longString(settingsStore.lastUpdated)}</p>
+          <button type="submit" onClick={this._save}>Save</button>
+        </Modal.Footer>
       </Modal>
-    )
-  }
-
-  _controls () {
-    return (
-      <div className="controls">
-        <p>Last updated: {date.longString(settingsStore.lastUpdated)}</p>
-        <button type="submit" onClick={this._save}>Save</button>
-      </div>
     )
   }
 

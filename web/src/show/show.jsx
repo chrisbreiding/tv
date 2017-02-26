@@ -3,6 +3,7 @@ import { observer } from 'mobx-react'
 import React from 'react'
 import { withRouter } from 'react-router'
 
+import Loader from '../loader/loader'
 import Modal from '../modal/modal'
 import Episodes from '../episodes/episodes'
 import { inSeasons, sortAscending } from '../episodes/util'
@@ -15,26 +16,30 @@ export default withRouter(observer(function Show ({ params, router }) {
   const seasons = inSeasons(show.episodes)
 
   return (
-    <Modal
-      className="all-episodes"
-      headerContent={<h2>{show.displayName}</h2>}
-      onClose={() => router.push('/')}
-    >
-      <ul>
-        {
-          _.map(seasons, (season) => {
-            return (
-              <li key={season.season} className="season">
-                <h3>Season {season.season}</h3>
-                <Episodes
-                  show={show}
-                  episodes={_(season.episodes).sort(sortAscending).value()}
-                />
-              </li>
-            )
-          })
-        }
-      </ul>
+    <Modal className="all-episodes">
+      <Modal.Header onClose={() => router.push('/')}>
+        <h2>{show.displayName}</h2>
+        {showsStore.isLoadingFromApi && (
+          <Loader>Loading older episodes...</Loader>
+        )}
+      </Modal.Header>
+      <Modal.Content>
+        <ul>
+          {
+            _.map(seasons, (season) => {
+              return (
+                <li key={season.season} className="season">
+                  <h3>Season {season.season}</h3>
+                  <Episodes
+                    show={show}
+                    episodes={_(season.episodes).sort(sortAscending).value()}
+                  />
+                </li>
+              )
+            })
+          }
+        </ul>
+      </Modal.Content>
     </Modal>
   )
 }))

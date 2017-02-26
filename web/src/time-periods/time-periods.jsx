@@ -16,7 +16,7 @@ export default class TimePeriods extends Component {
   }
 
   render () {
-    if (showsStore.isLoading || settingsStore.isLoading) {
+    if (showsStore.isLoadingFromCache || settingsStore.isLoading) {
       return (
         <div className="full-screen-centered">
           <Loader>Loading shows...</Loader>

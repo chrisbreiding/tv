@@ -30,18 +30,35 @@ body.modal-dialog-present {
   }
 
   header,
-  .modal-dialog-content,
+  main,
   footer {
-    padding: 1em 1.5em;
+    padding: 1em;
   }
 
-  .modal-dialog-content {
+  header {
+    padding-bottom: 0.5em;
+  }
+
+  main,
+  footer {
+    padding-top: 0.5em;
+  }
+
+  main {
     overflow-y: scroll;
   }
 
-  .modal-controls {
+  footer {
+    min-height: 2em;
+  }
+
+  .controls {
     display: flex;
     justify-content: flex-end;
+
+    &:empty {
+      display: none;
+    }
   }
 
   .ok {

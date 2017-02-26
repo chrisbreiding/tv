@@ -9,14 +9,16 @@ import { AutoFocusedInput } from '../lib/form'
 export default class Search extends Component {
   render () {
     return (
-      <Modal className="search" onClose={this._close}>
-        <form onSubmit={this._search}>
-          <h3>Search Shows</h3>
-
-          <AutoFocusedInput ref="query" defaultValue={this.props.params.query} />
-          <button type="submit">Search</button>
-        </form>
-        {this.props.children}
+      <Modal className="search">
+        <Modal.Header onClose={this._close} />
+        <Modal.Content>
+          <form onSubmit={this._search}>
+            <h3>Search Shows</h3>
+            <AutoFocusedInput ref="query" defaultValue={this.props.params.query} />
+            <button type="submit">Search</button>
+          </form>
+          {this.props.children}
+        </Modal.Content>
       </Modal>
     )
   }

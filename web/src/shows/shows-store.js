@@ -6,7 +6,8 @@ import { indexed } from '../episodes/util'
 
 class ShowsStore {
   @observable shows = []
-  @observable isLoading = false
+  @observable isLoadingFromCache = false
+  @observable isLoadingFromApi = false
 
   getShowById (id) {
     return this.shows.find((show) => show.id === id)

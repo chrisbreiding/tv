@@ -14,30 +14,35 @@ function saveShowsToCache () {
   cache.set(SHOWS, showsStore.serialize())
 }
 
-function getShowsFromApi () {
-  return api.getShows()
+const getShowsFromApi = action(() => {
+  showsStore.isLoadingFromApi = true
+
+  api.getShows()
   .then(({ shows, episodes }) => {
     return showsStore.showsWithEpisodes(shows, episodes)
   })
   .then(updateShows(true))
-}
+  .then(action(() => {
+    showsStore.isLoadingFromApi = false
+  }))
+})
 
 const updateShows = (updateCache) => action('updateShows', (shows) => {
   showsStore.setShows(shows)
-  showsStore.isLoading = false
+  showsStore.isLoadingFromCache = false
   if (updateCache) {
     saveShowsToCache()
   }
 })
 
 const loadShows = action('loadShows', () => {
-  showsStore.isLoading = true
+  showsStore.isLoadingFromCache = true
 
   getShowsFromCache().then((shows) => {
     if (shows) {
       updateShows(false)(shows)
     }
-    return getShowsFromApi()
+    getShowsFromApi()
   })
 })
 

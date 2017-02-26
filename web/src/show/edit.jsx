@@ -20,36 +20,34 @@ export default class EditShow extends Component {
 
     return (
       <div className="show-edit">
-        <Modal onClose={this._close} footerContent={this._controls()}>
-          <form className="form" onSubmit={this._save}>
-            <fieldset>
-              <label>Display Name</label>
-              <AutoFocusedInput ref="displayName" defaultValue={show.displayName} />
-            </fieldset>
+        <Modal className="show-edit-modal">
+          <Modal.Header onClose={this._close} />
+          <Modal.Content>
+            <form className="form" onSubmit={this._save}>
+              <fieldset>
+                <label>Display Name</label>
+                <AutoFocusedInput ref="displayName" defaultValue={show.displayName} />
+              </fieldset>
 
-            <fieldset>
-              <label>Search Name</label>
-              <Input ref="searchName" defaultValue={show.searchName} />
-            </fieldset>
+              <fieldset>
+                <label>Search Name</label>
+                <Input ref="searchName" defaultValue={show.searchName} />
+              </fieldset>
 
-            <fieldset>
-              <label>File Name</label>
-              <Input ref="fileName" defaultValue={show.fileName} />
-            </fieldset>
+              <fieldset>
+                <label>File Name</label>
+                <Input ref="fileName" defaultValue={show.fileName} />
+              </fieldset>
 
-            <button className="hide">Hidden here so submit on enter works</button>
-          </form>
+              <button className="hide">Hidden here so submit on enter works</button>
+            </form>
+          </Modal.Content>
+          <Modal.Footer>
+            <a onClick={this._askForConfirmation} href="#">Delete show</a>
+            <button type="submit" onClick={this._save}>Save</button>
+          </Modal.Footer>
         </Modal>
         {this._confirmation()}
-      </div>
-    )
-  }
-
-  _controls () {
-    return (
-      <div className="controls">
-        <a onClick={this._askForConfirmation} href="#">Delete show</a>
-        <button type="submit" onClick={this._save}>Save</button>
       </div>
     )
   }
@@ -63,8 +61,11 @@ export default class EditShow extends Component {
     if (!this.state.confirmDeletion) return null
 
     return (
-      <Modal onOk={this._confirmDelete} onCancel={this._cancelDelete}>
-        <p>Delete {this.show.displayName}?</p>
+      <Modal className='confirm-delete-modal'>
+        <Modal.Content>
+          <p>Delete {this.show.displayName}?</p>
+        </Modal.Content>
+        <Modal.Footer onOk={this._confirmDelete} onCancel={this._cancelDelete} />
       </Modal>
     )
   }
