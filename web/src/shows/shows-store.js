@@ -20,29 +20,21 @@ class ShowsStore {
   @computed get recent () {
     return _(this.shows)
       .filter({ hasRecent: true })
-      .sort(this._sortByAirdateDescending)
+      .orderBy(['lastEpisode.airdate', 'displayName'], ['desc', 'asc'])
       .value()
-  }
-
-  _sortByAirdateDescending (a, b) {
-    return b.lastEpisode.airdate - a.lastEpisode.airdate
   }
 
   @computed get upcoming () {
     return _(this.shows)
       .filter({ hasUpcoming: true })
-      .sort(this._sortByAirdateAscending)
+      .orderBy(['nextEpisode.airdate', 'displayName'], ['asc', 'asc'])
       .value()
-  }
-
-  _sortByAirdateAscending (a, b) {
-    return a.nextEpisode.airdate - b.nextEpisode.airdate
   }
 
   @computed get offAir () {
     return _(this.shows)
       .filter({ isOffAir: true })
-      .sort(this._sortAlphabetically)
+      .orderBy(['displayName'], ['asc'])
       .value()
   }
 
