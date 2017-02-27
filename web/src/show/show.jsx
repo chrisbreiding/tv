@@ -29,7 +29,11 @@ export default withRouter(observer(function Show ({ params, router }) {
             _.map(seasons, (season) => {
               return (
                 <li key={season.season} className="season">
-                  <h3>Season {season.season}</h3>
+                  <h3>
+                    <span>
+                      {season.season === 999 ? 'Specials' : `Season ${season.season}`}
+                    </span>
+                  </h3>
                   <Episodes
                     show={show}
                     episodes={_(season.episodes).sort(sortAscending).value()}

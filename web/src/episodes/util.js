@@ -9,7 +9,7 @@ function indexed (episodes) {
 
 function inSeasons (episodes) {
   const seasons = _.reduce(episodes, (coll, episode) => {
-    const seasonNumber = episode.season
+    const seasonNumber = episode.season || 999 // put sesaon 0 last
     const index = _.findIndex(coll, { season: seasonNumber })
     if (index > -1) {
       coll[index].episodes.push(episode)
