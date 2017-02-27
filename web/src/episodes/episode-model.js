@@ -5,19 +5,24 @@ import util from '../lib/util'
 
 const recentDaysCutoff = localStorage.recentDaysCutoff || 5
 
-const epochISOString = moment.utc([1970, 0, 1]).toISOString()
+const epochUTC = moment.utc([1970, 0, 1])
+const epochISOString = epochUTC.toISOString()
+const farPastMs = epochUTC.valueOf()
 const farFarFutureMs = moment([2077, 11, 31]).valueOf()
 
-const nullDate = {
+// episodes with season 0 may never have airdates, so treat them as far
+// past so they don't always show up as upcoming
+const nullDate = (isSeasoned) => ({
+  isNull: true,
   isSame () { return false },
-  isBefore () { return false },
+  isBefore () { return !isSeasoned },
   isBetween () { return false },
-  isAfter () { return true },
+  isAfter () { return isSeasoned },
   toISOString () { return epochISOString },
-  format () { return 'TBA' },
+  format () { return isSeasoned ? 'TBA' : '---' },
   // so comparisons put it ahead of anything else
-  valueOf () { return farFarFutureMs },
-}
+  valueOf () { return isSeasoned ? farFarFutureMs : farPastMs },
+})
 
 export default class EpisodeModel {
   @observable id
@@ -34,7 +39,7 @@ export default class EpisodeModel {
 
     const airdate = moment(episode.airdate)
     // if year is before 1975, it's a null date set to unix epoch
-    this.airdate = airdate.year() < 1975 ? nullDate : airdate
+    this.airdate = airdate.year() < 1975 ? nullDate(!!episode.season) : airdate
   }
 
   @computed get isRecent () {
