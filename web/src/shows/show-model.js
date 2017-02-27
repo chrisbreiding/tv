@@ -65,7 +65,6 @@ export default class ShowModel {
         return episode.isRecent || episode.isUpcoming
       })
       .map((episode) => episode.serialize())
-      .take(4)
       .value()
 
     return {
