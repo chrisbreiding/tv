@@ -25,9 +25,14 @@ export default createClass({
   _button (beyondThreshold) {
     if (!beyondThreshold) { return null }
 
+    const { collapsed } = this.state
+
     return (
       <li className="more-less">
-        <a href="#" onClick={this._toggle}>{this.state.collapsed ? 'more' : 'less'}</a>
+        <a href="#" onClick={this._toggle}>
+          <i className={`fa fa-caret-${collapsed ? 'down' : 'up'}`} />
+          {collapsed ? 'more' : 'less'}
+        </a>
       </li>
     )
   },
@@ -38,5 +43,7 @@ export default createClass({
     this.setState({
       collapsed: !this.state.collapsed,
     })
+
+    e.target.blur()
   },
 })
