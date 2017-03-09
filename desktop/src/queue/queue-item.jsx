@@ -17,9 +17,11 @@ const DownloadProgress = ({ info }) => {
   if (!info) return 'Downloading'
 
   const percentage = Math.round(info.progress * 100)
+  // show --:-- instead of 00:00 if timeRemaining is 0, but torrent isn't fully downloaded
+  const timeRemaining = percentage !== 100 && !info.timeRemaining ? null : info.timeRemaining
   return (
     <p className='status download-progress'>
-      <span>Downloading: {percentage}% / {util.msToTime(info.timeRemaining)}</span>
+      <span>Downloading: {percentage}% / {util.msToTime(timeRemaining)}</span>
       <span className='meter'>
         <span style={{ width: `${percentage}%` }} />
       </span>

@@ -85,7 +85,7 @@ const getLink = (episode) => {
 }
 
 const download = (episode, directory) => (magnetLink) => {
-  const download = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     queue.update({
       id: episode.id,
       state: queue.DOWNLOADING_TORRENT,
@@ -97,57 +97,55 @@ const download = (episode, directory) => (magnetLink) => {
 
     let statusPollingId
 
-    webTorrent.add(magnetLink, { path: directory }, (torrent) => {
-      statusPollingId = setInterval(() => {
-        queue.update({
-          id: episode.id,
-          info: {
-            progress: torrent.progress, // from 0 to 1
-            timeRemaining: torrent.timeRemaining, // in milliseconds
-          },
-        })
-      }, 1000)
-
-      torrent.on('done', () => {
-        clearInterval(statusPollingId)
-        queue.update({ id: episode.id, state: queue.REMOVING_TORRENT, info: null })
-        const filePaths = _.map(torrent.files, (file) => {
-          return path.join(directory, file.path)
-        })
-        torrent.destroy(() => {
-          resolve(filePaths)
-        })
-      })
-
-      torrent.on('error', (error) => {
-        clearInterval(statusPollingId)
-        reject(new util.HandlingError('Error downloading torrent', error.message))
-      })
-
-      ipc.once(`cancel:queue:item:${episode.id}`, () => {
-        queue.update({ id: episode.id, state: queue.CANCELING })
-        clearInterval(statusPollingId)
-        const filePaths = _.map(torrent.files, (file) => {
-          return path.join(directory, file.path)
-        })
-        torrent.destroy(() => {
-          // TODO: this destroys the files, but not any containing directories
-          trash(filePaths)
-          reject(new util.CancelationError('Canceled downloading torrent'))
-        })
-      })
-    })
-
     webTorrent.on('error', (error) => {
       clearInterval(statusPollingId)
       reject(new util.HandlingError('Error downloading torrent', error.message))
+    })
+
+    const torrent = webTorrent.add(magnetLink, { path: directory })
+
+    statusPollingId = setInterval(() => {
+      queue.update({
+        id: episode.id,
+        info: {
+          progress: torrent.progress, // from 0 to 1
+          timeRemaining: torrent.timeRemaining, // in milliseconds
+        },
+      })
+    }, 1000)
+
+    torrent.on('done', () => {
+      clearInterval(statusPollingId)
+      queue.update({ id: episode.id, state: queue.REMOVING_TORRENT, info: null })
+      const filePaths = _.map(torrent.files, (file) => {
+        return path.join(directory, file.path)
+      })
+      torrent.destroy(() => {
+        resolve(filePaths)
+      })
+    })
+
+    torrent.on('error', (error) => {
+      clearInterval(statusPollingId)
+      reject(new util.HandlingError('Error downloading torrent', error.message))
+    })
+
+    ipc.once(`cancel:queue:item:${episode.id}`, () => {
+      queue.update({ id: episode.id, state: queue.CANCELING })
+      clearInterval(statusPollingId)
+      const filePaths = _.map(torrent.files, (file) => {
+        return path.join(directory, file.path)
+      })
+      torrent.destroy(() => {
+        // TODO: this destroys the files, but not any containing directories
+        trash(filePaths)
+        reject(new util.CancelationError('Canceled downloading torrent'))
+      })
     })
   })
   .finally(() => {
     ipc.off(`cancel:queue:item:${episode.id}`)
   })
-
-  return download
 }
 
 module.exports = {
