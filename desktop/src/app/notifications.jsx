@@ -35,14 +35,7 @@ class Notification extends Component {
     )
   }
 
-  componentDidMount () {
-    if (this.props.notification.type !== 'error') {
-      this.autoRemoveTimeout = setTimeout(this.props.onRemove, 10000)
-    }
-  }
-
   @action _toggleExpanded = () => {
-    clearTimeout(this.autoRemoveTimeout)
     this.isExpanded = !this.isExpanded
   }
 }
