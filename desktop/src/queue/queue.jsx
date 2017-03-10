@@ -82,10 +82,14 @@ class Queue extends Component {
   }
 
   _isCancelable (queueItem) {
-    return (
-      queueItem.state === states.SEARCHING_TORRENTS ||
-      queueItem.state === states.DOWNLOADING_TORRENT
-    )
+    switch (queueItem.state) {
+      case states.SEARCHING_TORRENTS:
+      case states.ADDING_TORRENT:
+      case states.DOWNLOADING_TORRENT:
+        return true
+      default:
+        return false
+    }
   }
 
   _remove = (id) => () => {

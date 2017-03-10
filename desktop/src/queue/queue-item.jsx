@@ -73,6 +73,7 @@ const ActionButton = observer(({ queueItem, onRemove }) => {
         </Tooltip>
       )
     case states.SEARCHING_TORRENTS:
+    case states.ADDING_TORRENT:
     case states.DOWNLOADING_TORRENT:
     case states.SELECT_TORRENT:
     case states.SELECT_FILE:

@@ -88,11 +88,7 @@ const download = (episode, directory) => (magnetLink) => {
   return new Promise((resolve, reject) => {
     queue.update({
       id: episode.id,
-      state: queue.DOWNLOADING_TORRENT,
-      info: {
-        progress: 0,
-        timeRemaining: null,
-      },
+      state: queue.ADDING_TORRENT,
     })
 
     let statusPollingId
@@ -104,15 +100,26 @@ const download = (episode, directory) => (magnetLink) => {
 
     const torrent = webTorrent.add(magnetLink, { path: directory })
 
-    statusPollingId = setInterval(() => {
+    torrent.on('ready', () => {
       queue.update({
         id: episode.id,
+        state: queue.DOWNLOADING_TORRENT,
         info: {
-          progress: torrent.progress, // from 0 to 1
-          timeRemaining: torrent.timeRemaining, // in milliseconds
+          progress: 0,
+          timeRemaining: null,
         },
       })
-    }, 1000)
+
+      statusPollingId = setInterval(() => {
+        queue.update({
+          id: episode.id,
+          info: {
+            progress: torrent.progress, // from 0 to 1
+            timeRemaining: torrent.timeRemaining, // in milliseconds
+          },
+        })
+      }, 1000)
+    })
 
     torrent.on('done', () => {
       clearInterval(statusPollingId)
@@ -131,7 +138,7 @@ const download = (episode, directory) => (magnetLink) => {
     })
 
     ipc.once(`cancel:queue:item:${episode.id}`, () => {
-      queue.update({ id: episode.id, state: queue.CANCELING })
+      queue.update({ id: episode.id, state: queue.CANCELING, info: null })
       clearInterval(statusPollingId)
       const filePaths = _.map(torrent.files, (file) => {
         return path.join(directory, file.path)
