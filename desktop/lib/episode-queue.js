@@ -30,7 +30,7 @@ module.exports = {
     queue = _.filter(queue, (item) => item.id !== id)
   },
 
-  clear () {
+  reset () {
     numSucceeded = 0
   },
 

@@ -32,9 +32,13 @@ const notifySuccess = (episode, moveOnly) => ([from, to]) => {
 }
 
 const maybeRefreshPlex = () => {
-  if (!queue.size() && queue.numSucceeded() > 0) {
-    return plex.refresh()
-    .then(() => {
+  if (queue.size()) return
+
+  const numSucceeded = queue.numSucceeded()
+  queue.reset()
+
+  if (numSucceeded > 0) {
+    return plex.refresh().then(() => {
       return ipc.send('notification', {
         title: 'Refreshing Plex TV Shows',
         type: 'success',
