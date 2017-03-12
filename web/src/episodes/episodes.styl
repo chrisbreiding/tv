@@ -1,29 +1,11 @@
-airdate-status(color, opacity = 1.0) {
-  .episode-number span {
-    background: color;
-    opacity: opacity;
-  }
-
-  .airdate {
-    color: color;
-    min-width: 5.4em;
-    opacity: opacity;
-  }
-}
-
 .episode-single {
-  align-content: space-between;
+  color: soften(foreground-color);
   display: flex;
-  border-radius: 3px;
-  font-size: .9em;
-  padding: 0.5em;
-
-  > span,
-  .episode-number span {
-    display: block;
-  }
+  font-size: 0.9em;
+  padding: 0.3em;
 
   > span {
+    display: block;
     margin-left: 0.8em;
   }
 
@@ -37,13 +19,27 @@ airdate-status(color, opacity = 1.0) {
   .episode-number {
     margin-left: 0;
 
+    // nest span because .episode-number will grow in height if file name
+    // wraps and we don't want the background to grow in height
     span {
-      background: darken(neutral-color, 40%);
       border-radius: 3px;
       color: light-color;
+      display: block;
       text-align: center;
       width: 3em;
     }
+  }
+
+  &.recent .episode-number span {
+    background: primary-color;
+  }
+
+  &.upcoming .episode-number span {
+    background: secondary-color;
+  }
+
+  &.past .episode-number span {
+    background: tertiary-color;
   }
 
   .episode-number,
@@ -51,12 +47,16 @@ airdate-status(color, opacity = 1.0) {
     flex-shrink: 0;
   }
 
+  .airdate {
+    min-width: 5.4em;
+  }
+
   .title,
   .file-name {
     cursor: pointer;
 
     &:hover {
-      color: #FFF;
+      color: foreground-color;
     }
   }
 
@@ -89,30 +89,23 @@ airdate-status(color, opacity = 1.0) {
   }
 
   &.today {
-    background: darkest-color;
+    background: rgba(255, 255, 255, 0.2);
   }
 
-  &.recent {
-    airdate-status(primary-color);
-  }
-
-  &.past {
-    airdate-status(primary-color, 0.7);
-  }
-
-  &.far-past {
-    airdate-status(primary-color, 0.5);
-  }
-
-  &.upcoming {
-    airdate-status(secondary-color);
-  }
-
+  &.far-past,
   &.future {
-    airdate-status(secondary-color, 0.7);
+    .episode-number,
+    .airdate,
+    .title > span {
+      opacity: 0.7;
+    }
   }
 
   &.far-future {
-    airdate-status(secondary-color, 0.5);
+    .episode-number,
+    .airdate,
+    .title > span {
+      opacity: 0.5;
+    }
   }
 }

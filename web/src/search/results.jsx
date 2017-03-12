@@ -32,9 +32,11 @@ export default class SearchResults extends Component {
     const searchResults = searchStore.results
 
     if (searchStore.isLoading) {
-      return <p className="no-results">
-        <Loader>Searching...</Loader>
-      </p>
+      return (
+        <p className="no-results">
+          <Loader>Searching...</Loader>
+        </p>
+      )
     } else if (this.props.params.query == null) {
       return null
     } else if (!searchResults.length) {

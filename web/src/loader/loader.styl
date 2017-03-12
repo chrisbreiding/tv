@@ -1,3 +1,25 @@
+.loading-container {
+  animation: color-cycle 6s infinite;
+}
+
+@keyframes color-cycle {
+  0% {
+    background: tertiary-color-contrast;
+  }
+  25% {
+    background: primary-color-contrast;
+  }
+  50% {
+    background: secondary-color-contrast;
+  }
+  75% {
+    background: primary-color-contrast;
+  }
+  100% {
+    background: tertiary-color-contrast;
+  }
+}
+
 .loader {
   align-items: center;
   display: flex;
@@ -6,5 +28,44 @@
   i {
     font-size: 1.4em;
     margin-right: 0.5em;
+  }
+}
+
+spinner-color(color) {
+  border-top: 0.2em solid alpha(color, 0.2);
+  border-right: 0.2em solid alpha(color, 0.2);
+  border-bottom: 0.2em solid alpha(color, 0.2);
+  border-left: 0.2em solid alpha(color, 0.8);
+}
+
+/* Credit: https://projects.lukehaas.me/css-loaders/ */
+.spinner,
+.spinner:after {
+  border-radius: 50%;
+  display: block;
+  margin-right: 1em;
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.spinner {
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  spinner-color(light-color);
+  transform: translateZ(0);
+  animation: spin 1.5s infinite linear;
+}
+
+.theme-light .spinner {
+  spinner-color(dark-color);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

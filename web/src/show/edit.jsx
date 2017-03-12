@@ -43,7 +43,9 @@ export default class EditShow extends Component {
             </form>
           </Modal.Content>
           <Modal.Footer>
-            <a onClick={this._askForConfirmation} href="#">Delete show</a>
+            <a onClick={this._askForConfirmation} href="#">
+              <i className="fa fa-minus-circle" /> Delete show
+            </a>
             <button type="submit" onClick={this._save}>Save</button>
           </Modal.Footer>
         </Modal>
@@ -65,7 +67,7 @@ export default class EditShow extends Component {
         <Modal.Content>
           <p>Delete {this.show.displayName}?</p>
         </Modal.Content>
-        <Modal.Footer onOk={this._confirmDelete} onCancel={this._cancelDelete} />
+        <Modal.Footer okText="Delete" onOk={this._confirmDelete} onCancel={this._cancelDelete} />
       </Modal>
     )
   }

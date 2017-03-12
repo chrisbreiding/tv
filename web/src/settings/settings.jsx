@@ -28,7 +28,9 @@ export default class Settings extends Component {
   render () {
     return (
       <Modal className="settings">
-        <Modal.Header onClose={this._close} />
+        <Modal.Header onClose={this._close}>
+          <h2>Settings</h2>
+        </Modal.Header>
         <Modal.Content>
           <form className="form" onSubmit={this._save}>
             <fieldset>

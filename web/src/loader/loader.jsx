@@ -1,10 +1,10 @@
 import React from 'react'
 
-export default (props) => {
-  return (
-    <span className="loader">
-      <span className="spinner"></span>
-      {props.children}
-    </span>
-  )
-}
+const Loader = ({ children, theme }) => (
+  <span className={`loader theme-${theme || 'dark'}`}>
+    <span className="spinner"></span>
+    {children}
+  </span>
+)
+
+export default Loader

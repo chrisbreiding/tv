@@ -18,13 +18,13 @@ export default class TimePeriods extends Component {
   render () {
     if (showsStore.isLoadingFromCache || settingsStore.isLoading) {
       return (
-        <div className="full-screen-centered">
+        <div className="loading-container full-screen-centered">
           <Loader>Loading shows...</Loader>
         </div>
       )
     } else {
       return (
-        <div>
+        <div className="time-periods">
           <Shows
             type="recent"
             label="Recent"

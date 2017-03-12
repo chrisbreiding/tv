@@ -1,0 +1,67 @@
+.form {
+  fieldset {
+    margin: 0.8em 0;
+  }
+
+  label {
+    display: block;
+    font-size: 0.9em;
+    margin-bottom: 0.6em;
+  }
+
+  input {
+    display: block;
+    width: 100%;
+  }
+
+  button {
+    float: right;
+  }
+}
+
+.full-screen-centered {
+  align-items: center;
+  bottom: 0;
+  display: flex;
+  left: 0;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.options {
+  display: none;
+  position: absolute;
+  top: -0.3em;
+
+  ul {
+    background: background-color;
+    border: solid 1px darken(background-color, 20%);
+    border-radius: 3px;
+    display: flex;
+    padding: 0.3em 0.6em;
+    white-space: nowrap;
+  }
+
+  li {
+    margin-left: 0.6em;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  a,
+  button {
+    background: none;
+    border: none;
+    color: primary-color;
+    padding: 0;
+    text-shadow: none;
+
+    +hover() {
+      color: secondary-color;
+    }
+  }
+}

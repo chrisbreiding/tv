@@ -4,9 +4,11 @@ const Header = ({ children, onClose }) => (
   <header>
     {children}
     {onClose && (
-      <button className="close" title="Close" onClick={onClose}>
-        <i className="fa fa-times"></i>
-      </button>
+      <div className="close">
+        <button title="Close" onClick={onClose}>
+          <i className="fa fa-times"></i>
+        </button>
+      </div>
     )}
   </header>
 )
@@ -17,7 +19,7 @@ const Content = ({ children }) => (
   </main>
 )
 
-const Footer = ({ children, onCancel, onOk }) => (
+const Footer = ({ children, onCancel, onOk, okText = 'OK' }) => (
   <footer>
     {children}
     <div className="controls">
@@ -25,7 +27,7 @@ const Footer = ({ children, onCancel, onOk }) => (
         <button className="cancel" onClick={onCancel}>Cancel</button>
       )}
       {onOk && (
-        <button className="ok" onClick={onOk}>OK</button>
+        <button className="ok" onClick={onOk}>{okText}</button>
       )}
     </div>
   </footer>

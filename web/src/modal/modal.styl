@@ -9,6 +9,7 @@ body.modal-dialog-present {
   bottom: 0;
   left: 0;
   justify-content: center;
+  padding: 1em;
   position: fixed;
   right: 0;
   top: 0;
@@ -16,13 +17,13 @@ body.modal-dialog-present {
 }
 
 .modal-dialog {
-  background: dark-color;
-  border: solid 1px lighten(dark-color, 10%);
-  border-radius: 3px;
+  background: background-color;
+  border: solid 1px soften(background-color, 10%);
+  color: foreground-color;
   display: flex;
   flex-direction: column;
-  margin: 20px;
-  max-height: 90%;
+  max-height: 100%;
+  max-width: 100%;
   position: relative;
 
   p {
@@ -30,18 +31,25 @@ body.modal-dialog-present {
   }
 
   header,
+  footer {
+    flex-shrink: 0;
+  }
+
   main,
   footer {
-    padding: 1em;
+    padding: 0.6em;
   }
 
   header {
-    padding-bottom: 0.5em;
-  }
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 
-  main,
-  footer {
-    padding-top: 0.5em;
+    h2 {
+      font-size: 1.2em;
+      font-weight: normal;
+      margin: 0.6em;
+    }
   }
 
   main {
@@ -67,25 +75,27 @@ body.modal-dialog-present {
 
   .cancel {
     background: neutral-color;
+    border-color: neutral-color;
     color: dark-color;
 
     +hover() {
       background: darken(neutral-color, 20%);
+      border-color: darken(neutral-color, 20%);
+      color: black;
     }
   }
 
   .close {
-    background: none;
-    border: none;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 1.2em;
-    position: absolute;
-    right: 0;
-    top: 0;
+    button {
+      background: none;
+      border: none;
+      color: alpha(foreground-color, 0.2);
+      font-size: 1.2em;
+      padding: 0.2em 0.3em;
 
-    +hover() {
-      background: #000;
-      color: light-color;
+      +hover() {
+        color: alpha(foreground-color, 0.6);
+      }
     }
   }
 }
