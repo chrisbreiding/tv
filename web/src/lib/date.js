@@ -13,6 +13,10 @@ const dateUtils = {
     return momentDate.isBefore(moment(), 'day')
   },
 
+  isYesterday (momentDate) {
+    return momentDate.isSame(moment().subtract(1, 'day'), 'day')
+  },
+
   isToday (momentDate) {
     return momentDate.isSame(moment(), 'day')
   },

@@ -34,6 +34,7 @@ export default class Episode extends Component {
     const airdate = episode.airdate
     const className = cs({
       'episode-single': true,
+      yesterday: date.isYesterday(airdate),
       today: date.isToday(airdate),
       'far-past': date.isFarPast(airdate),
       past: date.isPast(airdate),

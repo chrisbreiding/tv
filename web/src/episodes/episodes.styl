@@ -1,4 +1,5 @@
 .episode-single {
+  border-radius: 3px;
   color: soften(foreground-color);
   display: flex;
   font-size: 0.9em;
@@ -88,8 +89,12 @@
     }
   }
 
+  &.yesterday {
+    background: alpha(primary-color, 15%);
+  }
+
   &.today {
-    background: rgba(255, 255, 255, 0.2);
+    background: alpha(secondary-color, 15%);
   }
 
   &.far-past,
