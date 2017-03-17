@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 
+import stats from '../lib/stats'
 import Modal from '../modal/modal'
 import { AutoFocusedInput, Input } from '../lib/form'
 import { deleteShow, updateShow } from '../shows/shows-api'
@@ -12,6 +13,14 @@ export default class EditShow extends Component {
     super(props)
 
     this.state = { confirmDeletion: false }
+  }
+
+  componentWillMount () {
+    const show = showsStore.getShowById(Number(this.props.params.id))
+    stats.send('Edit Show', {
+      showId: show.id,
+      showName: show.displayName,
+    })
   }
 
   render () {

@@ -3,6 +3,7 @@ import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 
+import stats from '../lib/stats'
 import Modal from '../modal/modal'
 import date from '../lib/date'
 import { AutoFocusedInput } from '../lib/form'
@@ -15,6 +16,8 @@ export default class Settings extends Component {
   @observable searchLink = settingsStore.searchLink
 
   componentDidMount () {
+    stats.send('View Settings')
+
     this.dispose = reaction(
       () => settingsStore.searchLink,
       action((searchLink) => this.searchLink = searchLink)
@@ -57,6 +60,12 @@ export default class Settings extends Component {
 
   _save = (e) => {
     e.preventDefault()
+
+    stats.send('Update Search Link', {
+      from: settingsStore.searchLink,
+      to: this.refs.searchLink.value,
+    })
+
     updateSettings({
       searchLink: this.refs.searchLink.value,
     })

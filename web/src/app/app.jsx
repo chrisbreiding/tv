@@ -5,6 +5,7 @@ import { Link, withRouter } from 'react-router'
 
 import Messages from '../messages/messages'
 import Loader from '../loader/loader'
+import stats from '../lib/stats'
 import api from '../data/api'
 import migrate from '../data/migrate'
 import uiState from '../lib/ui-state'
@@ -18,6 +19,8 @@ export default class App extends Component {
   }
 
   componentDidMount () {
+    stats.send('Visit App')
+
     axios.interceptors.response.use(null, (error) => {
       if (error.status === 401) {
         this.props.router.push('/auth')

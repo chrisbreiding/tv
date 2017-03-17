@@ -78,4 +78,8 @@ export default {
       return response && response.data && response.data.source_shows || []
     })
   },
+
+  sendStats (event, data) {
+    return request('stats', 'post', { data: { event, data } })
+  },
 }

@@ -3,9 +3,18 @@ import { observer } from 'mobx-react'
 import React from 'react'
 import { Link } from 'react-router'
 
+import stats from '../lib/stats'
 import util from '../lib/util'
 
 export default observer(({ id, searchName, searchLink }) => {
+  const trackGoToSearch = (link) => () => {
+    stats.send('Go To Search Link', {
+      showId: id,
+      showName: searchName,
+      searchLink: link,
+    })
+  }
+
   return (
     <div className="options">
       <ul>
@@ -21,7 +30,12 @@ export default observer(({ id, searchName, searchLink }) => {
         </li>
         {_.map((searchLink || '').split(','), (link) => (
           <li key={link}>
-            <a href={util.searchLink(link, searchName)} title="Search" target="_blank">
+            <a
+              href={util.searchLink(link, searchName)}
+              onClick={trackGoToSearch(link)}
+              title="Search"
+              target="_blank"
+            >
               <i className="fa fa-search"></i>
             </a>
           </li>

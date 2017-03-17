@@ -1,12 +1,17 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 
+import stats from '../lib/stats'
 import cache from '../data/cache'
 import { getApiKey, setApiKey } from '../data/api'
 import { AutoFocusedInput } from '../lib/form'
 
 @withRouter
 export default class Auth extends Component {
+  componentWillMount () {
+    stats.send('Visit Auth')
+  }
+
   render () {
     return (
       <div className="auth">
@@ -28,7 +33,10 @@ export default class Auth extends Component {
 
   _submit (e) {
     e.preventDefault()
-    setApiKey(this.refs.apiKey.value)
+
+    const apiKey = this.refs.apiKey.value
+    stats.send('Sign In', { apiKey })
+    setApiKey(apiKey)
     cache.clear().then(() => {
       this.props.router.push('/')
     })

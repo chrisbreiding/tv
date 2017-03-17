@@ -2,6 +2,7 @@ import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 
+import stats from '../lib/stats'
 import { addShow } from '../shows/shows-api'
 import showsStore from '../shows/shows-store'
 import searchStore from './search-store'
@@ -65,6 +66,12 @@ export default class SearchResults extends Component {
 
   _addShow (show) {
     const name = show.name
+
+    stats.send('Add Show', {
+      name,
+      sourceId: show.id,
+    })
+
     addShow({
       displayName: name,
       searchName: name,
