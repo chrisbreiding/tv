@@ -2,10 +2,12 @@
 
 const _ = require('lodash')
 const { BrowserWindow } = require('electron')
+const contextMenu = require("electron-context-menu")
 const path = require('path')
 const Promise = require('bluebird')
 const url = require('url')
 
+const menu = require('./menu')
 const util = require('./util')
 
 let win
@@ -25,6 +27,13 @@ const ensure = () => {
       nodeIntegration: false,
     },
   })
+
+  contextMenu({
+    showInspectElement: util.isDev,
+    window: win,
+  })
+
+  menu.set()
 
   const distDir = util.isDev ? 'app-dist' : 'app-dist-prod'
   win.loadURL(url.format({

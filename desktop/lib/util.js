@@ -7,6 +7,7 @@ const homedir = require('homedir')()
 
 const config = new Config()
 const isDev = process.env.NODE_ENV === 'development'
+const appName = require('../package').productName
 
 const getDirectories = () => {
   return config.get('directories') || {}
@@ -98,6 +99,7 @@ const matchesEpisodeName = (episode, name) => {
 }
 
 module.exports = {
+  appName,
   isDev,
   getDirectories,
   setDirectory,
