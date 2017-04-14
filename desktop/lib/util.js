@@ -41,21 +41,21 @@ const tildeify = (directory) => {
 class CancelationError extends Error {
   constructor (message, details) {
     super(message)
-    this.isCancellationError = true
     this.details = details
   }
 }
+
+const isCancelationError = { message: 'cancel' }
 
 const wrapCancelationError = (message) => () => {
   throw new CancelationError(message)
 }
 
-const notCancelationError = (error) => !error.isCancellationError
+const notCancelationError = (error) => !(error instanceof CancelationError)
 
 class HandlingError extends Error {
   constructor (message, details, stack) {
     super(message)
-    this.isHandlingError = true
     this.details = details
     this.stack = stack
   }
@@ -70,7 +70,7 @@ const getPlexToken = () => {
 }
 
 const setPlexToken = (token) => {
-  return config.set('plexToken', token)
+  config.set('plexToken', token)
 }
 
 const pad = (num) => num < 10 ? `0${num}` : `${num}`
@@ -106,6 +106,7 @@ module.exports = {
   logError,
   tildeify,
   CancelationError,
+  isCancelationError,
   wrapCancelationError,
   notCancelationError,
   HandlingError,

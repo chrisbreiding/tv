@@ -33,7 +33,7 @@ const selectFile = (episode, directory, filePaths) => {
   return ipc.request('select:file', episode.id)
   .tap(clear)
   .get('path')
-  .catch({ message: 'cancel' }, util.wrapCancelationError('Canceled selecting file'))
+  .catch(util.isCancelationError, util.wrapCancelationError('Canceled selecting file'))
   .catch(util.notCancelationError, util.wrapHandlingError('Error selecting file'))
 }
 

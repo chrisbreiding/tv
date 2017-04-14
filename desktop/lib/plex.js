@@ -14,10 +14,10 @@ const getPlexCredentials = () => {
 
 const getApiClient = () => {
   const options = {
-    hostname: 'MBP13.local',
+    hostname: os.hostname(),
     options: {
       identifier: 'com.chrisbreiding.tv.desktop',
-      deviceName: 'TV Episodes',
+      deviceName: util.appName,
       version,
       product: (os.hostname() || '').replace('.local', ''),
       device: `OSX ${os.release()}`,
@@ -33,11 +33,9 @@ const getApiClient = () => {
 
   return getPlexCredentials()
   .then(({ authToken }) => {
-    return new Promise((resolve) => {
-      util.setPlexToken(authToken)
-      options.token = authToken
-      resolve(new PlexAPI(options))
-    })
+    util.setPlexToken(authToken)
+    options.token = authToken
+    return new PlexAPI(options)
   })
 }
 
@@ -55,8 +53,12 @@ const refresh = () => {
       }
     })
   })
-  .catch((error) => {
-    throw new util.HandlingError('Could not refresh Plex', error.message)
+  .catch(util.isCancelationError, util.wrapCancelationError(''))
+  .catch({ code: 'ECONNREFUSED' }, () => {
+    throw new Error('Plex does not appear to be running. Make sure Plex Media Server is open and running on your computer.')
+  })
+  .catch(util.notCancelationError, (error) => {
+    throw new util.HandlingError('Failed to refresh Plex', error.message)
   })
 }
 

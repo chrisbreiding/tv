@@ -45,7 +45,7 @@ class PlexCredentials extends Component {
   @action _cancel = (e) => {
     e.preventDefault()
     this.requestingPlexCredentials = false
-    ipc.send('get:plex:credentials:response', { message: 'User canceled' })
+    ipc.send('get:plex:credentials:response', { message: 'cancel' })
   }
 
   @action _submit = (e) => {

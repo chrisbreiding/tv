@@ -21,7 +21,7 @@ const selectTorrent = (episode, torrents) => {
   return ipc.request('select:torrent', episode.id)
   .tap(clear)
   .get('magnetLink')
-  .catch({ message: 'cancel' }, util.wrapCancelationError('Canceled selecting torrent'))
+  .catch(util.isCancelationError, util.wrapCancelationError('Canceled selecting torrent'))
   .catch(util.notCancelationError, util.wrapHandlingError('Error selecting torrent'))
 }
 

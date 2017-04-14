@@ -38,10 +38,19 @@ const maybeRefreshPlex = () => {
   queue.reset()
 
   if (numSucceeded > 0) {
-    return plex.refresh().then(() => {
+    return plex.refresh()
+    .then(() => {
       return ipc.send('notification', {
         title: 'Refreshing Plex TV Shows',
         type: 'success',
+      })
+    })
+    .catch(util.CancelationError, () => {}) // do nothing on cancel
+    .catch((error) => {
+      return ipc.send('notification', {
+        title: error.message,
+        message: error.details,
+        type: 'error',
       })
     })
   }
@@ -63,8 +72,6 @@ const notifyError = (episode) => ({ message, details, stack }) => {
     info: { title: message, message: details },
   })
 }
-
-const notHandlingError = (error) => !error.isHandlingError
 
 const massageUncaughtError = (episode) => (error) => {
   throw new util.HandlingError(
@@ -98,10 +105,10 @@ module.exports = (episode, moveOnly) => {
   .then(getFile(episode)[moveOnly ? 'select' : 'download'])
   .then(moveFile(episode))
   .then(notifySuccess(episode, moveOnly))
-  .catch({ isCancellationError: true }, notifyCanceled(episode))
+  .catch(util.CancelationError, notifyCanceled(episode))
+  .catch(util.HandlingError, notifyError(episode))
   .catch(Promise.AggregateError, notifyErrors(episode))
-  .catch(notHandlingError, massageUncaughtError(episode))
-  .catch(notifyError(episode))
+  .catch(massageUncaughtError(episode))
   .finally(() => {
     queue.remove(episode.id)
     return maybeRefreshPlex()
