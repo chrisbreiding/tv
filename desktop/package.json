@@ -16,13 +16,12 @@
     "start": "nodemon --exec 'electron .'",
     "watch": "zunder watch",
     "seed": "rm -rf ./dist/test/from && rm -rf ./dist/test/to && mkdir -p ./dist/test/from && mkdir -p ./dist/test/to && cp -R ./dist/test/_source/ ./dist/test/from/",
-    "move-app": "mv dist/tv-episodes.tar.gz ~/Dropbox/",
-    "deploy": "npm run pack && npm run compress && npm run move-app",
+    "move-app": "mv dist/mac/*.dmg ~/Dropbox/",
+    "deploy": "npm run dist && npm run move-app",
     "dist": "npm run build-prod && npm run icons && build",
     "dist-only": "build",
     "pack": "npm run build-prod && npm run icons && build --dir",
-    "pack-only": "build --dir",
-    "compress": "cd dist && tar czf tv-episodes.tar.gz mac"
+    "pack-only": "build --dir"
   },
   "build": {
     "appId": "com.chrisbreiding.tv.desktop",
@@ -64,7 +63,7 @@
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "sanitize-filename": "^1.6.1",
-    "teeeff": "^1.3.5",
+    "teeeff": "^2.0.3",
     "trash": "^4.0.0",
     "webtorrent": "^0.98.6"
   }

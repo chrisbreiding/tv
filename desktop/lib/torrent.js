@@ -25,20 +25,53 @@ const selectTorrent = (episode, torrents) => {
   .catch(util.notCancelationError, util.wrapHandlingError('Error selecting torrent'))
 }
 
-const search = (episode, query) => {
+const search = (strategy, episode, query) => {
   return Promise.resolve(TF.search(query, {
-    category: '205', // TV Shows
+    category: 'tv',
     orderBy: 'date',
     sortBy: 'desc',
     filter: { verified: false },
+    strategy,
   }))
   .timeout(10000)
   .then((results) => {
     return _(results)
-      .sortBy((result) => Number(result.seeders))
+      .sortBy('seeders')
       .reverse()
       .value()
   })
+}
+
+const haveSeeders = (torrents) => {
+  return !!_.some(torrents, (torrent) => torrent.seeders > 0)
+}
+
+const searchTorrents = (episode) => {
+  const { searchName } = episode.show
+  const epNum = `s${util.pad(episode.season)}e${util.pad(episode.number)}`
+
+  const attempts = [
+    () => search('a', episode, `${searchName} ${epNum}`),
+    () => search('b', episode, `${searchName} ${epNum}`),
+    () => search('a', episode, searchName),
+    () => search('b', episode, searchName),
+  ]
+
+  const attempt = (index = 0) => {
+    console.log('attempt', index)
+    return attempts[index]().then((results) => {
+      const shouldTryAgain = (
+        attempts[index + 1] &&
+        !results.length ||
+        !haveSeeders(results)
+      )
+      console.log('should try again', shouldTryAgain, results.length)
+
+      return shouldTryAgain ? attempt(index + 1) : results
+    })
+  }
+
+  return attempt()
 }
 
 const getLink = (episode) => {
@@ -47,11 +80,7 @@ const getLink = (episode) => {
   const off = () => ipc.off(`cancel:queue:item:${episode.id}`)
 
   return new Promise((resolve, reject) => {
-    const epNum = `s${util.pad(episode.season)}e${util.pad(episode.number)}`
-    search(episode, `${episode.show.searchName} ${epNum}`)
-    .then((results) => {
-      return results.length ? results : search(episode, episode.show.searchName)
-    })
+    searchTorrents(episode)
     .then((results) => resolve(results))
     .catch((error) => reject(error))
 
