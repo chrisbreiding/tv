@@ -186,6 +186,15 @@ $canceled-color: darken($neutral-color, 20%);
   }
 }
 
+.torrent-picker,
+.file-picker {
+  .empty {
+    background: $darkest-color;
+    color: darken($light-color, 20%);
+    padding: 0.4em 0.6em;
+  }
+}
+
 .torrent-picker {
   font-size: 0.9em;
   overflow: auto;
@@ -227,6 +236,15 @@ $canceled-color: darken($neutral-color, 20%);
 
   td.leechers {
     color: $error-color;
+  }
+
+  .magnet-link-input {
+    margin-bottom: 2px;
+    width: 100%;
+
+    &.is-dragging-over {
+      border-color: $primary-color;
+    }
   }
 }
 

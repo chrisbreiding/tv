@@ -19,16 +19,18 @@ describe('design', () => {
           win.ipcRenderer = ipc
         },
       })
+      .wait(1)
   })
 
-  it('loading', () => {})
+  it('settings loading', () => {
+    cy.contains('Settings').click()
+  })
 
   it('settings', () => {
-    setTimeout(() => {
-      ipc.once.withArgs('get:directories:response').yield(null, null, {
-        downloads: '~/path/to/downloads',
-        tvShows: '~/path/to/shows',
-      })
+    cy.contains('Settings').click()
+    ipc.once.withArgs('get:directories:response').yield(null, null, {
+      downloads: '~/path/to/downloads',
+      tvShows: '~/path/to/shows',
     })
   })
 
@@ -70,27 +72,34 @@ describe('design', () => {
     ipc.on.withArgs('get:plex:credentials:request').yield()
   })
 
-  it('queue', () => {
-    const addEpisode = (id, season, number, displayName) => {
-      ipc.on.withArgs('queue:episode:added').yield(null, {
-        id,
-        state: 'STARTED',
-        episode: {
-          id,
-          season,
-          number,
-          show: { displayName },
-        },
-        info: {},
-      })
-    }
+  it('queue loading', () => {})
 
-    addEpisode(1, 4, 3, 'The Show About Nothing')
-    addEpisode(6, 1, 1, 'The Show About Five-O')
-    addEpisode(2, 20, 23, 'The Show with the Coffee Shop')
-    addEpisode(5, 7, 10, 'The Show with the Airport')
-    addEpisode(3, 12, 20, 'The Show with the Radio Show Psychiatrist')
-    addEpisode(4, 3, 1, 'The Show in the Court')
+  it('empty queue', () => {
+    ipc.once.withArgs('fetch:queue:response').yield(null, null, [])
+  })
+
+  it('queue', () => {
+    const episode = (id, season, number, displayName) => ({
+      id,
+      state: 'STARTED',
+      episode: {
+        id,
+        season,
+        number,
+        show: { displayName },
+      },
+      info: {},
+    })
+
+    ipc.once.withArgs('fetch:queue:response').yield(null, null, [
+      episode(1, 4, 3, 'The Show About Nothing'),
+      episode(6, 1, 1, 'The Show About Five-O'),
+      episode(2, 20, 23, 'The Show with the Coffee Shop'),
+      episode(5, 7, 10, 'The Show with the Airport'),
+      episode(3, 12, 20, 'The Show with the Radio Show Psychiatrist'),
+      episode(7, 4, 15, 'The Show that is Unscripted'),
+      episode(4, 3, 1, 'The Show in the Court'),
+    ])
 
     let progress = 0
 
@@ -121,45 +130,53 @@ describe('design', () => {
       sendProgress(id, 0, null)
     }
 
-    download(1)
-    ipc.on.withArgs('queue:episode:updated').yield(null, {
-      id: 2,
-      state: 'FINISHED',
-      info: {
-        title: 'Finished handling episode for *The Show with the Coffee Shop*',
-        message: '*~/some/path/blah.blah.mkv*\n\nrenamed and moved to\n\n*~/some/other/path/So Nice - s2e01 - Yes.mkv*',
-      },
+    cy.wait(1).then(() => {
+      download(1)
+      ipc.on.withArgs('queue:episode:updated').yield(null, {
+        id: 2,
+        state: 'FINISHED',
+        info: {
+          title: 'Finished handling episode for *The Show with the Coffee Shop*',
+          message: '*~/some/path/blah.blah.mkv*\n\nrenamed and moved to\n\n*~/some/other/path/So Nice - s2e01 - Yes.mkv*',
+        },
+      })
+      ipc.on.withArgs('queue:episode:updated').yield(null, {
+        id: 3,
+        state: 'FAILED',
+        info: {
+          title: 'Could not download torrent blah blah',
+          message: 'Could not download torrent blah blah',
+        },
+      })
+      ipc.on.withArgs('queue:episode:updated').yield(null, {
+        id: 4,
+        state: 'CANCELED',
+        info: {
+          title: 'Canceled selecting torrent',
+        },
+      })
+      ipc.on.withArgs('queue:episode:updated').yield(null, {
+        id: 5,
+        state: 'SELECT_TORRENT',
+        items: torrents,
+      })
+      ipc.on.withArgs('select:torrent:request').yield(null, 5)
+      ipc.on.withArgs('queue:episode:updated').yield(null, {
+        id: 6,
+        state: 'SELECT_FILE',
+        items: [
+          { path: '1', relativePath: '/path/to/The.Show.About.Five-Os01e01.mkv' },
+          { path: '2', relativePath: '/path/to/The.Show.About.Five-O.101.VERY.lOng.and.PRObabLY.CAUSing.UI.T0.Scroll.A.BIT.avi' },
+          { path: '3', relativePath: '/path/to/The.Show.About.Five-O.s1e1.Redneck.Party.YOLO.avi' },
+        ],
+      })
+      ipc.on.withArgs('select:file:request').yield(null, 6)
+      ipc.on.withArgs('queue:episode:updated').yield(null, {
+        id: 7,
+        state: 'SELECT_TORRENT',
+        items: [],
+      })
+      ipc.on.withArgs('select:torrent:request').yield(null, 7)
     })
-    ipc.on.withArgs('queue:episode:updated').yield(null, {
-      id: 3,
-      state: 'FAILED',
-      info: {
-        title: 'Could not download torrent blah blah',
-        message: 'Could not download torrent blah blah',
-      },
-    })
-    ipc.on.withArgs('queue:episode:updated').yield(null, {
-      id: 4,
-      state: 'CANCELED',
-      info: {
-        title: 'Canceled selecting torrent',
-      },
-    })
-    ipc.on.withArgs('queue:episode:updated').yield(null, {
-      id: 5,
-      state: 'SELECT_TORRENT',
-      items: torrents,
-    })
-    ipc.on.withArgs('select:torrent:request').yield(null, 5)
-    ipc.on.withArgs('queue:episode:updated').yield(null, {
-      id: 6,
-      state: 'SELECT_FILE',
-      items: [
-        { path: '1', relativePath: '/path/to/The.Show.About.Five-Os01e01.mkv' },
-        { path: '2', relativePath: '/path/to/The.Show.About.Five-O.101.VERY.lOng.and.PRObabLY.CAUSing.UI.T0.Scroll.A.BIT.avi' },
-        { path: '3', relativePath: '/path/to/The.Show.About.Five-O.s1e1.Redneck.Party.YOLO.avi' },
-      ],
-    })
-    ipc.on.withArgs('select:file:request').yield(null, 6)
   })
 })

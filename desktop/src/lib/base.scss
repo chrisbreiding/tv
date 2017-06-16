@@ -31,13 +31,34 @@ h2 {
   margin-bottom: 1em;
 }
 
+nav {
+  display: flex;
+  justify-content: center;
+  padding: 1em 1em 0;
+
+  button {
+    background: none;
+    border: none;
+    border-bottom: solid 3px transparent;
+    border-radius: 0;
+    color: darken($light-color, 30%);
+    font-size: 1.3em;
+    padding: 0.6em 2em;
+
+    &:hover {
+      background: none;
+      border-color: transparent;
+      color: $light-color;
+    }
+
+    &.is-active {
+      border-color: $primary-color;
+      color: $light-color;
+    }
+  }
+}
+
 main {
-  background: $dark-color;
-  bottom: 0;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
   padding: 1em;
 }
 
@@ -62,13 +83,11 @@ button {
   font-size: 1em;
   cursor: pointer;
   outline: none;
-  padding: .4em .6em;
+  padding: 0.4em 0.6em;
   transition: all .2s ease;
   text-decoration: none;
 
-  &:hover,
-  &:focus,
-  &:active {
+  &:hover {
     background: $secondary-color;
     border-color: $secondary-color;
   }

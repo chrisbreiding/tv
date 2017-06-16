@@ -1,8 +1,10 @@
 import _ from 'lodash'
 import React from 'react'
 
-const FilePicker = ({ files, onSelect }) => (
-  <div className='file-picker'>
+const Files = ({ files, onSelect }) => {
+  if (!files.length) return <p className='empty'>No files found</p>
+
+  return (
     <ul>
       {_.map(files, (file) => (
         <li key={file.path} onClick={() => onSelect(file)}>
@@ -11,6 +13,12 @@ const FilePicker = ({ files, onSelect }) => (
         </li>
       ))}
     </ul>
+  )
+}
+
+const FilePicker = ({ files, onSelect }) => (
+  <div className='file-picker'>
+    <Files files={files} onSelect={onSelect} />
   </div>
 )
 

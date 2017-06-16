@@ -5,11 +5,13 @@ import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Tooltip from '@cypress/react-tooltip'
 
+import { states } from './queue-item-model'
+import util from '../lib/util'
+
 import FilePicker from './file-picker'
 import TorrentPicker from './torrent-picker'
-import { states } from './queue-item-model'
 
-import util from '../lib/util'
+const md = new Markdown()
 
 const statusClass = (state) => _.kebabCase(state.toLowerCase())
 
@@ -89,8 +91,6 @@ const ActionButton = observer(({ queueItem, onRemove }) => {
   }
 })
 
-const md = new Markdown()
-
 const Info = ({ queueItem, showing }) => {
   const { info } = queueItem
   if (!info || !info.title || !showing) return null
@@ -105,7 +105,6 @@ const Info = ({ queueItem, showing }) => {
 
 const Picker = observer(({ queueItem }) => {
   const { state, items, onSelect } = queueItem
-  if (!items.length) return null
 
   switch (state) {
     case states.SELECT_TORRENT:

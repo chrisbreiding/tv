@@ -1,6 +1,7 @@
 .loading {
   align-items: center;
   display: flex;
+  height: 10em;
   justify-content: center;
   width: 100%;
 
@@ -16,6 +17,14 @@
       font-size: 1.1em;
     }
   }
+}
+
+.empty {
+  align-items: center;
+  display: flex;
+  height: 4em;
+  justify-content: center;
+  width: 100%;
 }
 
 .cancel {
@@ -42,7 +51,7 @@
   display: none;
   bottom: 0;
   left: 0;
-  position: absolute;
+  position: fixed;
   right: 0;
   top: 0;
 }

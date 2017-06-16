@@ -1,64 +1,42 @@
 import cs from 'classnames'
-import { action, observable } from 'mobx'
 import { observer } from 'mobx-react'
-import React, { Component } from 'react'
+import React from 'react'
+
+import settingsApi from './settings-api'
+import settingsStore from './settings-store'
 
 import Loader from '../lib/loader'
-import ipc from '../lib/ipc'
 
-@observer
-class Settings extends Component {
-  @observable isLoading = true
-  @observable downloadsDirectory = null
-  @observable tvShowsDirectory = null
-  @observable selectingDirectory = false
-
-  componentDidMount () {
-    ipc('get:directories').then(action(({ downloads, tvShows }) => {
-      this.downloadsDirectory = downloads
-      this.tvShowsDirectory = tvShows
-      this.isLoading = false
-    }))
-  }
-
-  render () {
-    if (this.isLoading) {
-      return <Loader message='Loading' />
-    }
-
+const Settings = observer(() => {
+  if (settingsStore.isLoading) {
     return (
-      <main className={cs('settings', {
-        selecting: this.selectingDirectory,
-      })}>
-        <h1>Settings</h1>
-        <label>Downloads Directory</label>
-        <div className='fieldset'>
-          <p>{this.downloadsDirectory || '\u00A0'}</p>
-          <button onClick={this._selectDirectory('downloads')}>
-            Select
-          </button>
-        </div>
-        <label>TV Shows Directory</label>
-        <div className='fieldset'>
-          <p>{this.tvShowsDirectory || '\u00A0'}</p>
-          <button onClick={this._selectDirectory('tvShows')}>
-            Select
-          </button>
-        </div>
-        <div className='cover'></div>
+      <main>
+        <Loader message='Loading' />
       </main>
     )
   }
 
-  _selectDirectory = (directory) => action('select:directory', () => {
-    this.selectingDirectory = true
-    ipc('select:directory', directory).then(action('selected:directory', (directoryPath) => {
-      if (directoryPath) {
-        this[`${directory}Directory`] = directoryPath
-      }
-      this.selectingDirectory = false
-    }))
-  })
-}
+  return (
+    <main className={cs('settings', {
+      selecting: settingsStore.selectingDirectory,
+    })}>
+      <label>Downloads Directory</label>
+      <div className='fieldset'>
+        <p>{settingsStore.downloadsDirectory || '\u00A0'}</p>
+        <button onClick={() => settingsApi.selectDirectory('downloads')}>
+          Select
+        </button>
+      </div>
+      <label>TV Shows Directory</label>
+      <div className='fieldset'>
+        <p>{settingsStore.tvShowsDirectory || '\u00A0'}</p>
+        <button onClick={() => settingsApi.selectDirectory('tvShows')}>
+          Select
+        </button>
+      </div>
+      <div className='cover'></div>
+    </main>
+  )
+})
 
 export default Settings

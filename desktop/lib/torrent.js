@@ -58,14 +58,12 @@ const searchTorrents = (episode) => {
   ]
 
   const attempt = (index = 0) => {
-    console.log('attempt', index)
     return attempts[index]().then((results) => {
       const shouldTryAgain = (
         attempts[index + 1] &&
         !results.length ||
         !haveSeeders(results)
       )
-      console.log('should try again', shouldTryAgain, results.length)
 
       return shouldTryAgain ? attempt(index + 1) : results
     })
@@ -90,16 +88,13 @@ const getLink = (episode) => {
     })
   })
   .then((results) => {
-    if (!results.length) {
-      throw new util.HandlingError('Could not find any torrents for episode')
-    }
-
     const matches = _.filter(results, (result) => {
       return util.matchesEpisodeName(episode, result.name)
     })
 
     const firstResult = matches[0] || results[0]
     if (
+      firstResult &&
       util.matchesEpisodeName(episode, firstResult.name) &&
       (results.length === 1 || Number(firstResult.seeders) > 100)
     ) {

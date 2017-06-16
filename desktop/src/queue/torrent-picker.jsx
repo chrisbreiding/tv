@@ -1,10 +1,84 @@
 import cs from 'classnames'
 import _ from 'lodash'
-import React from 'react'
+import { action, observable } from 'mobx'
+import { observer } from 'mobx-react'
+import React, { Component } from 'react'
 import Tooltip from '@cypress/react-tooltip'
 
-const TorrentPicker = ({ torrents, onSelect }) => (
-  <div className='torrent-picker'>
+const isMagnetLink = (text) => /^magnet:/.test(text)
+
+@observer
+class MagnetLinkInput extends Component {
+  @observable isDraggingOver
+
+  componentDidMount () {
+    // silly idiosyncrancies of the drag-n-drop API
+    document.addEventListener('dragover', this._nope)
+    document.addEventListener('drop', this._nope)
+  }
+
+  render () {
+    return (
+      <input
+        className={cs('magnet-link-input', { 'is-dragging-over': this.isDraggingOver })}
+        onDragOver={this._dragover}
+        onDragLeave={this._dragleave}
+        onDrop={this._drop}
+        placeholder="Choose torrent - or - Drag magnet link here - or - Paste magnet link and hit Enter"
+        onKeyUp={this._onKeyUp}
+      />
+    )
+  }
+
+  _dragover = () => {
+    this._setDragging(true)
+    return false
+  }
+
+  _dragleave = () => {
+    this._setDragging(false)
+    return false
+  }
+
+  _drop = (e) => {
+    e.preventDefault()
+    this._setDragging(false)
+
+    e.dataTransfer.items[0].getAsString((text) => {
+      if (isMagnetLink(text)) {
+        this.props.onInput({ magnetLink: text })
+      }
+    })
+
+    return false
+  }
+
+  _onKeyUp = (e) => {
+    if (e.key === 'Enter' && isMagnetLink(e.target.value)) {
+      this.props.onInput({ magnetLink: e.target.value })
+      e.target.value = ''
+    }
+  }
+
+  @action _setDragging = (isDraggingOver) => {
+    this.isDraggingOver = isDraggingOver
+  }
+
+  _nope (e) {
+    e.preventDefault()
+    return false
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('dragover', this._nope)
+    document.removeEventListener('drop', this._nope)
+  }
+}
+
+const Torrents = ({ torrents, onSelect }) => {
+  if (!torrents.length) return <p className='empty'>No torrents found</p>
+
+  return (
     <table>
       <thead>
         <tr>
@@ -47,6 +121,13 @@ const TorrentPicker = ({ torrents, onSelect }) => (
         ))}
       </tbody>
     </table>
+  )
+}
+
+const TorrentPicker = ({ torrents, onSelect }) => (
+  <div className='torrent-picker'>
+    <MagnetLinkInput onInput={onSelect} />
+    <Torrents torrents={torrents} onSelect={onSelect} />
   </div>
 )
 

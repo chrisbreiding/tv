@@ -1,4 +1,14 @@
-import { observable } from 'mobx'
+import _ from 'lodash'
+import { action, observable } from 'mobx'
+
+const validProps = [
+  'state',
+  'episode',
+  'info',
+  'items',
+  'onSelect',
+  'onCancel',
+]
 
 class QueueItemModel {
   @observable id
@@ -11,12 +21,15 @@ class QueueItemModel {
 
   constructor (props) {
     this.id = props.id
-    this.state = props.state
-    this.episode = props.episode
+    this.update(props)
+  }
 
-    if (props.info !== undefined) this.info = props.info
-    if (props.items !== undefined) this.items = props.items
-    if (props.onCancel !== undefined) this.onCancel = props.onCancel
+  @action update (props) {
+    _.each(validProps, (prop) => {
+      if (props[prop] !== undefined) {
+        this[prop] = props[prop]
+      }
+    })
   }
 }
 

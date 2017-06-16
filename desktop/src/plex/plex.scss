@@ -1,4 +1,8 @@
 .plex-credentials {
+  align-items: center;
+  background: $dark-color;
+  display: flex;
+
   form {
     margin: 0 auto;
     max-width: 25em;

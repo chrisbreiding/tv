@@ -13,7 +13,7 @@ class PlexCredentials extends Component {
     if (!this.requestingPlexCredentials) return null
 
     return (
-      <main className='plex-credentials'>
+      <main className='plex-credentials cover'>
         <form onSubmit={this._submit}>
           <h1>Enter your Plex Auth Token</h1>
           <p>This enables auto-refreshing after a show is added</p>
