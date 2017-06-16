@@ -19,6 +19,13 @@ const setDirectory = (directory, directoryPath) => {
   }))
 }
 
+const getSettings = () => {
+  return {
+    directories: getDirectories(),
+    plexToken: getPlexToken(),
+  }
+}
+
 const getWindowSettings = () => {
   return config.get('window') || {
     width: 600,
@@ -103,6 +110,7 @@ module.exports = {
   isDev,
   getDirectories,
   setDirectory,
+  getSettings,
   getWindowSettings,
   updateWindowSettings,
   logError,

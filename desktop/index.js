@@ -34,10 +34,12 @@ app.on('will-quit', () => {
 
 app.on('activate', window.ensure)
 
-ipc.on('get:directories', (respond) => {
-  respond(null, _.transform(util.getDirectories(), (dirs, dirPath, dirName) => {
+ipc.on('get:settings', (respond) => {
+  const settings = util.getSettings()
+  settings.directories = _.transform(settings.directories, (dirs, dirPath, dirName) => {
     dirs[dirName] = util.tildeify(dirPath)
-  }))
+  })
+  respond(null, settings)
 })
 
 ipc.on('select:directory', (respond, directory) => {
@@ -54,6 +56,10 @@ ipc.on('select:directory', (respond, directory) => {
     util.setDirectory(directory, directoryPath)
     respond(null, util.tildeify(directoryPath))
   })
+})
+
+ipc.on('set:plex:credentials', (__, { authToken }) => {
+  util.setPlexToken(authToken)
 })
 
 ipc.on('fetch:queue', (respond) => {

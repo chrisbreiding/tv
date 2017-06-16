@@ -7,6 +7,16 @@ describe('design', () => {
   let ipc
   let torrents
 
+  const loadSettings = () => {
+    ipc.once.withArgs('get:settings:response').yield(null, null, {
+      directories: {
+        downloads: '~/path/to/downloads',
+        tvShows: '~/path/to/shows',
+      },
+      plexToken: 'ABC123',
+    })
+  }
+
   beforeEach(() => {
     ipc = ipcStub()
 
@@ -28,10 +38,12 @@ describe('design', () => {
 
   it('settings', () => {
     cy.contains('Settings').click()
-    ipc.once.withArgs('get:directories:response').yield(null, null, {
-      downloads: '~/path/to/downloads',
-      tvShows: '~/path/to/shows',
-    })
+    loadSettings()
+  })
+
+  it('plex credentials', () => {
+    loadSettings()
+    ipc.on.withArgs('get:plex:credentials:request').yield()
   })
 
   it('notifications', () => {
@@ -66,10 +78,6 @@ describe('design', () => {
       title: 'This is a bad one without details',
       type: 'error',
     })
-  })
-
-  it('plex credentials', () => {
-    ipc.on.withArgs('get:plex:credentials:request').yield()
   })
 
   it('queue loading', () => {})

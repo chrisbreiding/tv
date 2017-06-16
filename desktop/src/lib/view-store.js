@@ -1,22 +1,26 @@
 import { action, computed, observable } from 'mobx'
 
 class ViewStore {
-  @observable currentView = 'queue'
+  @observable currentView = { name: 'queue' }
 
   @computed get isQueue () {
-    return this.currentView === 'queue'
+    return this.currentView.name === 'queue'
   }
 
   @computed get isSettings () {
-    return this.currentView === 'settings'
+    return this.currentView.name === 'settings'
   }
 
   @action showQueue = () => {
-    this.currentView = 'queue'
+    this.currentView = {
+      name: 'queue',
+    }
   }
 
   @action showSettings = () => {
-    this.currentView = 'settings'
+    this.currentView = {
+      name: 'settings',
+    }
   }
 }
 

@@ -7,7 +7,6 @@ import settingsApi from '../settings/settings-api'
 import viewStore from '../lib/view-store'
 
 import Notifications from './notifications'
-import PlexCredentials from '../plex/plex-credentials'
 import Queue from '../queue/queue'
 import Settings from '../settings/settings'
 
@@ -20,24 +19,20 @@ class App extends Component {
 
   render () {
     return (
-      <div className='wrap'>
+      <div className={cs('wrap', {
+        'is-queue': viewStore.isQueue,
+        'is-settings': viewStore.isSettings,
+      })}>
         <nav>
-          <button
-            onClick={viewStore.showQueue}
-            className={cs({ 'is-active': viewStore.isQueue })}
-          >
+          <button className='nav-queue' onClick={viewStore.showQueue}>
             Queue
           </button>
-          <button
-            onClick={viewStore.showSettings}
-            className={cs({ 'is-active': viewStore.isSettings })}
-          >
+          <button className='nav-settings' onClick={viewStore.showSettings}>
             Settings
           </button>
         </nav>
-        {viewStore.isQueue && <Queue />}
-        {viewStore.isSettings && <Settings />}
-        <PlexCredentials />
+        <Queue />
+        <Settings />
         <Notifications />
       </div>
     )

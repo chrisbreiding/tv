@@ -11,7 +11,7 @@ import QueueItem from './queue-item'
 const Queue = observer(() => {
   if (queueStore.isLoading) {
     return (
-      <main>
+      <main className='queue'>
         <Loader message='Loading' />
       </main>
     )
@@ -19,7 +19,7 @@ const Queue = observer(() => {
 
   if (!queueStore.size) {
     return (
-      <main>
+      <main className='queue'>
         <p className='empty'>No Items in Queue</p>
       </main>
     )
