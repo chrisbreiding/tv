@@ -1,12 +1,10 @@
 import React from 'react'
 
-const Loader = ({ message }) => (
-  <main className='loading'>
-    <p>
-      <span><i className='fa fa-soccer-ball-o fa-spin'></i></span>
-      {message}...
-    </p>
-  </main>
+const Loader = ({ children, theme }) => (
+  <span className={`loader theme-${theme || 'dark'}`}>
+    <span className="spinner"></span>
+    {children}
+  </span>
 )
 
 export default Loader

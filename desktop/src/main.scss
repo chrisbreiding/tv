@@ -1,6 +1,7 @@
 @import 'lib/variables';
 @import 'lib/mixins';
 @import 'lib/base';
+@import 'lib/loader';
 @import '../node_modules/@cypress/react-tooltip/dist/tooltip.scss';
 @import '../node_modules/font-awesome/scss/font-awesome';
 @import 'lib/util';

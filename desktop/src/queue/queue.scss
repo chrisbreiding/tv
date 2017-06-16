@@ -11,7 +11,7 @@ $canceled-color: darken($neutral-color, 20%);
 
   .main {
     align-items: center;
-    border-top: solid 1px #000;
+    border-top: solid 1px $primary-color-darkest;
     display: flex;
     justify-content: space-between;
     padding: 0.6em 0;
@@ -124,7 +124,7 @@ $canceled-color: darken($neutral-color, 20%);
     }
 
     .meter {
-      background: #000;
+      background: $primary-color-darkest;
       border-radius: 2px;
       height: 2px;
       margin-top: 0.4em;
@@ -193,22 +193,17 @@ $canceled-color: darken($neutral-color, 20%);
 
 .torrent-picker,
 .file-picker {
+  background: $primary-color-darkest;
+  color: darken($light-color, 20%);
+  font-size: 0.9em;
+  overflow: auto;
+
   .empty {
-    background: $darkest-color;
-    color: darken($light-color, 20%);
     padding: 0.4em 0.6em;
   }
 }
 
 .torrent-picker {
-  font-size: 0.9em;
-  overflow: auto;
-
-  table {
-    background: $darkest-color;
-    color: darken($light-color, 20%);
-  }
-
   tbody tr {
     cursor: pointer;
 
@@ -254,14 +249,6 @@ $canceled-color: darken($neutral-color, 20%);
 }
 
 .file-picker {
-  font-size: 0.9em;
-  overflow: auto;
-
-  ul {
-    background: $darkest-color;
-    color: darken($light-color, 20%);
-  }
-
   li {
     display: flex;
     padding: 0.4em 0.6em;

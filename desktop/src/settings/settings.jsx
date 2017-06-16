@@ -12,7 +12,7 @@ const Settings = observer(() => {
   if (settingsStore.isLoading) {
     return (
       <main className='settings'>
-        <Loader message='Loading' />
+        <Loader>Loading...</Loader>
       </main>
     )
   }

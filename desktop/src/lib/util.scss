@@ -1,24 +1,3 @@
-.loading {
-  align-items: center;
-  display: flex;
-  height: 10em;
-  justify-content: center;
-  width: 100%;
-
-  i {
-    margin-right: 0.5em;
-  }
-
-  p {
-    color: darken($light-color, 20%);
-    margin-top: 0.6em;
-
-    &:first-child {
-      font-size: 1.1em;
-    }
-  }
-}
-
 .empty {
   align-items: center;
   display: flex;

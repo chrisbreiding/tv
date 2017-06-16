@@ -1,0 +1,62 @@
+.wrap {
+  border: solid 0.4em transparent;
+  display: block;
+  overflow: auto;
+  transition: all 0.5s ease-out;
+
+  &.is-queue {
+    background: $primary-color-dark;
+    border-color: $primary-color;
+  }
+
+  &.is-settings {
+    background: $secondary-color-dark;
+    border-color: $secondary-color;
+
+    input:focus {
+      border-color: $secondary-color;
+    }
+
+    .fieldset button {
+      background: $secondary-color;
+      border-color: $secondary-color;
+
+      &:hover {
+        background: $secondary-color-light;
+        border-color: $secondary-color-light;
+      }
+    }
+  }
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  padding: 1em 1em 0;
+
+  button {
+    background: none;
+    border: none;
+    border-bottom: solid 3px transparent;
+    border-radius: 0;
+    color: darken($light-color, 30%);
+    font-size: 1.3em;
+    padding: 0.6em 2em;
+
+    &:hover {
+      background: none;
+      border-color: transparent;
+      color: $light-color;
+    }
+  }
+}
+
+.is-queue .nav-queue {
+  border-color: $primary-color;
+  color: $light-color;
+}
+
+.is-settings .nav-settings {
+  border-color: $secondary-color;
+  color: $light-color;
+}

@@ -11,7 +11,7 @@ body {
 }
 
 body {
-  background: $dark-color;
+  background: $primary-color-dark;
   color: $light-color;
 }
 
@@ -61,8 +61,8 @@ button {
   text-decoration: none;
 
   &:hover {
-    background: $secondary-color;
-    border-color: $secondary-color;
+    background: $primary-color-light;
+    border-color: $primary-color-light;
   }
 }
 

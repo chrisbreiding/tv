@@ -12,7 +12,7 @@ const Queue = observer(() => {
   if (queueStore.isLoading) {
     return (
       <main className='queue'>
-        <Loader message='Loading' />
+        <Loader>Loading...</Loader>
       </main>
     )
   }

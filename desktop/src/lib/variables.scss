@@ -2,7 +2,15 @@ $fa-font-path: 'fonts';
 $tooltip-color: #d3d3d3;
 
 $primary-color: #5c7fb8;
+$primary-color-dark: desaturate(darken($primary-color, 35%), 10%);
+$primary-color-darkest: darken($primary-color-dark, 5%);
+$primary-color-light: lighten($primary-color, 10%);
 $secondary-color: #74914F;
+$secondary-color-dark: desaturate(darken($secondary-color, 30%), 10%);
+$secondary-color-light: lighten($secondary-color, 10%);
+// $tertiary-color: #75579c;
+// $tertiary-color-dark: desaturate(darken($tertiary-color, 35%), 10%);
+// $tertiary-color-light: lighten($tertiary-color, 10%);
 
 $success-color: #74914F;
 $warning-color: #cd9c52;

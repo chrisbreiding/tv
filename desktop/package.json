@@ -39,7 +39,7 @@
     "eslint-plugin-mocha": "^4.8.0",
     "eslint-plugin-react": "^6.9.0",
     "nodemon": "^1.11.0",
-    "zunder": "^4.0.4"
+    "zunder": "^4.1.1"
   },
   "dependencies": {
     "@cypress/react-tooltip": "^0.1.3",

@@ -19,7 +19,7 @@ class App extends Component {
 
   render () {
     return (
-      <div className={cs('wrap', {
+      <div className={cs('wrap cover', {
         'is-queue': viewStore.isQueue,
         'is-settings': viewStore.isSettings,
       })}>
