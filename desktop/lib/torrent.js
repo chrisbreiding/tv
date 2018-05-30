@@ -33,7 +33,7 @@ const search = (strategy, episode, query) => {
     filter: { verified: false },
     strategy,
   }))
-  .timeout(10000)
+  .timeout(20000)
   .then((results) => {
     return _(results)
       .sortBy('seeders')
