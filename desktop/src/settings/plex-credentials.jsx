@@ -25,9 +25,7 @@ class PlexCredentials extends Component {
   }
 
   _focus () {
-    console.log('check focus')
     if (this.props.shouldFocus) {
-      console.log('focus')
       this.refs.authToken.focus()
     }
   }
