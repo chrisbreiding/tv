@@ -46,6 +46,8 @@ const haveSeeders = (torrents) => {
   return !!_.some(torrents, (torrent) => torrent.seeders > 0)
 }
 
+const MAX_ATTEMPTS = 4
+
 const searchTorrents = (episode) => {
   const { searchName } = episode.show
   const epNum = `s${util.pad(episode.season)}e${util.pad(episode.number)}`
@@ -57,15 +59,27 @@ const searchTorrents = (episode) => {
     () => search('b', episode, searchName),
   ]
 
-  const attempt = (index = 0) => {
-    return attempts[index]().then((results) => {
+  const attempt = (index = 0, attempNum = 1) => {
+    if (attempNum > MAX_ATTEMPTS && attempts[index + 1]) {
+      index = index + 1
+      attempNum = 1
+    }
+
+    return attempts[index]()
+    .then((results) => {
+      // QUESTION: what happens w/ 4xx/5xx response
+
       const shouldTryAgain = (
-        attempts[index + 1] &&
-        !results.length ||
-        !haveSeeders(results)
+        attempNum <= MAX_ATTEMPTS &&
+        (!results.length || !haveSeeders(results))
       )
 
-      return shouldTryAgain ? attempt(index + 1) : results
+      return shouldTryAgain ? attempt(index, attempNum + 1) : results
+    })
+    .catch((err) => {
+      if (attempNum <= MAX_ATTEMPTS) return attempt(index, attempNum + 1)
+
+      throw err
     })
   }
 
@@ -88,20 +102,7 @@ const getLink = (episode) => {
     })
   })
   .then((results) => {
-    const matches = _.filter(results, (result) => {
-      return util.matchesEpisodeName(episode, result.name)
-    })
-
-    const firstResult = matches[0] || results[0]
-    if (
-      firstResult &&
-      util.matchesEpisodeName(episode, firstResult.name) &&
-      (results.length === 1 || Number(firstResult.seeders) > 100)
-    ) {
-      return firstResult.magnetLink
-    } else {
-      return selectTorrent(episode, results)
-    }
+    return selectTorrent(episode, results)
   })
   .catch(Promise.TimeoutError, util.wrapHandlingError('Timed out searching for torrents'))
   .catch(util.notCancelationError, util.wrapHandlingError('Error searching for torrents'))
