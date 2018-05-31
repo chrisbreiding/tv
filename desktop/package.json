@@ -10,7 +10,7 @@
     "url": "http://chrisbreiding.com/"
   },
   "scripts": {
-    "postinstall": "install-app-deps",
+    "postinstall": "electron-builder install-app-deps",
     "build-prod": "zunder build-prod",
     "icons": "mkdir -p build && iconutil -c icns assets/icon.iconset -o build/icon.icns",
     "start": "nodemon --exec 'electron .'",
@@ -18,9 +18,9 @@
     "seed": "rm -rf ./dist/test/from && rm -rf ./dist/test/to && mkdir -p ./dist/test/from && mkdir -p ./dist/test/to && cp -R ./dist/test/_source/ ./dist/test/from/",
     "move-app": "mv dist/mac/*.dmg ~/Dropbox/",
     "deploy": "npm run dist && npm run move-app",
-    "dist": "npm run build-prod && npm run icons && build",
-    "dist-only": "build",
-    "pack": "npm run build-prod && npm run icons && build --dir",
+    "dist": "npm run build-prod && npm run icons && electron-builder",
+    "dist-only": "electron-builder",
+    "pack": "npm run build-prod && npm run icons && electron-builder --dir",
     "pack-only": "build --dir"
   },
   "build": {
@@ -34,7 +34,7 @@
     "concurrently": "^3.1.0",
     "devtron": "^1.4.0",
     "electron": "^1.4.14",
-    "electron-builder": "^11.2.4",
+    "electron-builder": "^20.15.1",
     "eslint": "^3.13.1",
     "eslint-plugin-mocha": "^4.8.0",
     "eslint-plugin-react": "^6.9.0",
