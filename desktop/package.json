@@ -16,7 +16,7 @@
     "start": "nodemon --exec 'electron .'",
     "watch": "zunder watch",
     "seed": "rm -rf ./dist/test/from && rm -rf ./dist/test/to && mkdir -p ./dist/test/from && mkdir -p ./dist/test/to && cp -R ./dist/test/_source/ ./dist/test/from/",
-    "move-app": "mv dist/mac/*.dmg ~/Dropbox/",
+    "move-app": "mv dist/*.dmg ~/Dropbox/",
     "deploy": "npm run dist && npm run move-app",
     "dist": "npm run build-prod && npm run icons && electron-builder",
     "dist-only": "electron-builder",
