@@ -85,6 +85,20 @@
     }
   }
 
+  .empty-message {
+    display: none;
+  }
+
+  &.empty {
+    > ul {
+      display: none;
+    }
+
+    .empty-message {
+      display: block;
+    }
+  }
+
   h3 {
     span {
       position: relative;
