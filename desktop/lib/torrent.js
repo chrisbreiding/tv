@@ -53,10 +53,10 @@ const searchTorrents = (episode) => {
   const epNum = `s${util.pad(episode.season)}e${util.pad(episode.number)}`
 
   const attempts = [
-    () => search('a', episode, `${searchName} ${epNum}`),
     () => search('b', episode, `${searchName} ${epNum}`),
-    () => search('a', episode, searchName),
     () => search('b', episode, searchName),
+    () => search('a', episode, `${searchName} ${epNum}`),
+    () => search('a', episode, searchName),
   ]
 
   const attempt = (index = 0, attempNum = 1) => {
