@@ -63,7 +63,7 @@
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "sanitize-filename": "^1.6.1",
-    "teeeff": "^2.0.5",
+    "teeeff": "^2.0.6",
     "trash": "^4.0.0",
     "webtorrent": "^0.100.0"
   }
