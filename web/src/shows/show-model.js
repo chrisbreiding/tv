@@ -14,10 +14,10 @@ export default class ShowModel {
 
   constructor (show) {
     this.id = show.id
-    this.displayName = show.display_name
-    this.searchName = show.search_name
-    this.fileName = show.file_name
-    this.sourceId = show.source_id
+    this.displayName = show.displayName
+    this.searchName = show.searchName
+    this.fileName = show.fileName
+    this.sourceId = show.sourceId
     this.episodes = _.map(show.episodes, (episode) => new EpisodeModel(episode))
   }
 
@@ -27,9 +27,9 @@ export default class ShowModel {
 
   @computed get recentEpisodes () {
     return _(this.episodes)
-      .filter({ isRecent: true })
-      .sort(sortAscending)
-      .value()
+    .filter({ isRecent: true })
+    .sort(sortAscending)
+    .value()
   }
 
   @computed get hasUpcoming () {
@@ -38,9 +38,9 @@ export default class ShowModel {
 
   @computed get upcomingEpisodes () {
     return _(this.episodes)
-      .filter({ isUpcoming: true })
-      .sort(sortAscending)
-      .value()
+    .filter({ isUpcoming: true })
+    .sort(sortAscending)
+    .value()
   }
 
   @computed get isOffAir () {
@@ -61,17 +61,17 @@ export default class ShowModel {
 
   serialize () {
     const episodes = _(this.episodes)
-      .filter((episode) => {
-        return episode.isRecent || episode.isUpcoming
-      })
-      .map((episode) => episode.serialize())
-      .value()
+    .filter((episode) => {
+      return episode.isRecent || episode.isUpcoming
+    })
+    .map((episode) => episode.serialize())
+    .value()
 
     return {
       id: this.id,
-      display_name: this.displayName,
-      search_name: this.searchName,
-      file_name: this.fileName,
+      displayName: this.displayName,
+      searchName: this.searchName,
+      fileName: this.fileName,
       source_id: this.sourceId,
       episodes,
     }

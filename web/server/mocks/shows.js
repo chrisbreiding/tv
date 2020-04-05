@@ -32,19 +32,19 @@ module.exports = function(app, express) {
 
   showsRouter.get('/:id', function(req, res) {
     res.send({
-      'show': _.find(shows, { id: Number(req.params.id) })
+      'show': _.find(shows, { id: req.params.id })
     })
   })
 
   showsRouter.put('/:id', function(req, res) {
-    var show = _.find(shows, { id: Number(req.params.id) })
+    var show = _.find(shows, { id: req.params.id })
     res.send({
       'show': _.extend(show, req.body.show)
     })
   })
 
   showsRouter.delete('/:id', function(req, res) {
-    var index = _.findIndex(shows, { id: Number(req.params.id) })
+    var index = _.findIndex(shows, { id: req.params.id })
     if (index >= 0) {
       shows.splice(index, 1)
     }

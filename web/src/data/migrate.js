@@ -18,6 +18,7 @@ function run (version) {
 
 export default function () {
   let currentDataVersion = Number(localStorage.dataVersion || 0)
+
   return run(currentDataVersion + 1).then((newVersion) => {
     localStorage.dataVersion = newVersion
   })

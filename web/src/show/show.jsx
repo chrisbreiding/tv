@@ -39,7 +39,8 @@ const content = (show, seasons) => {
 @observer
 class Show extends Component {
   componentWillMount () {
-    const show = showsStore.getShowById(Number(this.props.params.id))
+    const show = showsStore.getShowById(this.props.params.id)
+
     stats.send('View All Episodes', {
       showId: show.id,
       showName: show.displayName,
@@ -48,7 +49,8 @@ class Show extends Component {
 
   render () {
     const { params, router } = this.props
-    const show = showsStore.getShowById(Number(params.id))
+    const show = showsStore.getShowById(params.id)
+
     if (!show) return null
 
     const seasons = inSeasons(show.episodes)

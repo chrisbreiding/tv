@@ -34,10 +34,11 @@ export default class EpisodeModel {
   constructor (episode) {
     this.id = episode.id
     this.season = episode.season
-    this.number = episode.episode_number
+    this.number = episode.episodeNumber
     this.title = _.trim(episode.title)
 
     const airdate = moment(episode.airdate)
+
     // if year is before 1975, it's a null date set to unix epoch
     this.airdate = airdate.year() < 1975 ? nullDate(!!episode.season) : airdate
   }
@@ -45,11 +46,13 @@ export default class EpisodeModel {
   @computed get isRecent () {
     let startOfiveDaysAgo = moment().subtract(recentDaysCutoff, 'days').startOf('day')
     let startOfToday = moment().startOf('day')
+
     return this.airdate.isBetween(startOfiveDaysAgo.subtract(1, 'second'), startOfToday)
   }
 
   @computed get isUpcoming () {
     let startOfToday = moment().startOf('day')
+
     return this.airdate.isAfter(startOfToday.subtract(1, 'second'))
   }
 
@@ -67,10 +70,10 @@ export default class EpisodeModel {
     }
 
     return this.title
-      .replace(/[\/\\]/g, '-')
-      .replace(/\:\s+/g, ' - ')
-      .replace(/\&/g, 'and')
-      .replace(/[\.\!\?\@\#\$\%\^\*\:]/g, '')
+    .replace(/[\/\\]/g, '-')
+    .replace(/\:\s+/g, ' - ')
+    .replace(/\&/g, 'and')
+    .replace(/[\.\!\?\@\#\$\%\^\*\:]/g, '')
   }
 
   serialize () {

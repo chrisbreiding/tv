@@ -18,9 +18,9 @@ const getShowsFromApi = action(() => {
   showsStore.isLoadingFromApi = true
 
   api.getShows()
-  .then(({ shows, episodes }) => {
-    return showsStore.showsWithEpisodes(shows, episodes)
-  })
+  // .then(({ shows, episodes }) => {
+  //   return showsStore.showsWithEpisodes(shows, episodes)
+  // })
   .then(updateShows(true))
   .then(action(() => {
     showsStore.isLoadingFromApi = false
@@ -38,18 +38,25 @@ const updateShows = (updateCache) => action('updateShows', (shows) => {
 const loadShows = action('loadShows', () => {
   showsStore.isLoadingFromCache = true
 
+  getShowsFromApi()
+
+  return
+
   getShowsFromCache().then((shows) => {
     if (shows) {
       updateShows(false)(shows)
     }
+
     getShowsFromApi()
   })
 })
 
 const addShow = action('addShow', (showToAdd) => {
   const message = messagesStore.add(`Adding ${showToAdd.displayName}...`)
+
   api.addShow(util.keysToSnakeCase(showToAdd)).then(action('showAdded', ({ show, episodes }) => {
     const showWithEpisodes = showsStore.showsWithEpisodes([show], episodes)[0]
+
     showsStore.addShow(showWithEpisodes)
     saveShowsToCache()
     messagesStore.remove(message)

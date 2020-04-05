@@ -7,23 +7,18 @@
     "deploy": "zunder deploy"
   },
   "devDependencies": {
-    "babel-core": "^6.2.1",
-    "babel-eslint": "^6.0.4",
-    "babel-loader": "^6.2.0",
-    "babel-preset-es2015": "^6.1.18",
-    "babel-preset-react": "^6.1.18",
     "baconipsum": "^0.1.2",
-    "eslint": "^3.16.1",
+    "eslint": "^6.6.0",
+    "eslint-plugin-crb": "^1.0.0",
     "eslint-plugin-react": "^6.10.0",
-    "gulp": "^3.9.0",
     "lodash": "^4.13.1",
     "moment": "^2.9.0",
-    "webpack": "^1.12.9",
-    "zunder": "^3.2.0"
+    "zunder": "^6.4.2"
   },
   "dependencies": {
     "axios": "^0.11.1",
     "classnames": "^2.2.1",
+    "firebase": "^7.2.2",
     "history": "^2.0.0",
     "localforage": "^1.3.0",
     "lodash": "^4.13.1",

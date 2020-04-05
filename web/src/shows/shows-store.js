@@ -19,42 +19,46 @@ class ShowsStore {
 
   @computed get recent () {
     return _(this.shows)
-      .filter({ hasRecent: true })
-      .orderBy(['lastEpisode.airdate', 'displayName'], ['desc', 'asc'])
-      .value()
+    .filter({ hasRecent: true })
+    .orderBy(['lastEpisode.airdate', 'displayName'], ['desc', 'asc'])
+    .value()
   }
 
   @computed get upcoming () {
     return _(this.shows)
-      .filter({ hasUpcoming: true })
-      .orderBy(['nextEpisode.airdate', 'displayName'], ['asc', 'asc'])
-      .value()
+    .filter({ hasUpcoming: true })
+    .orderBy(['nextEpisode.airdate', 'displayName'], ['asc', 'asc'])
+    .value()
   }
 
   @computed get offAir () {
     return _(this.shows)
-      .filter({ isOffAir: true })
-      .orderBy(['displayName'], ['asc'])
-      .value()
+    .filter({ isOffAir: true })
+    .orderBy(['displayName'], ['asc'])
+    .value()
   }
 
   _sortAlphabetically (a, b) {
     const aName = a.displayName.toLowerCase()
     const bName = b.displayName.toLowerCase()
+
     if (aName < bName) return -1
+
     if (aName > bName) return 1
+
     return 0
   }
 
   showsWithEpisodes (shows, episodes) {
     const episodesIndex = indexed(episodes)
+
     return _.map(shows, (show) => {
       return _(show)
-        .extend({
-          episodes: _.map(show.episode_ids, (episodeId) => episodesIndex[episodeId]),
-        })
-        .omit('episode_ids')
-        .value()
+      .extend({
+        episodes: _.map(show.episode_ids, (episodeId) => episodesIndex[episodeId]),
+      })
+      .omit('episode_ids')
+      .value()
     })
   }
 
@@ -68,6 +72,7 @@ class ShowsStore {
 
   updateShow (showProps) {
     const show = this.getShowById(showProps.id)
+
     _.extend(show, showProps)
   }
 
@@ -81,10 +86,10 @@ class ShowsStore {
       this.upcoming.slice(),
       this.offAir.slice(),
     ])
-      .flatten()
-      .uniqBy('id')
-      .map((show) => show.serialize())
-      .value()
+    .flatten()
+    .uniqBy('id')
+    .map((show) => show.serialize())
+    .value()
   }
 
   deserialize (shows) {

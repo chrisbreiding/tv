@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import { getShows } from './firebase'
+
 const baseUrl = localStorage.apiUrl || 'http://tvapi.crbapps.com'
 const desktopBaseUrl = 'http://localhost:4192'
 
@@ -44,9 +46,7 @@ export default {
   },
 
   getShows () {
-    return request('shows').then((response) => {
-      return response && response.data || { shows: [], episodes: [] }
-    })
+    return getShows()
   },
 
   addShow (show) {

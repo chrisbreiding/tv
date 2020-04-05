@@ -16,7 +16,8 @@ export default class EditShow extends Component {
   }
 
   componentWillMount () {
-    const show = showsStore.getShowById(Number(this.props.params.id))
+    const show = showsStore.getShowById(this.props.params.id)
+
     stats.send('Edit Show', {
       showId: show.id,
       showName: show.displayName,
@@ -24,7 +25,8 @@ export default class EditShow extends Component {
   }
 
   render () {
-    const show = this.show = showsStore.getShowById(Number(this.props.params.id))
+    const show = this.show = showsStore.getShowById(this.props.params.id)
+
     if (!show) return null
 
     return (
