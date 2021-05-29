@@ -80,8 +80,6 @@ export default class Episode extends Component {
   }
 
   _options () {
-    if (!uiState.desktopRunning) return null
-
     const { episode, show } = this.props
     const epNum = `s${util.pad(episode.season)}e${util.pad(episode.number)}`
 
@@ -99,16 +97,20 @@ export default class Episode extends Component {
               </a>
             </li>
           ))}
-          <li>
-            <button title='Move' onClick={this._moveEpisode}>
-              <i className='fa fa-random' />
-            </button>
-          </li>
-          <li>
-            <button title='Download' onClick={this._downloadEpisode}>
-              <i className='fa fa-cloud-download' />
-            </button>
-          </li>
+          {uiState.desktopRunning &&
+            <li>
+              <button title='Move' onClick={this._moveEpisode}>
+                <i className='fa fa-random' />
+              </button>
+            </li>
+          }
+          {uiState.desktopRunning &&
+            <li>
+              <button title='Download' onClick={this._downloadEpisode}>
+                <i className='fa fa-cloud-download' />
+              </button>
+            </li>
+          }
         </ul>
       </div>
     )
