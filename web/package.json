@@ -17,7 +17,7 @@
     "eslint-plugin-react": "^6.10.0",
     "gulp": "^3.9.0",
     "lodash": "^4.13.1",
-    "moment": "^2.9.0",
+    "moment": "^2.29.2",
     "webpack": "^1.12.9",
     "zunder": "^3.2.0"
   },
@@ -29,7 +29,7 @@
     "lodash": "^4.13.1",
     "mobx": "^2.2.2",
     "mobx-react": "^3.3.0",
-    "moment": "^2.10.6",
+    "moment": "^2.29.2",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "react-router": "^2.4.1"
