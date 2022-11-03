@@ -15,7 +15,7 @@
     "baconipsum": "^0.1.2",
     "eslint": "^3.16.1",
     "eslint-plugin-react": "^6.10.0",
-    "gulp": "^3.9.0",
+    "gulp": "^4.0.2",
     "lodash": "^4.13.1",
     "moment": "^2.9.0",
     "webpack": "^1.12.9",
