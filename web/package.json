@@ -9,7 +9,7 @@
   "devDependencies": {
     "babel-core": "^6.2.1",
     "babel-eslint": "^6.0.4",
-    "babel-loader": "^6.2.0",
+    "babel-loader": "^9.1.0",
     "babel-preset-es2015": "^6.1.18",
     "babel-preset-react": "^6.1.18",
     "baconipsum": "^0.1.2",
@@ -18,7 +18,7 @@
     "gulp": "^3.9.0",
     "lodash": "^4.13.1",
     "moment": "^2.9.0",
-    "webpack": "^1.12.9",
+    "webpack": "^5.74.0",
     "zunder": "^3.2.0"
   },
   "dependencies": {
