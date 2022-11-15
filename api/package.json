@@ -6,14 +6,14 @@
     "lint": "eslint ."
   },
   "devDependencies": {
-    "debug": "^4.1.1",
+    "debug": "^4.3.4",
     "eslint": "^5.16.0",
-    "eslint-plugin-crb": "^1.0.0"
+    "eslint-plugin-crb": "^2.0.3"
   },
   "dependencies": {
-    "bluebird": "^3.7.1",
-    "moment": "^2.24.0",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.4"
+    "bluebird": "^3.7.2",
+    "moment": "^2.29.4",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
   }
 }
