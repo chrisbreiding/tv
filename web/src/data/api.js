@@ -1,12 +1,6 @@
 import axios from 'axios'
 import messagesStore from '../messages/messages-store'
 
-messagesStore.add({
-  message: 'hey now...',
-  type: 'error',
-  dismissable: true,
-})
-
 const baseUrl = localStorage.apiUrl || 'https://proxy.crbapps.com/tv'
 const desktopBaseUrl = 'http://localhost:4192'
 

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "vite build",
-    "deploy": "echo 'TBD'",
+    "preview": "vite preview --port 8080",
     "lint": "eslint 'src/*.+(js|jsx)' 'src/**/*.+(js|jsx)'",
     "lint-fix": "npm run lint -- --fix",
     "start": "vite"
