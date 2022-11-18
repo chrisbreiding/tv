@@ -9,7 +9,7 @@ export default observer(({ exists, show, onAddShow }) => {
     <li className={cs({ exists })}>
       <img src={show.poster} />
       <article>
-        {exists ? <p>Show already added</p> : null}
+        {exists ? <p><i className="fa fa-check-square" /> Show already added</p> : null}
         <h4>{show.name}</h4>
         <dl>
           <dt className={cs({ 'no-value': !show.firstAired })}>First Aired</dt>
