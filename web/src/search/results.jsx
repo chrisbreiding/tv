@@ -10,9 +10,7 @@ import searchStore from './search-store'
 import Result from './result'
 import Loader from '../loader/loader'
 
-@withRouter
-@observer
-export default class SearchResults extends Component {
+class SearchResults extends Component {
   componentWillMount () {
     this._search(this.props.params.query)
   }
@@ -25,7 +23,7 @@ export default class SearchResults extends Component {
 
   _search (query) {
     if (query) {
-      searchStore.searchSourceShows(query)
+      searchStore.searchShows(query)
     }
   }
 
@@ -69,16 +67,13 @@ export default class SearchResults extends Component {
 
     stats.send('Add Show', {
       name,
-      sourceId: show.id,
+      showId: show.id,
     })
 
-    addShow({
-      displayName: name,
-      searchName: name,
-      fileName: name,
-      sourceId: show.id,
-    })
+    addShow(show)
 
     this.props.router.push('/')
   }
 }
+
+export default withRouter(observer(SearchResults))

@@ -1,6 +1,13 @@
 import axios from 'axios'
+import messagesStore from '../messages/messages-store'
 
-const baseUrl = localStorage.apiUrl || 'http://tvapi.crbapps.com'
+messagesStore.add({
+  message: 'hey now...',
+  type: 'error',
+  dismissable: true,
+})
+
+const baseUrl = localStorage.apiUrl || 'https://proxy.crbapps.com/tv'
 const desktopBaseUrl = 'http://localhost:4192'
 
 export function getApiKey () {
@@ -11,16 +18,46 @@ export function setApiKey (apiKey) {
   localStorage.apiKey = apiKey
 }
 
-function headers () {
-  return { api_key: getApiKey() }
+export function posterUrl (poster) {
+  return `${baseUrl}/shows/poster/${btoa(poster)}?apiKey=${getApiKey()}`
 }
 
-function request (endpoint, method = 'get', props = {}) {
-  return axios(Object.assign({
+function headers () {
+  return { 'api-key': getApiKey() }
+}
+
+async function apiRequest (endpoint, method = 'get', props = {}) {
+  const { data } = await axios(Object.assign({
     url: `${baseUrl}/${endpoint}`,
     headers: headers(),
     method,
   }, props))
+
+  return data
+}
+
+function logError (error, message) {
+  console.log(error.stack) // eslint-disable-line no-console
+
+  messagesStore.add({
+    dismissable: true,
+    message,
+    type: 'error',
+  })
+}
+
+async function desktopRequest (endpoint, data = {}) {
+  try {
+    return await axios.post(`${desktopBaseUrl}/${endpoint}`, data)
+  } catch (error) {
+    console.log(error.stack) // eslint-disable-line no-console
+
+    messagesStore.add({
+      dismissable: true,
+      message: 'Desktop request failed. See console for more information.',
+      type: 'error',
+    })
+  }
 }
 
 function pingDesktop (callback) {
@@ -31,55 +68,71 @@ function pingDesktop (callback) {
 
 export default {
   pollDesktopConnection (callback) {
+    if (window.location.hostname === 'localhost') return
+
     setInterval(() => pingDesktop(callback), 10000)
     pingDesktop(callback)
   },
 
   moveEpisode (episode) {
-    return axios.post(`${desktopBaseUrl}/move`, { episode })
+    return desktopRequest('move', { episode })
   },
 
   downloadEpisode (episode) {
-    return axios.post(`${desktopBaseUrl}/download`, { episode })
+    return desktopRequest('download', { episode })
   },
 
   getShows () {
-    return request('shows').then((response) => {
-      return response && response.data || { shows: [], episodes: [] }
+    return apiRequest('shows').catch((error) => {
+      logError(error, 'Failed to get shows')
+
+      return []
     })
   },
 
   addShow (show) {
-    return request('shows', 'post', { data: { show } }).then((response) => {
-      return response.data
+    return apiRequest('shows', 'post', { data: { show } }).catch((error) => {
+      logError(error, 'Failed to add show')
     })
   },
 
   updateShow (show) {
-    return request(`shows/${show.id}`, 'put', { data: { show } })
-  },
-
-  deleteShow ({ id }) {
-    return request(`shows/${id}`, 'delete')
-  },
-
-  getSettings () {
-    return request('settings/1').then((response) => {
-      return response && response.data && response.data.setting || {}
+    return apiRequest(`shows/${show.id}`, 'put', { data: { show } }).catch((error) => {
+      logError(error, 'Failed to update show')
     })
   },
 
-  updateSettings (setting) {
-    return request('settings/1', 'put', { data: { setting } })
+  deleteShow ({ id }) {
+    return apiRequest(`shows/${id}`, 'delete').catch((error) => {
+      logError(error, 'Failed to delete show')
+    })
   },
 
-  searchSourceShows (query) {
-    return request('source_shows', 'get', { params: { query } }).then((response) => {
-      return response && response.data && response.data.source_shows || []
+  getSettings () {
+    return apiRequest('user').catch((error) => {
+      logError(error, 'Failed to get settings')
+    })
+  },
+
+  updateSettings (settings) {
+    return apiRequest('user', 'put', { data: settings })
+    .then(() => true)
+    .catch((error) => {
+      logError(error, 'Failed to update settings')
+
+      return false
+    })
+  },
+
+  searchShows (query) {
+    return apiRequest('shows/search', 'get', { params: { query } }).catch((error) => {
+      logError(error, 'Failed to search shows')
+
+      return []
     })
   },
 
   sendStats (event, data) {
-    return request('stats', 'post', { data: { event, data } })
+    return apiRequest('stats', 'post', { data: { event, data } }).catch(() => {})
   },
 }

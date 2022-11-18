@@ -7,8 +7,7 @@ import { AutoFocusedInput, Input } from '../lib/form'
 import { deleteShow, updateShow } from '../shows/shows-api'
 import showsStore from '../shows/shows-store'
 
-@withRouter
-export default class EditShow extends Component {
+class EditShow extends Component {
   constructor (props) {
     super(props)
 
@@ -16,7 +15,7 @@ export default class EditShow extends Component {
   }
 
   componentWillMount () {
-    const show = showsStore.getShowById(Number(this.props.params.id))
+    const show = showsStore.getShowById(this.props.params.id)
     stats.send('Edit Show', {
       showId: show.id,
       showName: show.displayName,
@@ -24,7 +23,7 @@ export default class EditShow extends Component {
   }
 
   render () {
-    const show = this.show = showsStore.getShowById(Number(this.props.params.id))
+    const show = this.show = showsStore.getShowById(this.props.params.id)
     if (!show) return null
 
     return (
@@ -52,7 +51,7 @@ export default class EditShow extends Component {
             </form>
           </Modal.Content>
           <Modal.Footer>
-            <a onClick={this._askForConfirmation} href="#">
+            <a className="delete" onClick={this._askForConfirmation} href="#">
               <i className="fa fa-minus-circle" /> Delete show
             </a>
             <button type="submit" onClick={this._save}>Save</button>
@@ -106,3 +105,5 @@ export default class EditShow extends Component {
     this.props.router.push('/')
   }
 }
+
+export default withRouter(EditShow)

@@ -1,5 +1,4 @@
-import _ from 'lodash'
-import { asReference, computed, observable } from 'mobx'
+import { asReference, extendObservable } from 'mobx'
 import moment from 'moment'
 import util from '../lib/util'
 
@@ -25,59 +24,56 @@ const nullDate = (isSeasoned) => ({
 })
 
 export default class EpisodeModel {
-  @observable id
-  @observable season
-  @observable number
-  @observable title
-  @observable airdate = asReference(null)
-
   constructor (episode) {
-    this.id = episode.id
-    this.season = episode.season
-    this.number = episode.episode_number
-    this.title = _.trim(episode.title)
+    const airdate = episode.airdate ? moment(episode.airdate) : undefined
 
-    const airdate = moment(episode.airdate)
-    // if year is before 1975, it's a null date set to unix epoch
-    this.airdate = airdate.year() < 1975 ? nullDate(!!episode.season) : airdate
+    extendObservable(this, {
+      // if year is before 1975, it's a null date set to unix epoch
+      airdate: asReference(!airdate || airdate.year() < 1975 ? nullDate(!!episode.season) : airdate),
+      id: episode.id,
+      number: episode.number,
+      season: episode.season,
+      title: episode.title,
+
+      get isRecent () {
+        let startOfiveDaysAgo = moment().subtract(recentDaysCutoff, 'days').startOf('day')
+        let startOfToday = moment().startOf('day')
+        return this.airdate.isBetween(startOfiveDaysAgo.subtract(1, 'second'), startOfToday)
+      },
+
+      get isUpcoming () {
+        let startOfToday = moment().startOf('day')
+        return this.airdate.isAfter(startOfToday.subtract(1, 'second'))
+      },
+
+      get longEpisodeNumber () {
+        return `s${util.pad(this.season)}e${util.pad(this.number)}`
+      },
+
+      get shortEpisodeNumber () {
+        return `${this.season}${util.pad(this.number)}`
+      },
+
+      get fileSafeTitle () {
+        if (this.title == null) {
+          return ''
+        }
+
+        return this.title
+        .replace(/[\/\\]/g, '-')
+        .replace(/\:\s+/g, ' - ')
+        .replace(/\&/g, 'and')
+        .replace(/[\.\!\?\@\#\$\%\^\*\:]/g, '')
+      },
+    })
   }
 
-  @computed get isRecent () {
-    let startOfiveDaysAgo = moment().subtract(recentDaysCutoff, 'days').startOf('day')
-    let startOfToday = moment().startOf('day')
-    return this.airdate.isBetween(startOfiveDaysAgo.subtract(1, 'second'), startOfToday)
-  }
-
-  @computed get isUpcoming () {
-    let startOfToday = moment().startOf('day')
-    return this.airdate.isAfter(startOfToday.subtract(1, 'second'))
-  }
-
-  @computed get longEpisodeNumber () {
-    return `s${util.pad(this.season)}e${util.pad(this.number)}`
-  }
-
-  @computed get shortEpisodeNumber () {
-    return `${this.season}${util.pad(this.number)}`
-  }
-
-  @computed get fileSafeTitle () {
-    if (this.title == null) {
-      return ''
-    }
-
-    return this.title
-      .replace(/[\/\\]/g, '-')
-      .replace(/\:\s+/g, ' - ')
-      .replace(/\&/g, 'and')
-      .replace(/[\.\!\?\@\#\$\%\^\*\:]/g, '')
-  }
 
   serialize () {
     return {
       id: this.id,
       season: this.season,
-      episode_number: this.number,
+      number: this.number,
       title: this.title,
       airdate: this.airdate.toISOString(),
     }

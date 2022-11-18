@@ -10,8 +10,7 @@ import api from '../data/api'
 import migrate from '../data/migrate'
 import uiState from '../lib/ui-state'
 
-@withRouter
-export default class App extends Component {
+class App extends Component {
   constructor (props) {
     super(props)
 
@@ -69,3 +68,5 @@ export default class App extends Component {
     )
   }
 }
+
+export default withRouter(App)

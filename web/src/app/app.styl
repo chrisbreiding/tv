@@ -7,14 +7,24 @@
 
 .app-options {
   background: background-color;
-  border-bottom: solid 1px darken(background-color, 20%);
-  border-left: solid 1px darken(background-color, 20%);
+  border-bottom: solid 0.4rem tertiary-color;
+  border-left: solid 0.4rem tertiary-color;
   border-bottom-left-radius: 3px;
   font-size: 1.1em;
   padding: 0.3em 0.5em;
   position: absolute;
   right: 0;
   top: 0;
+
+  @media all and (max-width: 60em) {
+    border-bottom-color: secondary-color;
+    border-left-color: secondary-color;
+  }
+
+  @media all and (max-width: 40em) {
+    border-bottom-color: primary-color;
+    border-left-color: primary-color;
+  }
 
   li {
     display: inline-block;

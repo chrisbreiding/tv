@@ -6,7 +6,7 @@ import { Link } from 'react-router'
 import stats from '../lib/stats'
 import util from '../lib/util'
 
-export default observer(({ id, searchName, searchLink }) => {
+export default observer(({ id, searchName, searchLinks }) => {
   const trackGoToSearch = (link) => () => {
     stats.send('Go To Search Link', {
       showId: id,
@@ -28,13 +28,13 @@ export default observer(({ id, searchName, searchLink }) => {
             <i className="fa fa-edit"></i>
           </Link>
         </li>
-        {_.map((searchLink || '').split(','), (link) => (
-          <li key={link}>
+        {_.map(searchLinks, (link) => (
+          <li key={link.name}>
             <a
-              href={util.searchLink(link, searchName)}
-              onClick={trackGoToSearch(link)}
-              title="Search"
-              target="_blank"
+              href={util.searchLink(link.showLink, searchName)}
+              onClick={trackGoToSearch(link.showLink)}
+              title={`Search ${link.name}`}
+              target="_blank" rel="noreferrer"
             >
               <i className="fa fa-search"></i>
             </a>

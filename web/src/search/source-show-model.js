@@ -1,20 +1,18 @@
-import { observable } from 'mobx'
+import { extendObservable } from 'mobx'
 import moment from 'moment'
 
-export default class SourceShowModel {
-  @observable banner
-  @observable description
-  @observable firstAired
-  @observable id
-  @observable name
-  @observable network
+import { posterUrl } from '../data/api'
 
+export default class SourceShowModel {
   constructor (sourceShow) {
-    this.banner = sourceShow.banner
-    this.description = sourceShow.description
-    this.firstAired = moment(sourceShow.first_aired)
-    this.id = sourceShow.id
-    this.name = sourceShow.name
-    this.network = sourceShow.network
+    extendObservable(this, {
+      description: sourceShow.description,
+      firstAired: moment(sourceShow.first_aired),
+      id: sourceShow.id,
+      name: sourceShow.name,
+      network: sourceShow.network,
+      poster: posterUrl(sourceShow.poster),
+      status: sourceShow.status,
+    })
   }
 }

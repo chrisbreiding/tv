@@ -4,8 +4,7 @@ import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import Show from './show'
 
-@observer
-export default class Shows extends Component {
+class Shows extends Component {
   render () {
     const { label, type, showsStore, settings } = this.props
     const shows = showsStore[type]
@@ -25,11 +24,15 @@ export default class Shows extends Component {
   }
 
   _show = (show) => {
-    return <Show
-     key={show.id}
-     show={show}
-     type={this.props.type}
-     searchLink={this.props.settings.searchLink}
-    />
+    return (
+      <Show
+        key={show.id}
+        show={show}
+        type={this.props.type}
+        searchLinks={this.props.settings.searchLinks}
+      />
+    )
   }
 }
+
+export default observer(Shows)

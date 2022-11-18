@@ -1,41 +1,44 @@
 import _ from 'lodash'
-import { computed, observable } from 'mobx'
+import { extendObservable } from 'mobx'
 
 import ShowModel from './show-model'
-import { indexed } from '../episodes/util'
 
 class ShowsStore {
-  @observable shows = []
-  @observable isLoadingFromCache = false
-  @observable isLoadingFromApi = false
+  constructor () {
+    extendObservable(this, {
+      isLoadingFromApi: false,
+      isLoadingFromCache: false,
+      shows: [],
+
+      get recent () {
+        return _(this.shows)
+        .filter({ hasRecent: true })
+        .orderBy(['lastEpisode.airdate', 'displayName'], ['desc', 'asc'])
+        .value()
+      },
+
+      get upcoming () {
+        return _(this.shows)
+        .filter({ hasUpcoming: true })
+        .orderBy(['nextEpisode.airdate', 'displayName'], ['asc', 'asc'])
+        .value()
+      },
+
+      get offAir () {
+        return _(this.shows)
+        .filter({ isOffAir: true })
+        .orderBy(['displayName'], ['asc'])
+        .value()
+      },
+    })
+  }
 
   getShowById (id) {
     return this.shows.find((show) => show.id === id)
   }
 
   hasSourceShow (sourceShow) {
-    return !!this.shows.find((show) => show.sourceId === sourceShow.id)
-  }
-
-  @computed get recent () {
-    return _(this.shows)
-      .filter({ hasRecent: true })
-      .orderBy(['lastEpisode.airdate', 'displayName'], ['desc', 'asc'])
-      .value()
-  }
-
-  @computed get upcoming () {
-    return _(this.shows)
-      .filter({ hasUpcoming: true })
-      .orderBy(['nextEpisode.airdate', 'displayName'], ['asc', 'asc'])
-      .value()
-  }
-
-  @computed get offAir () {
-    return _(this.shows)
-      .filter({ isOffAir: true })
-      .orderBy(['displayName'], ['asc'])
-      .value()
+    return !!this.getShowById(sourceShow.id)
   }
 
   _sortAlphabetically (a, b) {
@@ -44,18 +47,6 @@ class ShowsStore {
     if (aName < bName) return -1
     if (aName > bName) return 1
     return 0
-  }
-
-  showsWithEpisodes (shows, episodes) {
-    const episodesIndex = indexed(episodes)
-    return _.map(shows, (show) => {
-      return _(show)
-        .extend({
-          episodes: _.map(show.episode_ids, (episodeId) => episodesIndex[episodeId]),
-        })
-        .omit('episode_ids')
-        .value()
-    })
   }
 
   setShows (shows) {
@@ -81,10 +72,10 @@ class ShowsStore {
       this.upcoming.slice(),
       this.offAir.slice(),
     ])
-      .flatten()
-      .uniqBy('id')
-      .map((show) => show.serialize())
-      .value()
+    .flatten()
+    .uniqBy('id')
+    .map((show) => show.serialize())
+    .value()
   }
 
   deserialize (shows) {

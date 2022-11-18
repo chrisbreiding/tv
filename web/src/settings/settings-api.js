@@ -11,10 +11,11 @@ function getSettingsFromCache () {
 function getSettingsFromApi () {
   return api.getSettings()
   .then((settings) => {
-    cache.set(SETTINGS, settings)
-    return settings
+    if (settings) {
+      cache.set(SETTINGS, settings)
+      setSettings(settings)
+    }
   })
-  .then(setSettings)
 }
 
 const setSettings = action('setSettings', (settings) => {
@@ -35,11 +36,13 @@ const loadSettings = action('loadSettings', () => {
 
 const updateSettings = (settings) => {
   const settingsProps = {
-    view_link: settings.searchLink,
+    searchLinks: settings.searchLinks,
   }
-  api.updateSettings(settingsProps).then(() => {
-    setSettings(settingsProps)
-    cache.set(SETTINGS, settingsStore.serialize())
+  api.updateSettings(settingsProps).then((success) => {
+    if (success) {
+      setSettings(settingsProps)
+      cache.set(SETTINGS, settingsStore.serialize())
+    }
   })
 }
 

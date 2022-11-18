@@ -33,5 +33,5 @@ render(
       <Redirect from="/*" to="/shows" />
     </Route>
   </Router>,
-  document.getElementById('app')
+  document.getElementById('app'),
 )

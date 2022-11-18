@@ -8,9 +8,7 @@ import Modal from '../modal/modal'
 import { AutoFocusedInput } from '../lib/form'
 import searchStore from './search-store'
 
-@withRouter
-@observer
-export default class Search extends Component {
+class Search extends Component {
   componentWillMount () {
     stats.send('Visit Search')
   }
@@ -49,3 +47,5 @@ export default class Search extends Component {
     this.props.router.push('/')
   }
 }
+
+export default withRouter(observer(Search))

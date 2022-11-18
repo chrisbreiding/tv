@@ -13,6 +13,30 @@
     flex-wrap: nowrap;
   }
 
+  dl {
+    border-bottom: solid 1px soften(background-color, 10%);
+    display: flex;
+    padding: 0.8em;
+  }
+
+  dt {
+    color: darken(light-color, 20%);
+  }
+
+  dd {
+    margin-left: 0.4em;
+    margin-right: 1em;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  dt.no-value,
+  dt.no-value + dd {
+    display: none;
+  }
+
   main {
     padding: 0;
 
@@ -26,7 +50,7 @@
     border-bottom: solid 1px soften(background-color, 10%);
     left: -1em;
     margin: 0;
-    padding: 0.4em 0.8em;
+    padding: 0.4rem 0.8rem;
     position: sticky;
     top: 0;
     width: 100%;
@@ -34,7 +58,7 @@
   }
 
   .episode-single {
-    padding: 0.3em 1.3em;
+    padding: 0.3em 0.8rem;
 
     &:first-child {
       padding-top: 0.9em;
@@ -79,18 +103,6 @@
   footer {
     display: flex;
     justify-content: space-between;
-
-    a {
-      color: error-color;
-      margin-top: 0.6em;
-      text-decoration: none;
-      text-shadow: none;
-      transform: none;
-
-      +hover() {
-        color: darken(error-color, 20%);
-      }
-    }
   }
 
   .hide {

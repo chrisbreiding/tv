@@ -1,20 +1,24 @@
-import {  observable } from 'mobx'
+import { extendObservable } from 'mobx'
 import moment from 'moment'
 
 class SettingsStore {
-  @observable lastUpdated
-  @observable searchLink = ''
-  @observable isLoading = false
+  constructor () {
+    extendObservable(this, {
+      lastUpdated: null,
+      searchLinks: [],
+      isLoading: false,
+    })
+  }
 
   setSettings (settings) {
-    if (settings.last_updated) this.lastUpdated = moment(settings.last_updated)
-    if (settings.view_link) this.searchLink = settings.view_link
+    if (settings.lastUpdated) this.lastUpdated = moment(settings.lastUpdated)
+    if (settings.searchLinks) this.searchLinks = settings.searchLinks
   }
 
   serialize () {
     return {
-      last_updated: this.lastUpdated.toISOString(),
-      view_link: this.searchLink,
+      lastUpdated: this.lastUpdated.toISOString(),
+      searchLinks: this.searchLinks,
     }
   }
 }

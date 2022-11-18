@@ -1,16 +1,40 @@
 .messages {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   left: 0;
   position: fixed;
   right: 0;
   text-align: center;
-  top: 0.5em;
+  top: 0.8em;
+  z-index: 100;
 
   li {
+    align-items: center;
     background: background-color;
     border: solid 1px soften(background-color);
     color: foreground-color;
-    display: inline-block;
-    margin: 0 0.5em;
-    padding: 0.5em 1em;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0.8em 0.8em;
+
+    span {
+      padding: 0.8em 1em;
+    }
+
+    button {
+      background: none;
+      border: none;
+      color: soften(foreground-color);
+
+      +hover() {
+        color: foreground-color;
+      }
+    }
+
+    &.type-error {
+      background: error-color;
+      border-color: soften(error-color);
+    }
   }
 }

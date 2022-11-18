@@ -6,8 +6,7 @@ import cache from '../data/cache'
 import { getApiKey, setApiKey } from '../data/api'
 import { AutoFocusedInput } from '../lib/form'
 
-@withRouter
-export default class Auth extends Component {
+class Auth extends Component {
   componentWillMount () {
     stats.send('Visit Auth')
   }
@@ -42,3 +41,5 @@ export default class Auth extends Component {
     })
   }
 }
+
+export default withRouter(Auth)

@@ -4,7 +4,6 @@ import cache, { SHOWS } from '../data/cache'
 import api from '../data/api'
 import messagesStore from '../messages/messages-store'
 import showsStore from './shows-store'
-import util from '../lib/util'
 
 function getShowsFromCache () {
   return cache.get(SHOWS)
@@ -18,9 +17,6 @@ const getShowsFromApi = action(() => {
   showsStore.isLoadingFromApi = true
 
   api.getShows()
-  .then(({ shows, episodes }) => {
-    return showsStore.showsWithEpisodes(shows, episodes)
-  })
   .then(updateShows(true))
   .then(action(() => {
     showsStore.isLoadingFromApi = false
@@ -47,17 +43,18 @@ const loadShows = action('loadShows', () => {
 })
 
 const addShow = action('addShow', (showToAdd) => {
-  const message = messagesStore.add(`Adding ${showToAdd.displayName}...`)
-  api.addShow(util.keysToSnakeCase(showToAdd)).then(action('showAdded', ({ show, episodes }) => {
-    const showWithEpisodes = showsStore.showsWithEpisodes([show], episodes)[0]
-    showsStore.addShow(showWithEpisodes)
-    saveShowsToCache()
-    messagesStore.remove(message)
+  const messageId = messagesStore.add({ message: `Adding ${showToAdd.name}...` })
+  api.addShow(showToAdd).then(action('showAdded', (show) => {
+    if (show) {
+      showsStore.addShow(show)
+      saveShowsToCache()
+    }
+    messagesStore.remove(messageId)
   }))
 })
 
 const updateShow = action('updateShow', (showProps) => {
-  api.updateShow(util.keysToSnakeCase(showProps))
+  api.updateShow(showProps)
   showsStore.updateShow(showProps)
   saveShowsToCache()
 })

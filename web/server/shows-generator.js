@@ -105,7 +105,7 @@ module.exports = {
     return {
       id: id,
       season: season,
-      episode_number: epNum,
+      number: epNum,
       title: title,
       airdate: airdate.startOf('day').toISOString()
     }

@@ -44,13 +44,13 @@ const dateUtils = {
   },
 
   status (momentDate) {
-    return dateUtils.isToday(momentDate)     ? 'today upcoming' :
-           dateUtils.isFarPast(momentDate)   ? 'far-past'       :
-           dateUtils.isPast(momentDate)      ? 'past'           :
-           dateUtils.isRecent(momentDate)    ? 'recent'         :
-           dateUtils.isFarFuture(momentDate) ? 'far-future'     :
-           dateUtils.isFuture(momentDate)    ? 'future'         :
-                                               'upcoming'
+    return dateUtils.isToday(momentDate) ? 'today upcoming' :
+      dateUtils.isFarPast(momentDate) ? 'far-past' :
+        dateUtils.isPast(momentDate) ? 'past' :
+          dateUtils.isRecent(momentDate) ? 'recent' :
+            dateUtils.isFarFuture(momentDate) ? 'far-future' :
+              dateUtils.isFuture(momentDate) ? 'future' :
+                'upcoming'
   },
 
   todayObject () {

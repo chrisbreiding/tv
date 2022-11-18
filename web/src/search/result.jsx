@@ -7,12 +7,9 @@ import date from '../lib/date'
 export default observer(({ exists, show, onAddShow }) => {
   return (
     <li className={cs({ exists })}>
-      <button title="Add Show" onClick={onAddShow} disabled={exists}>
-        <i className="fa fa-plus"></i>
-      </button>
-      <div>
+      <img src={show.poster} />
+      <article>
         {exists ? <p>Show already added</p> : null}
-        <img src={show.banner} />
         <h4>{show.name}</h4>
         <dl>
           <dt className={cs({ 'no-value': !show.firstAired })}>First Aired</dt>
@@ -23,8 +20,15 @@ export default observer(({ exists, show, onAddShow }) => {
 
           <dt className={cs({ 'no-value': !show.description })}>Description</dt>
           <dd>{show.description}</dd>
+
+          <dt className={cs({ 'no-value': !show.status })}>Status</dt>
+          <dd>{show.status}</dd>
         </dl>
-      </div>
+      </article>
+      <div className="spacer" />
+      <button title="Add Show" onClick={onAddShow} disabled={exists}>
+        <i className="fa fa-plus"></i>
+      </button>
     </li>
   )
 })

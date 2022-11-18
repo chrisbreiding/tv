@@ -95,7 +95,17 @@ button {
   transition: all 0.3s ease;
 
   +hover() {
-    background: secondary-color;
-    border-color: secondary-color;
+    background: darken(primary-color, 20%);
+    border-color: darken(primary-color, 20%);
+  }
+}
+
+button.alt {
+  background: secondary-color;
+  border-color: secondary-color;
+
+  +hover() {
+    background: darken(secondary-color, 20%);
+    border-color: darken(secondary-color, 20%);
   }
 }

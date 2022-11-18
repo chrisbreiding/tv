@@ -8,8 +8,7 @@ import settingsStore from '../settings/settings-store'
 import Shows from '../shows/shows'
 import Loader from '../loader/loader'
 
-@observer
-export default class TimePeriods extends Component {
+class TimePeriods extends Component {
   componentWillMount () {
     loadShows()
     loadSettings()
@@ -49,3 +48,5 @@ export default class TimePeriods extends Component {
     }
   }
 }
+
+export default observer(TimePeriods)

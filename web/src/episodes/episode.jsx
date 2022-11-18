@@ -86,12 +86,12 @@ export default class Episode extends Component {
     return (
       <div className='options'>
         <ul>
-          {_.map((settingsStore.searchLink || '').split(','), (link) => (
-            <li key={link}>
+          {_.map(settingsStore.searchLinks, (link) => (
+            <li key={link.name}>
               <a
-                href={`${util.searchLink(link, show.searchName, epNum)}`}
-                title="Search"
-                target="_blank"
+                href={`${util.searchLink(link.episodeLink, show.searchName, epNum)}`}
+                title={`Search ${link.name}`}
+                target="_blank" rel="noreferrer"
               >
                 <i className="fa fa-search"></i>
               </a>

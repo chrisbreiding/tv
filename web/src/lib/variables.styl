@@ -1,18 +1,18 @@
-theme = 'dark'
+theme = 'dark';
 
 contrast-color(color) {
-  fn = theme == 'dark' ? darken : lighten
+  fn = theme == 'dark' ? darken : lighten;
   saturation(fn(color, 70%), 20%);
 }
 
 soften(color, percent = 20%) {
-  fn = dark(color) ? lighten : darken
-  fn(color, percent)
+  fn = dark(color) ? lighten : darken;
+  fn(color, percent);
 }
 
 harden(color, percent = 20%) {
-  fn = dark(color) ? darken : lighten
-  fn(color, percent)
+  fn = dark(color) ? darken : lighten;
+  fn(color, percent);
 }
 
 primary-color = #5c7fb8;
@@ -30,9 +30,9 @@ neutral-color = #b4b4b4;
 dark-color = #242424;
 
 if (theme == 'dark') {
-  background-color = dark-color
-  foreground-color = light-color
+  background-color = dark-color;
+  foreground-color = light-color;
 } else {
-  background-color = light-color
-  foreground-color = dark-color
+  background-color = light-color;
+  foreground-color = dark-color;
 }

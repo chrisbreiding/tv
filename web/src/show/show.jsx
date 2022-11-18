@@ -1,3 +1,4 @@
+import cs from 'classnames'
 import _ from 'lodash'
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
@@ -34,12 +35,9 @@ const content = (show, seasons) => {
   )
 }
 
-
-@withRouter
-@observer
 class Show extends Component {
   componentWillMount () {
-    const show = showsStore.getShowById(Number(this.props.params.id))
+    const show = showsStore.getShowById(this.props.params.id)
     stats.send('View All Episodes', {
       showId: show.id,
       showName: show.displayName,
@@ -48,7 +46,7 @@ class Show extends Component {
 
   render () {
     const { params, router } = this.props
-    const show = showsStore.getShowById(Number(params.id))
+    const show = showsStore.getShowById(params.id)
     if (!show) return null
 
     const seasons = inSeasons(show.episodes)
@@ -59,6 +57,13 @@ class Show extends Component {
           <h2>{show.displayName}</h2>
         </Modal.Header>
         <Modal.Content>
+          <dl>
+            <dt className={cs({ 'no-value': !show.network })}>Network:</dt>
+            <dd>{show.network}</dd>
+
+            <dt className={cs({ 'no-value': !show.status })}>Status:</dt>
+            <dd>{show.status}</dd>
+          </dl>
           {content(show, seasons)}
         </Modal.Content>
       </Modal>
@@ -66,4 +71,4 @@ class Show extends Component {
   }
 }
 
-export default Show
+export default withRouter(observer(Show))

@@ -16,7 +16,7 @@ module.exports = function(app, express) {
                     .startOf('day')
                     .toISOString(),
       network: textGen(1).substr(0, 3).toUpperCase(),
-      banner: '/api/static/banner-' + _.random(1, 4) + '.png'
+      poster: '/api/static/banner-' + _.random(1, 4) + '.png'
     }
   })
 

@@ -30,6 +30,10 @@
   top: 0;
 }
 
+.spacer {
+  flex-grow: 2;
+}
+
 .options {
   display: none;
   position: absolute;
@@ -63,5 +67,17 @@
     +hover() {
       color: secondary-color;
     }
+  }
+}
+
+a.delete {
+  color: error-color;
+  margin-top: 0.6em;
+  text-decoration: none;
+  text-shadow: none;
+  transform: none;
+
+  +hover() {
+    color: darken(error-color, 20%);
   }
 }

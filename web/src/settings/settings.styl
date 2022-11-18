@@ -1,17 +1,80 @@
 .settings {
-  .form fieldset {
-    margin: 0;
+  padding: 0;
+
+  .modal-dialog {
+    border: none;
+    height: 100%;
+    width: 100%;
+  }
+
+  header,
+  main,
+  footer {
+    padding: 0.8rem 1.2rem;
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  header {
+    border-bottom: solid 1px soften(background-color, 10%);
+  }
+
+  main {
+    background: harden(background-color);
+
+    h3 {
+      margin-top: 0;
+    }
+
+    p {
+      color: soften(foreground-color);
+      margin: 0.4em 0;
+
+      i {
+        color: primary-color;
+      }
+
+      em {
+        color: foreground-color;
+        font-style: normal;
+        font-family: monospace;
+      }
+    }
+  }
+
+  .form {
+    fieldset {
+      background: background-color;
+      border: solid 1px soften(background-color, 10%);
+      margin: 0.8em 0;
+      padding: 0.6em 0.8em;
+    }
+
+    button {
+      float: none;
+    }
+  }
+
+  .add-link {
+    border-color: success-color;
+    background: success-color;
   }
 
   footer {
     align-items: flex-end;
+    border-top: solid 1px soften(background-color, 10%);
     display: flex;
-    justify-content: space-between;
 
     p {
       color: darken(neutral-color, 20%);
       font-size: 0.8em;
       margin: 0 2em 0 0;
+    }
+
+    button {
+      margin-left: 1em;
     }
   }
 }
