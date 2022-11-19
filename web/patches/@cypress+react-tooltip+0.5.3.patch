@@ -1,0 +1,4 @@
+diff --git a/node_modules/@cypress/react-tooltip/dist/tooltip.css b/node_modules/@cypress/react-tooltip/dist/tooltip.styl
+similarity index 100%
+rename from node_modules/@cypress/react-tooltip/dist/tooltip.css
+rename to node_modules/@cypress/react-tooltip/dist/tooltip.styl
