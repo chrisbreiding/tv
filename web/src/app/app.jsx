@@ -21,7 +21,7 @@ class App extends Component {
     stats.send('Visit App')
 
     axios.interceptors.response.use(null, (error) => {
-      if (error.status === 401) {
+      if (error.response?.status === 401) {
         this.props.router.push('/auth')
         return
       }

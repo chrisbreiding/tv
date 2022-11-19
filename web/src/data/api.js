@@ -25,19 +25,27 @@ async function apiRequest (endpoint, method = 'get', props = {}) {
     url: `${baseUrl}/${endpoint}`,
     headers: headers(),
     method,
-  }, props))
+  }, props)) || {}
 
   return data
 }
 
 function logError (error, message) {
-  console.log(error.stack) // eslint-disable-line no-console
-
-  messagesStore.add({
-    dismissable: true,
-    message,
-    type: 'error',
+  // eslint-disable-next-line no-console
+  console.log({
+    message: error.message,
+    stack: error.stack,
+    response: error.response,
   })
+
+  if (error.response?.status !== 401) {
+    // 401 redirects to /auth and shouldn't surface this message to user
+    messagesStore.add({
+      dismissable: true,
+      message,
+      type: 'error',
+    })
+  }
 }
 
 async function desktopRequest (endpoint, data = {}) {
