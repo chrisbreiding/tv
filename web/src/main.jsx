@@ -1,8 +1,9 @@
 import { useStrict } from 'mobx'
 import React from 'react'
 import { render } from 'react-dom'
-import { createHashHistory } from 'history'
+import { createHistory } from 'history'
 import { IndexRoute, Router, Route, Redirect, useRouterHistory } from 'react-router'
+
 useStrict(true)
 
 import App from './app/app'
@@ -14,7 +15,7 @@ import Settings from './settings/settings'
 import Search from './search/search'
 import SearchResults from './search/results'
 
-const history = useRouterHistory(createHashHistory)()
+const history = useRouterHistory(createHistory)()
 
 render(
   <Router history={history}>
