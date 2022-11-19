@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import cs from 'classnames'
 import React, { Component } from 'react'
+import Tooltip from '@cypress/react-tooltip'
 
 import date from '../lib/date'
 import uiState from '../lib/ui-state'
@@ -52,8 +53,9 @@ export default class Episode extends Component {
         </span>
         <span className="airdate">{date.shortString(episode.airdate)}</span>
         <span className="title">
-          <span onClick={this._showFileName}>{episode.title || 'TBA'}</span>
-          {this._options()}
+          <Tooltip className="episode-tooltip tooltip" placement="right" title={this._options()}>
+            <span onClick={this._showFileName}>{episode.title || 'TBA'}</span>
+          </Tooltip>
         </span>
         <span className="file-name" ref="fileName">
           {this._fileName()}

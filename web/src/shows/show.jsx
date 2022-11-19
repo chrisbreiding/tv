@@ -1,15 +1,18 @@
 import { observer } from 'mobx-react'
 import React from 'react'
+import Tooltip from '@cypress/react-tooltip'
+
 import Episodes from '../episodes/episodes'
 import Options from './show-options'
 
 export default observer(({ show, type, searchLinks }) => (
   <li key={show.id}>
     <h3>
-      <span>
-        {show.displayName}
+      <Tooltip placement="right" title={(
         <Options id={show.id} searchName={show.searchName} searchLinks={searchLinks} />
-      </span>
+      )}>
+        <span>{show.displayName}</span>
+      </Tooltip>
     </h3>
     <Episodes show={show} episodes={show[`${type}Episodes`]} threshold={3} />
   </li>

@@ -36,11 +36,11 @@ const content = (show, seasons) => {
 }
 
 class Show extends Component {
-  componentWillMount () {
+  componentDidMount () {
     const show = showsStore.getShowById(this.props.params.id)
     stats.send('View All Episodes', {
-      showId: show.id,
-      showName: show.displayName,
+      showId: this.props.params.id,
+      showName: show?.displayName,
     })
   }
 

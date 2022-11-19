@@ -9,7 +9,7 @@ import { AutoFocusedInput } from '../lib/form'
 import searchStore from './search-store'
 
 class Search extends Component {
-  componentWillMount () {
+  componentDidMount () {
     stats.send('Visit Search')
   }
 

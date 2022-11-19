@@ -14,7 +14,7 @@ class EditShow extends Component {
     this.state = { confirmDeletion: false }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     const show = showsStore.getShowById(this.props.params.id)
     stats.send('Edit Show', {
       showId: show.id,
@@ -29,7 +29,7 @@ class EditShow extends Component {
     return (
       <div className="show-edit">
         <Modal className="show-edit-modal">
-          <Modal.Header onClose={this._close} />
+          <Modal.Header />
           <Modal.Content>
             <form className="form" onSubmit={this._save}>
               <fieldset>
@@ -50,11 +50,10 @@ class EditShow extends Component {
               <button className="hide">Hidden here so submit on enter works</button>
             </form>
           </Modal.Content>
-          <Modal.Footer>
+          <Modal.Footer okText="Save" onOk={this._save} onCancel={this._cancel}>
             <a className="delete" onClick={this._askForConfirmation} href="#">
               <i className="fa fa-minus-circle" /> Delete show
             </a>
-            <button type="submit" onClick={this._save}>Save</button>
           </Modal.Footer>
         </Modal>
         {this._confirmation()}
@@ -98,6 +97,10 @@ class EditShow extends Component {
       searchName: this.refs.searchName.value,
       fileName: this.refs.fileName.value,
     })
+    this._close()
+  }
+
+  _cancel = () => {
     this._close()
   }
 

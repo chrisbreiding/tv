@@ -34,22 +34,31 @@
   flex-grow: 2;
 }
 
-.options {
-  display: none;
-  position: absolute;
-  top: -0.3em;
+.tooltip {
+  background: background-color;
+  border-color: background-color;
+  font-size: 16px;
+  padding: 0;
+  z-index: 5;
+}
 
+.tooltip-arrow svg {
+  fill: background-color;
+  stroke: background-color;
+}
+
+.options {
   ul {
     background: background-color;
     border: solid 1px darken(background-color, 20%);
     border-radius: 3px;
     display: flex;
-    padding: 0.3em 0.6em;
+    padding: 0.3rem 0.6rem;
     white-space: nowrap;
   }
 
   li {
-    margin-left: 0.6em;
+    margin-left: 0.6rem;
 
     &:first-child {
       margin-left: 0;

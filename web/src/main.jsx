@@ -14,7 +14,7 @@ import Settings from './settings/settings'
 import Search from './search/search'
 import SearchResults from './search/results'
 
-const history = useRouterHistory(createHashHistory)({ queryKey: false })
+const history = useRouterHistory(createHashHistory)()
 
 render(
   <Router history={history}>

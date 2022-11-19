@@ -1,9 +1,11 @@
-import React, { Children, createClass } from 'react'
+import React, { Children, Component } from 'react'
 
-export default createClass({
-  getInitialState () {
-    return { collapsed: true }
-  },
+export default class MoreLess extends Component {
+  constructor (props) {
+    super(props)
+
+    this.state = { collapsed: true }
+  }
 
   render () {
     const { children, threshold } = this.props
@@ -15,12 +17,12 @@ export default createClass({
         {this._button(beyondThreshold)}
       </ul>
     )
-  },
+  }
 
   _beyondThreshold () {
     const { children, threshold } = this.props
     return threshold && Children.count(children) > threshold
-  },
+  }
 
   _button (beyondThreshold) {
     if (!beyondThreshold) { return null }
@@ -35,9 +37,9 @@ export default createClass({
         </a>
       </li>
     )
-  },
+  }
 
-  _toggle (e) {
+  _toggle = (e) => {
     e.preventDefault()
 
     this.setState({
@@ -45,5 +47,5 @@ export default createClass({
     })
 
     e.target.blur()
-  },
-})
+  }
+}

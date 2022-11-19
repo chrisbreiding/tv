@@ -9,7 +9,7 @@ import Shows from '../shows/shows'
 import Loader from '../loader/loader'
 
 class TimePeriods extends Component {
-  componentWillMount () {
+  componentDidMount () {
     loadShows()
     loadSettings()
   }

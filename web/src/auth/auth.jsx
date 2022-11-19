@@ -7,7 +7,7 @@ import { getApiKey, setApiKey } from '../data/api'
 import { AutoFocusedInput } from '../lib/form'
 
 class Auth extends Component {
-  componentWillMount () {
+  componentDidMount () {
     stats.send('Visit Auth')
   }
 

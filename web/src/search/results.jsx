@@ -11,7 +11,7 @@ import Result from './result'
 import Loader from '../loader/loader'
 
 class SearchResults extends Component {
-  componentWillMount () {
+  componentDidMount () {
     this._search(this.props.params.query)
   }
 
