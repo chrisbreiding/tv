@@ -1,3 +1,5 @@
+import { faCircleMinus, faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import _ from 'lodash'
 import { action, reaction, extendObservable } from 'mobx'
 import { observer } from 'mobx-react'
@@ -29,7 +31,7 @@ const SearchLinkEditor = observer(({ link, onRemove }) => {
       <label>Episode Link</label>
       <input value={link.episodeLink} onChange={onChange('episodeLink')} />
       <a className="delete" onClick={_onRemove} href="#">
-        <i className="fa fa-minus-circle" /> Delete
+        <FontAwesomeIcon icon={faCircleMinus} /> Delete
       </a>
     </fieldset>
   )
@@ -66,7 +68,7 @@ class Settings extends Component {
         <Modal.Content>
           <form className="form" onSubmit={this._save}>
             <h3>Search Links</h3>
-            <p>Search links that appear as <i className="fa fa-search" /> when hovering over a show or episode. The following placeholders can be used:</p>
+            <p>Search links that appear as <FontAwesomeIcon icon={faMagnifyingGlass} /> when hovering over a show or episode. The following placeholders can be used:</p>
             <p><em>[show name]</em>: The <strong>Search Name</strong> of the show</p>
             <p><em>[episode]</em>: The episode season and number (e.g. s01e12)</p>
             {_.map(this.searchLinks, (link, i) => (
@@ -74,7 +76,7 @@ class Settings extends Component {
             ))}
             <div className="controls">
               <button type="button" className="add-link alt" onClick={this._add}>
-                <i className="fa fa-plus"></i> Add Link
+                <FontAwesomeIcon icon={faPlus} /> Add Link
               </button>
             </div>
           </form>

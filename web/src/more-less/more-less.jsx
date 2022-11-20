@@ -1,3 +1,5 @@
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { Children, Component } from 'react'
 
 export default class MoreLess extends Component {
@@ -32,7 +34,7 @@ export default class MoreLess extends Component {
     return (
       <li className="more-less">
         <a href="#" onClick={this._toggle}>
-          <i className={`fa fa-caret-${collapsed ? 'down' : 'up'}`} />
+          <FontAwesomeIcon icon={collapsed ? faAngleDown : faAngleUp} />
           {collapsed ? 'more' : 'less'}
         </a>
       </li>

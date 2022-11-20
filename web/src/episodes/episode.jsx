@@ -1,3 +1,5 @@
+import { faMagnifyingGlass, faShuffle, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import _ from 'lodash'
 import cs from 'classnames'
 import React, { Component } from 'react'
@@ -5,9 +7,9 @@ import Tooltip from '@cypress/react-tooltip'
 
 import date from '../lib/date'
 import uiState from '../lib/ui-state'
+import util from '../lib/util'
 import api from '../data/api'
 import settingsStore from '../settings/settings-store'
-import util from '../lib/util'
 
 export default class Episode extends Component {
   constructor (props) {
@@ -95,21 +97,21 @@ export default class Episode extends Component {
                 title={`Search ${link.name}`}
                 target="_blank" rel="noreferrer"
               >
-                <i className="fa fa-search"></i>
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
               </a>
             </li>
           ))}
           {uiState.desktopRunning &&
             <li>
               <button title='Move' onClick={this._moveEpisode}>
-                <i className='fa fa-random' />
+                <FontAwesomeIcon icon={faShuffle} />
               </button>
             </li>
           }
           {uiState.desktopRunning &&
             <li>
               <button title='Download' onClick={this._downloadEpisode}>
-                <i className='fa fa-cloud-download' />
+                <FontAwesomeIcon icon={faDownload} />
               </button>
             </li>
           }

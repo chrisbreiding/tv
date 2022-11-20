@@ -1,3 +1,5 @@
+import { faCheckSquare, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { observer } from 'mobx-react'
 import cs from 'classnames'
 import React from 'react'
@@ -9,7 +11,7 @@ export default observer(({ exists, show, onAddShow }) => {
     <li className={cs({ exists })}>
       <img src={show.poster} />
       <article>
-        {exists ? <p><i className="fa fa-check-square" /> Show already added</p> : null}
+        {exists ? <p><FontAwesomeIcon icon={faCheckSquare} /> Show already added</p> : null}
         <h4>{show.name}</h4>
         <dl>
           <dt className={cs({ 'no-value': !show.firstAired })}>First Aired</dt>
@@ -27,7 +29,7 @@ export default observer(({ exists, show, onAddShow }) => {
       </article>
       <div className="spacer" />
       <button title="Add Show" onClick={onAddShow} disabled={exists}>
-        <i className="fa fa-plus"></i>
+        <FontAwesomeIcon icon={faPlus} />
       </button>
     </li>
   )

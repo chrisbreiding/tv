@@ -1,8 +1,10 @@
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import _ from 'lodash'
-import React from 'react'
-import messagesStore from './messages-store'
-
 import { observer } from 'mobx-react'
+import React from 'react'
+
+import messagesStore from './messages-store'
 
 export default observer(() => {
   const messages = messagesStore.messages
@@ -19,7 +21,7 @@ export default observer(() => {
           <span>{message}</span>
           {dismissable &&
             <button onClick={remove(id)}>
-              <i className="fa fa-remove" />
+              <FontAwesomeIcon icon={faXmark} />
             </button>
           }
         </li>

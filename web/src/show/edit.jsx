@@ -1,3 +1,5 @@
+import { faCircleMinus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 
@@ -52,7 +54,7 @@ class EditShow extends Component {
           </Modal.Content>
           <Modal.Footer okText="Save" onOk={this._save} onCancel={this._cancel}>
             <a className="delete" onClick={this._askForConfirmation} href="#">
-              <i className="fa fa-minus-circle" /> Delete show
+              <FontAwesomeIcon icon={faCircleMinus} /> Delete show
             </a>
           </Modal.Footer>
         </Modal>

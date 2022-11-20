@@ -1,3 +1,5 @@
+import { faListUl, faMagnifyingGlass, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import _ from 'lodash'
 import { observer } from 'mobx-react'
 import React from 'react'
@@ -20,12 +22,12 @@ export default observer(({ id, searchName, searchLinks }) => {
       <ul>
         <li>
           <Link to={`/shows/${id}`} title="All Episodes">
-            <i className="fa fa-list-ul"></i>
+            <FontAwesomeIcon icon={faListUl} />
           </Link>
         </li>
         <li>
           <Link to={`/shows/${id}/edit`} title="Edit">
-            <i className="fa fa-edit"></i>
+            <FontAwesomeIcon icon={faPenToSquare} />
           </Link>
         </li>
         {_.map(searchLinks, (link) => (
@@ -36,7 +38,7 @@ export default observer(({ id, searchName, searchLinks }) => {
               title={`Search ${link.name}`}
               target="_blank" rel="noreferrer"
             >
-              <i className="fa fa-search"></i>
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
             </a>
           </li>
         ))}

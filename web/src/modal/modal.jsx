@@ -1,3 +1,5 @@
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { Component } from 'react'
 
 const Header = ({ children, onClose }) => (
@@ -6,7 +8,7 @@ const Header = ({ children, onClose }) => (
     {onClose && (
       <div className="close">
         <button title="Close" onClick={onClose}>
-          <i className="fa fa-times"></i>
+          <FontAwesomeIcon icon={faXmark} />
         </button>
       </div>
     )}

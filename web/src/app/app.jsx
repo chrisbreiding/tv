@@ -1,3 +1,5 @@
+import { faSliders, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import { action } from 'mobx'
 import React, { Component } from 'react'
@@ -41,22 +43,22 @@ class App extends Component {
 
   _container () {
     return (
-      <div>
+      <>
         <ul className="app-options">
           <li>
             <Link to="/search" title="Add Show">
-              <i className="fa fa-plus"></i>
+              <FontAwesomeIcon icon={faPlus} />
             </Link>
           </li>
           <li>
             <Link to="/settings" title="Settings">
-              <i className="fa fa-cog"></i>
+              <FontAwesomeIcon icon={faSliders} />
             </Link>
           </li>
         </ul>
         {this.props.children}
         <Messages />
-      </div>
+      </>
     )
   }
 

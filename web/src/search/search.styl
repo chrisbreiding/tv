@@ -55,7 +55,7 @@
 
       &.exists {
         img,
-        article *:not(p, i),
+        article *:not(p, svg, path),
         button {
           opacity: 0.5;
         }
@@ -63,6 +63,10 @@
 
       p {
         color: success-color;
+
+        svg {
+          margin-right: 0.2em;
+        }
       }
 
       img {
