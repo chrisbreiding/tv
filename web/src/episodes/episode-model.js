@@ -35,6 +35,14 @@ export default class EpisodeModel {
       season: episode.season,
       title: episode.title,
 
+      get isSpecial () {
+        return !this.season
+      },
+
+      get isTBA () {
+        return (!this.title || this.title === 'TBA') && this.airdate.isNull
+      },
+
       get isRecent () {
         let startOfiveDaysAgo = moment().subtract(recentDaysCutoff, 'days').startOf('day')
         let startOfToday = moment().startOf('day')

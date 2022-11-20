@@ -27,8 +27,12 @@
       margin-top: 0;
     }
 
+    .general label,
     p {
       color: soften(foreground-color);
+    }
+
+    p {
       margin: 0.4em 0;
 
       svg {
@@ -57,6 +61,29 @@
 
     button {
       float: none;
+    }
+  }
+
+  .general {
+    margin-bottom: 2rem;
+
+    label {
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      background: none;
+      margin-right: 0.5rem;
+      padding: 0.2rem 0.3rem;
+
+      svg {
+        visibility: hidden;
+      }
+
+      &.is-checked svg {
+        visibility: visible;
+      }
     }
   }
 

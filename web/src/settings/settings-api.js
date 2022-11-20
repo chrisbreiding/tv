@@ -1,5 +1,3 @@
-import { action } from 'mobx'
-
 import api from '../data/api'
 import cache, { SETTINGS } from '../data/cache'
 import settingsStore from '../settings/settings-store'
@@ -18,13 +16,13 @@ function getSettingsFromApi () {
   })
 }
 
-const setSettings = action('setSettings', (settings) => {
+const setSettings = (settings) => {
   settingsStore.setSettings(settings)
-  settingsStore.isLoading = false
-})
+  settingsStore.setIsLoading(false)
+}
 
-const loadSettings = action('loadSettings', () => {
-  settingsStore.isLoading = true
+const loadSettings = () => {
+  settingsStore.setIsLoading(true)
 
   getSettingsFromCache().then((settings) => {
     if (settings) {
@@ -32,12 +30,15 @@ const loadSettings = action('loadSettings', () => {
     }
     getSettingsFromApi()
   })
-})
+}
 
 const updateSettings = (settings) => {
   const settingsProps = {
+    hideSpecialEpisodes: settings.hideSpecialEpisodes,
+    hideTBAEpisodes: settings.hideTBAEpisodes,
     searchLinks: settings.searchLinks,
   }
+
   api.updateSettings(settingsProps).then((success) => {
     if (success) {
       setSettings(settingsProps)

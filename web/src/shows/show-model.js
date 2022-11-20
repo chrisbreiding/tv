@@ -4,6 +4,7 @@ import { extendObservable } from 'mobx'
 import { posterUrl } from '../data/api'
 import EpisodeModel from '../episodes/episode-model'
 import { sortAscending } from '../episodes/util'
+import settingsStore from '../settings/settings-store'
 
 export default class ShowModel {
   constructor (show) {
@@ -23,7 +24,12 @@ export default class ShowModel {
 
       get recentEpisodes () {
         return _(this.episodes)
-        .filter({ isRecent: true })
+        .filter((episode) => {
+          const specialFilter = settingsStore.hideSpecialEpisodes ? !episode.isSpecial : true
+          const tbaFilter = settingsStore.hideAllTBAEPisodes ? !episode.isTBA : true
+
+          return episode.isRecent && specialFilter && tbaFilter
+        })
         .sort(sortAscending)
         .value()
       },
@@ -34,7 +40,12 @@ export default class ShowModel {
 
       get upcomingEpisodes () {
         return _(this.episodes)
-        .filter({ isUpcoming: true })
+        .filter((episode) => {
+          const specialFilter = settingsStore.hideSpecialEpisodes ? !episode.isSpecial : true
+          const tbaFilter = settingsStore.hideAllTBAEPisodes ? !episode.isTBA : true
+
+          return episode.isUpcoming && specialFilter && tbaFilter
+        })
         .sort(sortAscending)
         .value()
       },
