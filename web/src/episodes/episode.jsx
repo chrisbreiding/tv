@@ -55,7 +55,7 @@ export default class Episode extends Component {
         </span>
         <span className="airdate">{date.shortString(episode.airdate)}</span>
         <span className="title">
-          <Tooltip className="episode-tooltip tooltip" placement="right" title={this._options()}>
+          <Tooltip className="episode-tooltip options-tooltip tooltip" placement="right" title={this._options()}>
             <span onClick={this._showFileName}>{episode.title || 'TBA'}</span>
           </Tooltip>
         </span>

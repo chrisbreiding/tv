@@ -8,7 +8,7 @@ import Options from './show-options'
 export default observer(({ show, type, searchLinks }) => (
   <li key={show.id}>
     <h3>
-      <Tooltip placement="right" title={(
+      <Tooltip className="show-tooltip options-tooltip tooltip" placement="right" title={(
         <Options id={show.id} searchName={show.searchName} searchLinks={searchLinks} />
       )}>
         <span>{show.displayName}</span>

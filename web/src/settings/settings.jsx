@@ -1,8 +1,10 @@
+import Tooltip from '@cypress/react-tooltip'
 import {
   faCheck,
   faCircleMinus,
   faMagnifyingGlass,
   faPlus,
+  faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import cs from 'classnames'
@@ -78,7 +80,6 @@ class Settings extends Component {
       () => settingsStore.hideTBAEpisodes,
       action((hideTBAEpisodes) => this.hideTBAEpisodes = hideTBAEpisodes),
     )
-    // TODO: potentially buggy since searchLinks is more complex data type?
     this.disposeSearchLinks = reaction(
       () => settingsStore.searchLinks,
       action((searchLinks) => this.searchLinks = searchLinks),
@@ -129,7 +130,14 @@ class Settings extends Component {
         </Modal.Content>
         <div className="spacer" />
         <Modal.Footer okText="Save" onOk={this._save} onCancel={this._cancel}>
-          <p>Shows & episodes last updated: {date.longString(settingsStore.lastUpdated)}</p>
+          <p>
+            Shows & episodes last updated: {date.longString(settingsStore.lastUpdated)}
+            {settingsStore.showOutdatedWarning &&
+              <Tooltip className="settings-tooltip tooltip" title="Last update was over 24 hours ago">
+                <FontAwesomeIcon className="outdated-warning" icon={faTriangleExclamation} />
+              </Tooltip>
+            }
+          </p>
           <div className="spacer" />
         </Modal.Footer>
       </Modal>

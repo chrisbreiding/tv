@@ -1,9 +1,7 @@
-import { faSliders, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import { action } from 'mobx'
 import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router'
+import { withRouter } from 'react-router'
 
 import Messages from '../messages/messages'
 import Loader from '../loader/loader'
@@ -11,6 +9,7 @@ import stats from '../lib/stats'
 import api from '../data/api'
 import migrate from '../data/migrate'
 import uiState from '../lib/ui-state'
+import AppOptions from './app-options'
 
 class App extends Component {
   constructor (props) {
@@ -44,18 +43,7 @@ class App extends Component {
   _container () {
     return (
       <>
-        <ul className="app-options">
-          <li>
-            <Link to="/search" title="Add Show">
-              <FontAwesomeIcon icon={faPlus} />
-            </Link>
-          </li>
-          <li>
-            <Link to="/settings" title="Settings">
-              <FontAwesomeIcon icon={faSliders} />
-            </Link>
-          </li>
-        </ul>
+        <AppOptions />
         {this.props.children}
         <Messages />
       </>

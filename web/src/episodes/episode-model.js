@@ -44,8 +44,9 @@ export default class EpisodeModel {
       },
 
       get isRecent () {
-        let startOfiveDaysAgo = moment().subtract(recentDaysCutoff, 'days').startOf('day')
-        let startOfToday = moment().startOf('day')
+        const startOfiveDaysAgo = moment().subtract(recentDaysCutoff, 'days').startOf('day')
+        const startOfToday = moment().startOf('day')
+
         return this.airdate.isBetween(startOfiveDaysAgo.subtract(1, 'second'), startOfToday)
       },
 

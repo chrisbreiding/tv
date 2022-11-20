@@ -99,12 +99,23 @@
 
     p {
       color: darken(neutral-color, 20%);
-      font-size: 0.8em;
-      margin: 0 2em 0 0;
+      font-size: 0.8rem;
+      margin: 0 2rem 0 0;
+    }
+
+    .outdated-warning {
+      color: warning-color;
+      margin-left: 0.6rem;
     }
 
     button {
-      margin-left: 1em;
+      margin-left: 1rem;
     }
   }
+}
+
+.settings-tooltip {
+  background: #111;
+  border-color: solid 1px soften(background-color, 10%);
+  max-width: 10rem;
 }
