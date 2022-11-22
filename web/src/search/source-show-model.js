@@ -7,7 +7,7 @@ export default class SourceShowModel {
   constructor (sourceShow) {
     extendObservable(this, {
       description: sourceShow.description,
-      firstAired: dayjs(sourceShow.first_aired),
+      firstAired: dayjs(sourceShow.firstAired),
       id: sourceShow.id,
       name: sourceShow.name,
       network: sourceShow.network,
