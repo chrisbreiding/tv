@@ -1,4 +1,4 @@
-var moment = require('moment')
+var dayjs = require('dayjs')
 var _ = require('lodash')
 
 module.exports = function(app, express) {
@@ -7,7 +7,7 @@ module.exports = function(app, express) {
   var setting = {
     id: '1',
     view_link: 'http://example.com/q=%s',
-    last_updated: moment().subtract(5, 'hours').toISOString()
+    last_updated: dayjs().subtract(5, 'hours').toISOString()
   }
 
   router.get('/:id', function(req, res) {

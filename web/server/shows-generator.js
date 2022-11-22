@@ -1,5 +1,5 @@
 var _ = require('lodash')
-var moment = require('moment')
+var dayjs = require('dayjs')
 var textGen = require('./text-generator')
 
 var showId = 0
@@ -71,19 +71,19 @@ module.exports = {
   },
 
   _randomStartDate: function () {
-    return moment().subtract(_.random(0, 100), 'days')
+    return dayjs().subtract(_.random(0, 100), 'days')
   },
 
   _todayStartDate: function () {
-    return moment()
+    return dayjs()
   },
 
   _recentStartDate: function () {
-    return moment().subtract(2, 'days')
+    return dayjs().subtract(2, 'days')
   },
 
   _offAirStartDate: function () {
-    return moment().subtract(5, 'years')
+    return dayjs().subtract(5, 'years')
   },
 
   _episodes: function (num, season, airdate) {

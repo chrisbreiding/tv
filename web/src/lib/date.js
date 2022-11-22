@@ -1,36 +1,36 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 const dateUtils = {
-  isFarPast (momentDate) {
-    return momentDate.isBefore(moment().subtract(2, 'months'), 'day')
+  isFarPast (dayjsDate) {
+    return dayjsDate.isBefore(dayjs().subtract(2, 'months'), 'day')
   },
 
-  isPast (momentDate) {
-    return momentDate.isBefore(moment().subtract(5, 'days'), 'day')
+  isPast (dayjsDate) {
+    return dayjsDate.isBefore(dayjs().subtract(5, 'days'), 'day')
   },
 
-  isRecent (momentDate) {
-    return momentDate.isBefore(moment(), 'day')
+  isRecent (dayjsDate) {
+    return dayjsDate.isBefore(dayjs(), 'day')
   },
 
-  isYesterday (momentDate) {
-    return momentDate.isSame(moment().subtract(1, 'day'), 'day')
+  isYesterday (dayjsDate) {
+    return dayjsDate.isSame(dayjs().subtract(1, 'day'), 'day')
   },
 
-  isToday (momentDate) {
-    return momentDate.isSame(moment(), 'day')
+  isToday (dayjsDate) {
+    return dayjsDate.isSame(dayjs(), 'day')
   },
 
-  isUpcoming (momentDate) {
-    return momentDate.isAfter(moment().subtract(1, 'day'), 'day')
+  isUpcoming (dayjsDate) {
+    return dayjsDate.isAfter(dayjs().subtract(1, 'day'), 'day')
   },
 
-  isFuture (momentDate) {
-    return momentDate.isAfter(moment().add(1, 'month'), 'day')
+  isFuture (dayjsDate) {
+    return dayjsDate.isAfter(dayjs().add(1, 'month'), 'day')
   },
 
-  isFarFuture (momentDate) {
-    return momentDate.isAfter(moment().add(2, 'months'), 'day')
+  isFarFuture (dayjsDate) {
+    return dayjsDate.isAfter(dayjs().add(2, 'months'), 'day')
   },
 
   shortString (date) {
@@ -43,18 +43,18 @@ const dateUtils = {
     return date.format('MMM D, YYYY h:mma')
   },
 
-  status (momentDate) {
-    return dateUtils.isToday(momentDate) ? 'today upcoming' :
-      dateUtils.isFarPast(momentDate) ? 'far-past' :
-        dateUtils.isPast(momentDate) ? 'past' :
-          dateUtils.isRecent(momentDate) ? 'recent' :
-            dateUtils.isFarFuture(momentDate) ? 'far-future' :
-              dateUtils.isFuture(momentDate) ? 'future' :
+  status (dayjsDate) {
+    return dateUtils.isToday(dayjsDate) ? 'today upcoming' :
+      dateUtils.isFarPast(dayjsDate) ? 'far-past' :
+        dateUtils.isPast(dayjsDate) ? 'past' :
+          dateUtils.isRecent(dayjsDate) ? 'recent' :
+            dateUtils.isFarFuture(dayjsDate) ? 'far-future' :
+              dateUtils.isFuture(dayjsDate) ? 'future' :
                 'upcoming'
   },
 
   todayObject () {
-    return { date: moment().toISOString() }
+    return { date: dayjs().toISOString() }
   },
 }
 

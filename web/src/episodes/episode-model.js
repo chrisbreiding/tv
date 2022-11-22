@@ -1,13 +1,13 @@
 import { asReference, extendObservable } from 'mobx'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import util from '../lib/util'
 
 const recentDaysCutoff = localStorage.recentDaysCutoff || 5
 
-const epochUTC = moment.utc([1970, 0, 1])
+const epochUTC = dayjs('1970-01-01')
 const epochISOString = epochUTC.toISOString()
 const farPastMs = epochUTC.valueOf()
-const farFarFutureMs = moment([2077, 11, 31]).valueOf()
+const farFarFutureMs = dayjs('2077-12-31').valueOf()
 
 // episodes with season 0 may never have airdates, so treat them as far
 // past so they don't always show up as upcoming
@@ -25,7 +25,7 @@ const nullDate = (isSeasoned) => ({
 
 export default class EpisodeModel {
   constructor (episode) {
-    const airdate = episode.airdate ? moment(episode.airdate) : undefined
+    const airdate = episode.airdate ? dayjs(episode.airdate) : undefined
 
     extendObservable(this, {
       // if year is before 1975, it's a null date set to unix epoch
@@ -44,14 +44,14 @@ export default class EpisodeModel {
       },
 
       get isRecent () {
-        const startOfiveDaysAgo = moment().subtract(recentDaysCutoff, 'days').startOf('day')
-        const startOfToday = moment().startOf('day')
+        const startOfiveDaysAgo = dayjs().subtract(recentDaysCutoff, 'days').startOf('day')
+        const startOfToday = dayjs().startOf('day')
 
         return this.airdate.isBetween(startOfiveDaysAgo.subtract(1, 'second'), startOfToday)
       },
 
       get isUpcoming () {
-        let startOfToday = moment().startOf('day')
+        let startOfToday = dayjs().startOf('day')
         return this.airdate.isAfter(startOfToday.subtract(1, 'second'))
       },
 

@@ -1,5 +1,5 @@
 import { action, asReference, extendObservable } from 'mobx'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 class SettingsStore {
   constructor () {
@@ -16,7 +16,7 @@ class SettingsStore {
       },
 
       get showOutdatedWarning () {
-        const oneDayAgo = moment().subtract(1, 'day')
+        const oneDayAgo = dayjs().subtract(1, 'day')
 
         return this.username === 'chris' && this.lastUpdated?.isBefore(oneDayAgo)
       },
@@ -30,7 +30,7 @@ class SettingsStore {
   setSettings = action((settings) => {
     if (settings.hideSpecialEpisodes != null) this.hideSpecialEpisodes = settings.hideSpecialEpisodes
     if (settings.hideTBAEpisodes) this.hideTBAEpisodes = settings.hideTBAEpisodes
-    if (settings.lastUpdated) this.lastUpdated = moment(settings.lastUpdated)
+    if (settings.lastUpdated) this.lastUpdated = dayjs(settings.lastUpdated)
     if (settings.searchLinks) this.searchLinks = settings.searchLinks
     if (settings.username) this.username = settings.username
   })

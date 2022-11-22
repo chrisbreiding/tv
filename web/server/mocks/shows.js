@@ -1,4 +1,3 @@
-var moment = require('moment')
 var _ = require('lodash')
 var generator = require('../shows-generator')
 

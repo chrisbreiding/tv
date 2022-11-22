@@ -8,6 +8,7 @@ class Shows extends Component {
   render () {
     const { label, type, showsStore, settings } = this.props
     const shows = showsStore[type]
+
     if (!_.keys(settings).length) {
       return null
     }

@@ -1,4 +1,4 @@
-var moment = require('moment')
+var dayjs = require('dayjs')
 var _ = require('lodash')
 var textGen = require('../text-generator')
 
@@ -10,7 +10,7 @@ module.exports = function(app, express) {
       id: id,
       name: textGen(1, 4),
       description: textGen(10, 30),
-      first_aired: moment()
+      first_aired: dayjs()
                     .subtract(_.random(1, 10), 'years')
                     .subtract(_.random(1, 20), 'days')
                     .startOf('day')

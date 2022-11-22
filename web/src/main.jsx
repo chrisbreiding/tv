@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
 import { useStrict } from 'mobx'
 import React from 'react'
 import { render } from 'react-dom'
@@ -14,6 +16,8 @@ import EditShow from './show/edit'
 import Settings from './settings/settings'
 import Search from './search/search'
 import SearchResults from './search/results'
+
+dayjs.extend(isBetween)
 
 const history = useRouterHistory(createHistory)()
 
