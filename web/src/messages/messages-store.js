@@ -1,14 +1,19 @@
 import _ from 'lodash'
-import { action, extendObservable } from 'mobx'
+import { action, makeObservable, observable } from 'mobx'
 
 class MessagesStore {
+  messages = []
+
   constructor () {
-    extendObservable(this, {
-      messages: [],
+    makeObservable(this, {
+      messages: observable,
+
+      add: action,
+      remove: action,
     })
   }
 
-  add = action((message) => {
+  add = (message) => {
     const messageObject = {
       type: 'info',
       dismissable: false,
@@ -19,13 +24,13 @@ class MessagesStore {
     this.messages.push(messageObject)
 
     return messageObject.id
-  })
+  }
 
-  remove = action((messageId) => {
+  remove = (messageId) => {
     this.messages = _.reject(this.messages, ({ id }) => {
       return messageId === id
     })
-  })
+  }
 }
 
 export default new MessagesStore()

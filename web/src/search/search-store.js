@@ -1,17 +1,20 @@
 import _ from 'lodash'
-import { action, extendObservable } from 'mobx'
+import { action, makeObservable, observable } from 'mobx'
 
 import api from '../data/api'
 import SourceShowModel from './source-show-model'
 
 class SearchStore {
-  constructor () {
-    extendObservable(this, {
-      results: [],
-      isLoading: false,
+  results = []
+  isLoading = false
 
-      setResults: action(this.setResults),
-      searchShows: action(this.searchShows),
+  constructor () {
+    makeObservable(this, {
+      results: observable,
+      isLoading: observable,
+
+      setResults: action,
+      searchShows: action,
     })
   }
 

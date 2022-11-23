@@ -1,12 +1,13 @@
 import cs from 'classnames'
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
-import { withRouter } from 'react-router'
+import { Outlet } from 'react-router-dom'
 
 import stats from '../lib/stats'
 import Modal from '../modal/modal'
 import { AutoFocusedInput } from '../lib/form'
 import searchStore from './search-store'
+import { withRouter } from '../lib/with-router'
 
 class Search extends Component {
   componentDidMount () {
@@ -27,7 +28,7 @@ class Search extends Component {
           </form>
         </Modal.Header>
         <Modal.Content>
-          {this.props.children}
+          <Outlet />
         </Modal.Content>
       </Modal>
     )
@@ -40,11 +41,11 @@ class Search extends Component {
       query: this.refs.query.value,
     })
 
-    this.props.router.push(`/search/${this.refs.query.value}`)
+    this.props.navigate(this.refs.query.value)
   }
 
   _close = () => {
-    this.props.router.push('/')
+    this.props.navigate('/')
   }
 }
 

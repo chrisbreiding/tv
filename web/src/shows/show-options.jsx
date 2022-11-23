@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import _ from 'lodash'
 import { observer } from 'mobx-react'
 import React from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
 import stats from '../lib/stats'
 import util from '../lib/util'
@@ -21,12 +21,12 @@ export default observer(({ id, searchName, searchLinks }) => {
     <div className="options">
       <ul>
         <li>
-          <Link to={`/shows/${id}`} title="All Episodes">
+          <Link to={id} title="All Episodes">
             <FontAwesomeIcon icon={faListUl} />
           </Link>
         </li>
         <li>
-          <Link to={`/shows/${id}/edit`} title="Edit">
+          <Link to={`${id}/edit`} title="Edit">
             <FontAwesomeIcon icon={faPenToSquare} />
           </Link>
         </li>

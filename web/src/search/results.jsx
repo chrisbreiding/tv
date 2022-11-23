@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
-import { withRouter } from 'react-router'
 
 import stats from '../lib/stats'
+import { withRouter } from '../lib/with-router'
 import { addShow } from '../shows/shows-api'
 import showsStore from '../shows/shows-store'
 import searchStore from './search-store'
@@ -72,7 +72,7 @@ class SearchResults extends Component {
 
     addShow(show)
 
-    this.props.router.push('/')
+    this.props.navigate('/shows')
   }
 }
 

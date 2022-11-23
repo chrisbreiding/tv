@@ -2,7 +2,6 @@ import cs from 'classnames'
 import _ from 'lodash'
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
-import { withRouter } from 'react-router'
 
 import stats from '../lib/stats'
 import Loader from '../loader/loader'
@@ -10,6 +9,7 @@ import Modal from '../modal/modal'
 import Episodes from '../episodes/episodes'
 import { inSeasons, sortAscending } from '../episodes/util'
 import showsStore from '../shows/shows-store'
+import { withRouter } from '../lib/with-router'
 
 const content = (show, seasons) => {
   if (showsStore.isLoadingFromApi) {
@@ -45,7 +45,7 @@ class Show extends Component {
   }
 
   render () {
-    const { params, router } = this.props
+    const { params, navigate } = this.props
     const show = showsStore.getShowById(params.id)
     if (!show) return null
 
@@ -53,7 +53,7 @@ class Show extends Component {
 
     return (
       <Modal className="all-episodes">
-        <Modal.Header onClose={() => router.push('/')}>
+        <Modal.Header onClose={() => navigate('/')}>
           <h2>{show.displayName}</h2>
         </Modal.Header>
         <Modal.Content>

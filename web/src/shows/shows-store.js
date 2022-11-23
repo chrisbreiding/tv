@@ -1,36 +1,44 @@
 import _ from 'lodash'
-import { extendObservable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 
 import ShowModel from './show-model'
 
 class ShowsStore {
+  isLoadingFromApi = false
+  isLoadingFromCache = false
+  shows = []
+
   constructor () {
-    extendObservable(this, {
-      isLoadingFromApi: false,
-      isLoadingFromCache: false,
-      shows: [],
+    makeObservable(this, {
+      isLoadingFromApi: observable,
+      isLoadingFromCache: observable,
+      shows: observable,
 
-      get recent () {
-        return _(this.shows)
-        .filter({ hasRecent: true })
-        .orderBy(['lastEpisode.airdate', 'displayName'], ['desc', 'asc'])
-        .value()
-      },
-
-      get upcoming () {
-        return _(this.shows)
-        .filter({ hasUpcoming: true })
-        .orderBy(['nextEpisode.airdate', 'displayName'], ['asc', 'asc'])
-        .value()
-      },
-
-      get offAir () {
-        return _(this.shows)
-        .filter({ isOffAir: true })
-        .orderBy(['displayName'], ['asc'])
-        .value()
-      },
+      recent: computed,
+      upcoming: computed,
+      offAir: computed,
     })
+  }
+
+  get recent () {
+    return _(this.shows)
+    .filter({ hasRecent: true })
+    .orderBy(['lastEpisode.airdate', 'displayName'], ['desc', 'asc'])
+    .value()
+  }
+
+  get upcoming () {
+    return _(this.shows)
+    .filter({ hasUpcoming: true })
+    .orderBy(['nextEpisode.airdate', 'displayName'], ['asc', 'asc'])
+    .value()
+  }
+
+  get offAir () {
+    return _(this.shows)
+    .filter({ isOffAir: true })
+    .orderBy(['displayName'], ['asc'])
+    .value()
   }
 
   getShowById (id) {

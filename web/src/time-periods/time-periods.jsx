@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
+import { Outlet } from 'react-router-dom'
 
 import { loadShows } from '../shows/shows-api'
 import showsStore from '../shows/shows-store'
@@ -42,7 +43,7 @@ class TimePeriods extends Component {
             showsStore={showsStore}
             settings={settingsStore}
           />
-          {this.props.children}
+          <Outlet />
         </div>
       )
     }

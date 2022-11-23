@@ -1,11 +1,15 @@
-import { extendObservable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 class UiState {
+  showsLoading = false
+  settingsLoading = false
+  desktopRunning = false
+
   constructor () {
-    extendObservable(this, {
-      showsLoading: false,
-      settingsLoading: false,
-      desktopRunning: false,
+    makeObservable(this, {
+      showsLoading: observable,
+      settingsLoading: observable,
+      desktopRunning: observable,
     })
   }
 }

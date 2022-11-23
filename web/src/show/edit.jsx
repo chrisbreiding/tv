@@ -1,13 +1,13 @@
 import { faCircleMinus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { Component } from 'react'
-import { withRouter } from 'react-router'
 
 import stats from '../lib/stats'
 import Modal from '../modal/modal'
 import { AutoFocusedInput, Input } from '../lib/form'
 import { deleteShow, updateShow } from '../shows/shows-api'
 import showsStore from '../shows/shows-store'
+import { withRouter } from '../lib/with-router'
 
 class EditShow extends Component {
   constructor (props) {
@@ -107,7 +107,7 @@ class EditShow extends Component {
   }
 
   _close = () => {
-    this.props.router.push('/')
+    this.props.navigate('/')
   }
 }
 

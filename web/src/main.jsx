@@ -1,12 +1,8 @@
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
-import { useStrict } from 'mobx'
 import React from 'react'
-import { render } from 'react-dom'
-import { createHistory } from 'history'
-import { IndexRoute, Router, Route, Redirect, useRouterHistory } from 'react-router'
-
-useStrict(true)
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom'
 
 import App from './app/app'
 import Auth from './auth/auth'
@@ -19,24 +15,24 @@ import SearchResults from './search/results'
 
 dayjs.extend(isBetween)
 
-const history = useRouterHistory(createHistory)()
+const root = createRoot(document.getElementById('app'))
 
-render(
-  <Router history={history}>
-    <Redirect from="/" to="/shows" />
-    <Route path="/" component={App}>
-      <Route path="/shows" component={TimePeriods}>
-        <Route path=":id" component={Show} />
-        <Route path=":id/edit" component={EditShow} />
-        <Route path="/settings" component={Settings} />
-        <Route path="/search" component={Search}>
-          <IndexRoute component={SearchResults} />
-          <Route path=":query" component={SearchResults} />
+root.render(
+  <Router>
+    <Routes>
+      <Route path="/" element={<Navigate to="/shows" replace />} />
+      <Route path="/" element={<App />}>
+        <Route path="shows" element={<TimePeriods />}>
+          <Route path=":id" element={<Show />} />
+          <Route path=":id/edit" element={<EditShow />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="search" element={<Search />}>
+            <Route path=":query" element={<SearchResults />} />
+          </Route>
         </Route>
+        <Route path="auth" element={<Auth />} />
+        <Route path="*" element={<Navigate to="/shows" replace />} />
       </Route>
-      <Route path="/auth" component={Auth} />
-      <Redirect from="/*" to="/shows" />
-    </Route>
+    </Routes>
   </Router>,
-  document.getElementById('app'),
 )

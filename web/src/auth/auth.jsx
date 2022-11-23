@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router'
 
 import stats from '../lib/stats'
 import cache from '../data/cache'
 import { getApiKey, setApiKey } from '../data/api'
 import { AutoFocusedInput } from '../lib/form'
+import { withRouter } from '../lib/with-router'
 
 class Auth extends Component {
   componentDidMount () {
@@ -37,7 +37,7 @@ class Auth extends Component {
     stats.send('Sign In', { apiKey })
     setApiKey(apiKey)
     cache.clear().then(() => {
-      this.props.router.push('/')
+      this.props.navigate('/shows')
     })
   }
 }

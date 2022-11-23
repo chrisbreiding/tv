@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { action } from 'mobx'
 import React, { Component } from 'react'
-import { withRouter } from 'react-router'
+import { Outlet } from 'react-router-dom'
 
 import Messages from '../messages/messages'
 import Loader from '../loader/loader'
@@ -10,6 +10,7 @@ import api from '../data/api'
 import migrate from '../data/migrate'
 import uiState from '../lib/ui-state'
 import AppOptions from './app-options'
+import { withRouter } from '../lib/with-router'
 
 class App extends Component {
   constructor (props) {
@@ -23,7 +24,7 @@ class App extends Component {
 
     axios.interceptors.response.use(null, (error) => {
       if (error.response?.status === 401) {
-        this.props.router.push('/auth')
+        this.props.navigate('/auth')
         return
       }
       return Promise.reject(error)
@@ -44,7 +45,7 @@ class App extends Component {
     return (
       <>
         <AppOptions />
-        {this.props.children}
+        <Outlet />
         <Messages />
       </>
     )

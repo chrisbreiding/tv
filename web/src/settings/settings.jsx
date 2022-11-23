@@ -9,16 +9,16 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import cs from 'classnames'
 import _ from 'lodash'
-import { action, reaction, extendObservable } from 'mobx'
+import { action, reaction, makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
-import { withRouter } from 'react-router'
 
 import stats from '../lib/stats'
 import Modal from '../modal/modal'
 import date from '../lib/date'
 import { updateSettings } from './settings-api'
 import settingsStore from './settings-store'
+import { withRouter } from '../lib/with-router'
 
 const Checkbox = ({ isChecked, onChange }) => {
   const onClick = () => {
@@ -58,10 +58,26 @@ const SearchLinkEditor = observer(({ link, onRemove }) => {
 })
 
 class Settings extends Component {
+  hideSpecialEpisodes
+  hideTBAEpisodes
+  searchLinks
+
   constructor (props) {
     super(props)
 
-    extendObservable(this, {
+    makeObservable(this, {
+      hideSpecialEpisodes: observable,
+      hideTBAEpisodes: observable,
+      searchLinks: observable,
+
+      _updateHideSpecialEpisodes: action,
+      _updateHideTBAEpisodes: action,
+      _addSearchLink: action,
+      _removeSearchLink: action,
+      _cancel: action,
+    })
+
+    Object.assign(this, {
       hideSpecialEpisodes: settingsStore.hideSpecialEpisodes,
       hideTBAEpisodes: settingsStore.hideTBAEpisodes,
       searchLinks: settingsStore.searchLinks,
@@ -144,28 +160,28 @@ class Settings extends Component {
     )
   }
 
-  _updateHideSpecialEpisodes = action((bool) => {
+  _updateHideSpecialEpisodes = (bool) => {
     this.hideSpecialEpisodes = bool
-  })
+  }
 
-  _updateHideTBAEpisodes = action((bool) => {
+  _updateHideTBAEpisodes = (bool) => {
     this.hideTBAEpisodes = bool ? 'ALL' : 'NONE'
-  })
+  }
 
-  _addSearchLink = action(() => {
+  _addSearchLink = () => {
     this.searchLinks.push({
       episodeLink: '',
       name: '',
       showLink: '',
     })
-  })
+  }
 
-  _removeSearchLink = (index) => action(() => {
+  _removeSearchLink = (index) => () => {
     this.searchLinks = [
       ...this.searchLinks.slice(0, index),
       ...this.searchLinks.slice(index + 1),
     ]
-  })
+  }
 
   _save = (e) => {
     e.preventDefault()
@@ -181,16 +197,16 @@ class Settings extends Component {
     this._close()
   }
 
-  _cancel = action(() => {
+  _cancel = () => {
     this.hideSpecialEpisodes = settingsStore.hideSpecialEpisodes
     this.hideTBAEpisodes = settingsStore.hideTBAEpisodes
     this.searchLinks = settingsStore.searchLinks
 
     this._close()
-  })
+  }
 
   _close = () => {
-    this.props.router.push('/')
+    this.props.navigate('/')
   }
 }
 
