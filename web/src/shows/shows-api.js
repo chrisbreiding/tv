@@ -14,25 +14,25 @@ function saveShowsToCache () {
 }
 
 const getShowsFromApi = action(() => {
-  showsStore.isLoadingFromApi = true
+  showsStore.setIsLoadingfromApi(true)
 
   api.getShows()
   .then(updateShows(true))
   .then(action(() => {
-    showsStore.isLoadingFromApi = false
+    showsStore.setIsLoadingfromApi(false)
   }))
 })
 
 const updateShows = (updateCache) => action('updateShows', (shows) => {
   showsStore.setShows(shows)
-  showsStore.isLoadingFromCache = false
+  showsStore.setIsLoadingfromCache(false)
   if (updateCache) {
     saveShowsToCache()
   }
 })
 
 const loadShows = action('loadShows', () => {
-  showsStore.isLoadingFromCache = true
+  showsStore.setIsLoadingfromCache(true)
 
   getShowsFromCache().then((shows) => {
     if (shows) {

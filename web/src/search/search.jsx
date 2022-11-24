@@ -1,52 +1,50 @@
 import cs from 'classnames'
 import { observer } from 'mobx-react'
-import React, { Component } from 'react'
-import { Outlet } from 'react-router-dom'
+import React, { useEffect, useRef } from 'react'
+import { Outlet, useNavigate, useParams } from 'react-router-dom'
 
 import stats from '../lib/stats'
 import Modal from '../modal/modal'
 import { AutoFocusedInput } from '../lib/form'
 import searchStore from './search-store'
-import { withRouter } from '../lib/with-router'
 
-class Search extends Component {
-  componentDidMount () {
+export default observer(() => {
+  const queryRef = useRef()
+  const { query } = useParams()
+  const navigate = useNavigate()
+
+  useEffect(() => {
     stats.send('Visit Search')
-  }
+  }, [true])
 
-  render () {
-    return (
-      <Modal className={cs('search', {
-        'has-query': !!this.props.params.query,
-        'has-results': !!searchStore.results.length,
-      })}>
-        <Modal.Header onClose={this._close}>
-          <h2>Search Shows</h2>
-          <form onSubmit={this._search}>
-            <AutoFocusedInput ref="query" defaultValue={this.props.params.query} />
-            <button type="submit">Search</button>
-          </form>
-        </Modal.Header>
-        <Modal.Content>
-          <Outlet />
-        </Modal.Content>
-      </Modal>
-    )
-  }
-
-  _search = (e) => {
+  const search = (e) => {
     e.preventDefault()
 
-    stats.send('Search', {
-      query: this.refs.query.value,
-    })
+    const query = queryRef.current.value
 
-    this.props.navigate(this.refs.query.value)
+    stats.send('Search', { query })
+    navigate(queryRef.current.value)
   }
 
-  _close = () => {
-    this.props.navigate('/')
+  const close = () => {
+    navigate('/')
   }
-}
 
-export default withRouter(observer(Search))
+  return (
+    <Modal className={cs('search', {
+      'has-query': !!query,
+      'has-results': !!searchStore.results.length,
+    })}>
+      <Modal.Header onClose={close}>
+        <h2>Search Shows</h2>
+        <form onSubmit={search}>
+          <AutoFocusedInput ref={queryRef} defaultValue={query} />
+          <button type="submit">Search</button>
+        </form>
+      </Modal.Header>
+      <Modal.Content>
+        <Outlet />
+      </Modal.Content>
+    </Modal>
+  )
+})

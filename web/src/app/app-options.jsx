@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 import settingsStore from '../settings/settings-store'
 
-const AppOptions = () => (
+export default observer(() => (
   <ul className="app-options">
     <li>
       <Link to="/shows/search" title="Add Show">
@@ -14,7 +14,7 @@ const AppOptions = () => (
       </Link>
     </li>
     <li>
-      <Link to="/shows/settings" title="Settings">
+      <Link to="/settings" title="Settings">
         <FontAwesomeIcon icon={faSliders} />
         {settingsStore.showOutdatedWarning &&
           <FontAwesomeIcon className="outdated-warning" icon={faTriangleExclamation} />
@@ -22,6 +22,4 @@ const AppOptions = () => (
       </Link>
     </li>
   </ul>
-)
-
-export default observer(AppOptions)
+))

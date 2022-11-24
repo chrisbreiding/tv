@@ -1,11 +1,11 @@
 import _ from 'lodash'
-import { computed, makeObservable, observable } from 'mobx'
+import { action, computed, makeObservable, observable } from 'mobx'
 
 import ShowModel from './show-model'
 
 class ShowsStore {
-  isLoadingFromApi = false
-  isLoadingFromCache = false
+  isLoadingFromApi = true
+  isLoadingFromCache = true
   shows = []
 
   constructor () {
@@ -17,6 +17,9 @@ class ShowsStore {
       recent: computed,
       upcoming: computed,
       offAir: computed,
+
+      setIsLoadingfromApi: action,
+      setIsLoadingfromCache: action,
     })
   }
 
@@ -39,6 +42,14 @@ class ShowsStore {
     .filter({ isOffAir: true })
     .orderBy(['displayName'], ['asc'])
     .value()
+  }
+
+  setIsLoadingfromApi (isLoading) {
+    this.isLoadingFromApi = isLoading
+  }
+
+  setIsLoadingfromCache (isLoading) {
+    this.isLoadingFromCache = isLoading
   }
 
   getShowById (id) {

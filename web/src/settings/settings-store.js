@@ -1,10 +1,10 @@
-import { action, computed, makeObservable, observable } from 'mobx'
+import { action, computed, makeObservable, observable, toJS } from 'mobx'
 import dayjs from 'dayjs'
 
 class SettingsStore {
   hideSpecialEpisodes = false
   hideTBAEpisodes = 'NONE'
-  isLoading = false
+  isLoading = true
   lastUpdated = null
   searchLinks = []
   username = null
@@ -53,7 +53,7 @@ class SettingsStore {
       hideSpecialEpisodes: this.hideSpecialEpisodes,
       hideTBAEpisodes: this.hideTBAEpisodes,
       lastUpdated: this.lastUpdated.toISOString(),
-      searchLinks: this.searchLinks,
+      searchLinks: toJS(this.searchLinks),
       username: this.username,
     }
   }

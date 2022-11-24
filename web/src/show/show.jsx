@@ -1,7 +1,7 @@
 import cs from 'classnames'
 import _ from 'lodash'
 import { observer } from 'mobx-react'
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 
 import stats from '../lib/stats'
 import Loader from '../loader/loader'
@@ -9,66 +9,59 @@ import Modal from '../modal/modal'
 import Episodes from '../episodes/episodes'
 import { inSeasons, sortAscending } from '../episodes/util'
 import showsStore from '../shows/shows-store'
-import { withRouter } from '../lib/with-router'
+import { useNavigate, useParams } from 'react-router'
 
-const content = (show, seasons) => {
-  if (showsStore.isLoadingFromApi) {
-    return <Loader>Loading episodes...</Loader>
-  }
+const EpisodesList = ({ show }) => (
+  <ul>
+    {
+      _.map(inSeasons(show.episodes), (season) => {
+        return (
+          <li key={season.season} className="season">
+            <h3>{season.season === 999 ? 'Specials' : `Season ${season.season}`}</h3>
+            <Episodes
+              show={show}
+              episodes={_(season.episodes).sort(sortAscending).value()}
+            />
+          </li>
+        )
+      })
+    }
+  </ul>
+)
 
-  return (
-    <ul>
-      {
-        _.map(seasons, (season) => {
-          return (
-            <li key={season.season} className="season">
-              <h3>{season.season === 999 ? 'Specials' : `Season ${season.season}`}</h3>
-              <Episodes
-                show={show}
-                episodes={_(season.episodes).sort(sortAscending).value()}
-              />
-            </li>
-          )
-        })
-      }
-    </ul>
-  )
-}
+export default observer(() => {
+  const { id } = useParams()
+  const navigate = useNavigate()
 
-class Show extends Component {
-  componentDidMount () {
-    const show = showsStore.getShowById(this.props.params.id)
+  const show = showsStore.getShowById(id)
+
+  useEffect(() => {
     stats.send('View All Episodes', {
-      showId: this.props.params.id,
+      showId: id,
       showName: show?.displayName,
     })
-  }
+  }, [true])
 
-  render () {
-    const { params, navigate } = this.props
-    const show = showsStore.getShowById(params.id)
-    if (!show) return null
+  if (!show) return null
 
-    const seasons = inSeasons(show.episodes)
+  return (
+    <Modal className="all-episodes">
+      <Modal.Header onClose={() => navigate('/')}>
+        <h2>{show.displayName}</h2>
+      </Modal.Header>
+      <Modal.Content>
+        <dl>
+          <dt className={cs({ 'no-value': !show.network })}>Network:</dt>
+          <dd>{show.network}</dd>
 
-    return (
-      <Modal className="all-episodes">
-        <Modal.Header onClose={() => navigate('/')}>
-          <h2>{show.displayName}</h2>
-        </Modal.Header>
-        <Modal.Content>
-          <dl>
-            <dt className={cs({ 'no-value': !show.network })}>Network:</dt>
-            <dd>{show.network}</dd>
-
-            <dt className={cs({ 'no-value': !show.status })}>Status:</dt>
-            <dd>{show.status}</dd>
-          </dl>
-          {content(show, seasons)}
-        </Modal.Content>
-      </Modal>
-    )
-  }
-}
-
-export default withRouter(observer(Show))
+          <dt className={cs({ 'no-value': !show.status })}>Status:</dt>
+          <dd>{show.status}</dd>
+        </dl>
+        {showsStore.isLoadingFromApi
+          ? <Loader>Loading episodes...</Loader>
+          : <EpisodesList show={show} />
+        }
+      </Modal.Content>
+    </Modal>
+  )
+})

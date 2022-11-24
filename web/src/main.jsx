@@ -12,27 +12,27 @@ import EditShow from './show/edit'
 import Settings from './settings/settings'
 import Search from './search/search'
 import SearchResults from './search/results'
+import stats from './lib/stats'
 
 dayjs.extend(isBetween)
+
+stats.send('Visit App')
 
 const root = createRoot(document.getElementById('app'))
 
 root.render(
   <Router>
     <Routes>
-      <Route path="/" element={<Navigate to="/shows" replace />} />
+      <Route path="/auth" element={<Auth />} />
       <Route path="/" element={<App />}>
-        <Route path="shows" element={<TimePeriods />}>
-          <Route path=":id" element={<Show />} />
-          <Route path=":id/edit" element={<EditShow />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="search" element={<Search />}>
-            <Route path=":query" element={<SearchResults />} />
-          </Route>
+        <Route path="shows/:id" element={<Show />} />
+        <Route path="shows/:id/edit" element={<EditShow />} />
+        <Route path="shows/search" element={<Search />}>
+          <Route path=":query" element={<SearchResults />} />
         </Route>
-        <Route path="auth" element={<Auth />} />
-        <Route path="*" element={<Navigate to="/shows" replace />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   </Router>,
 )

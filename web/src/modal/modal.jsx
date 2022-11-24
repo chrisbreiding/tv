@@ -1,6 +1,6 @@
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 
 const Header = ({ children, onClose }) => (
   <header>
@@ -35,28 +35,26 @@ const Footer = ({ children, onCancel, onOk, okText = 'OK' }) => (
   </footer>
 )
 
-class Modal extends Component {
-  static Header = Header
-  static Content = Content
-  static Footer = Footer
-
-  componentDidMount () {
+const Modal = ({ className, children }) => {
+  useEffect(() => {
     document.body.className += 'modal-dialog-present'
-  }
 
-  componentWillUnmount () {
-    document.body.className = ''
-  }
+    return () => {
+      document.body.className = ''
+    }
+  }, [true])
 
-  render () {
-    return (
-      <div className={`modal-dialog-overlay ${this.props.className || ''}`}>
-        <div className="modal-dialog">
-          {this.props.children}
-        </div>
+  return (
+    <div className={`modal-dialog-overlay ${className || ''}`}>
+      <div className="modal-dialog">
+        {children}
       </div>
-    )
-  }
+    </div>
+  )
 }
+
+Modal.Header = Header
+Modal.Content = Content
+Modal.Footer = Footer
 
 export default Modal

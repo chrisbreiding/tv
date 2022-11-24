@@ -9,16 +9,16 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import cs from 'classnames'
 import _ from 'lodash'
-import { action, reaction, makeObservable, observable } from 'mobx'
-import { observer } from 'mobx-react'
-import React, { Component } from 'react'
+import { action, reaction } from 'mobx'
+import { observer, useLocalObservable } from 'mobx-react'
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router'
 
+import date from '../lib/date'
 import stats from '../lib/stats'
 import Modal from '../modal/modal'
-import date from '../lib/date'
 import { updateSettings } from './settings-api'
 import settingsStore from './settings-store'
-import { withRouter } from '../lib/with-router'
 
 const Checkbox = ({ isChecked, onChange }) => {
   const onClick = () => {
@@ -57,157 +57,134 @@ const SearchLinkEditor = observer(({ link, onRemove }) => {
   )
 })
 
-class Settings extends Component {
-  hideSpecialEpisodes
-  hideTBAEpisodes
-  searchLinks
+export default observer(() => {
+  const navigate = useNavigate()
+  const state = useLocalObservable(() => ({
+    hideSpecialEpisodes: settingsStore.hideSpecialEpisodes,
+    hideTBAEpisodes: settingsStore.hideTBAEpisodes,
+    searchLinks: settingsStore.searchLinks,
 
-  constructor (props) {
-    super(props)
+    updateHideSpecialEpisodes (bool) {
+      this.hideSpecialEpisodes = bool
+    },
+    updateHideTBAEpisodes (bool) {
+      this.hideTBAEpisodes = bool ? 'ALL' : 'NONE'
+    },
+    addSearchLink () {
+      this.searchLinks.push({
+        episodeLink: '',
+        name: '',
+        showLink: '',
+      })
+    },
+    removeSearchLink (index) {
+      this.searchLinks = [
+        ...this.searchLinks.slice(0, index),
+        ...this.searchLinks.slice(index + 1),
+      ]
+    },
+    reset () {
+      this.hideSpecialEpisodes = settingsStore.hideSpecialEpisodes
+      this.hideTBAEpisodes = settingsStore.hideTBAEpisodes
+      this.searchLinks = settingsStore.searchLinks
+    },
+  }))
 
-    makeObservable(this, {
-      hideSpecialEpisodes: observable,
-      hideTBAEpisodes: observable,
-      searchLinks: observable,
-
-      _updateHideSpecialEpisodes: action,
-      _updateHideTBAEpisodes: action,
-      _addSearchLink: action,
-      _removeSearchLink: action,
-      _cancel: action,
-    })
-
-    Object.assign(this, {
-      hideSpecialEpisodes: settingsStore.hideSpecialEpisodes,
-      hideTBAEpisodes: settingsStore.hideTBAEpisodes,
-      searchLinks: settingsStore.searchLinks,
-    })
-  }
-
-  componentDidMount () {
+  useEffect(() => {
     stats.send('View Settings')
 
     // react to data changes from cache/api
-    this.disposeHideSpecial = reaction(
-      () => settingsStore.hideSpecialEpisodes,
-      action((hideSpecialEpisodes) => this.hideSpecialEpisodes = hideSpecialEpisodes),
-    )
-    this.disposeHideTBA = reaction(
-      () => settingsStore.hideTBAEpisodes,
-      action((hideTBAEpisodes) => this.hideTBAEpisodes = hideTBAEpisodes),
-    )
-    this.disposeSearchLinks = reaction(
-      () => settingsStore.searchLinks,
-      action((searchLinks) => this.searchLinks = searchLinks),
-    )
-  }
-
-  componentWillUnmount () {
-    this.disposeHideSpecial()
-    this.disposeHideTBA()
-    this.disposeSearchLinks()
-  }
-
-  render () {
-    return (
-      <Modal className="settings">
-        <Modal.Header>
-          <h2>Settings</h2>
-        </Modal.Header>
-        <Modal.Content>
-          <form className="form" onSubmit={this._save}>
-            <section className="general">
-              <h3>Hide from Recent & Upcoming</h3>
-              <label>
-                <Checkbox isChecked={this.hideSpecialEpisodes} onChange={this._updateHideSpecialEpisodes} />
-                Special episodes
-              </label>
-              <label>
-                <Checkbox isChecked={this.hideTBAEpisodes === 'ALL'} onChange={this._updateHideTBAEpisodes} />
-                Episodes where date and title are TBA
-              </label>
-            </section>
-
-            <section className="search-links">
-              <h3>Search Links</h3>
-              <p>Search links that appear as <FontAwesomeIcon icon={faMagnifyingGlass} /> when hovering over a show or episode. The following placeholders can be used:</p>
-              <p><em>[show name]</em>: The <strong>Search Name</strong> of the show</p>
-              <p><em>[episode]</em>: The episode season and number (e.g. s01e12)</p>
-              {_.map(this.searchLinks, (link, i) => (
-                <SearchLinkEditor link={link} key={i} onRemove={this._removeSearchLink(i)} />
-              ))}
-              <div className="controls">
-                <button type="button" className="add-link alt" onClick={this._addSearchLink}>
-                  <FontAwesomeIcon icon={faPlus} /> Add Link
-                </button>
-              </div>
-            </section>
-          </form>
-        </Modal.Content>
-        <div className="spacer" />
-        <Modal.Footer okText="Save" onOk={this._save} onCancel={this._cancel}>
-          <p>
-            Shows & episodes last updated: {date.longString(settingsStore.lastUpdated)}
-            {settingsStore.showOutdatedWarning &&
-              <Tooltip className="settings-tooltip tooltip" title="Last update was over 24 hours ago">
-                <FontAwesomeIcon className="outdated-warning" icon={faTriangleExclamation} />
-              </Tooltip>
-            }
-          </p>
-          <div className="spacer" />
-        </Modal.Footer>
-      </Modal>
-    )
-  }
-
-  _updateHideSpecialEpisodes = (bool) => {
-    this.hideSpecialEpisodes = bool
-  }
-
-  _updateHideTBAEpisodes = (bool) => {
-    this.hideTBAEpisodes = bool ? 'ALL' : 'NONE'
-  }
-
-  _addSearchLink = () => {
-    this.searchLinks.push({
-      episodeLink: '',
-      name: '',
-      showLink: '',
-    })
-  }
-
-  _removeSearchLink = (index) => () => {
-    this.searchLinks = [
-      ...this.searchLinks.slice(0, index),
-      ...this.searchLinks.slice(index + 1),
+    const disposers = [
+      reaction(
+        () => settingsStore.hideSpecialEpisodes,
+        action((hideSpecialEpisodes) => state.hideSpecialEpisodes = hideSpecialEpisodes),
+      ),
+      reaction(
+        () => settingsStore.hideTBAEpisodes,
+        action((hideTBAEpisodes) => state.hideTBAEpisodes = hideTBAEpisodes),
+      ),
+      reaction(
+        () => settingsStore.searchLinks,
+        action((searchLinks) => state.searchLinks = searchLinks),
+      ),
     ]
-  }
 
-  _save = (e) => {
+    return () => {
+      disposers.forEach((dispose) => dispose())
+    }
+  }, [true])
+
+  const save = (e) => {
     e.preventDefault()
 
     stats.send('Update Settings')
 
     updateSettings({
-      hideSpecialEpisodes: this.hideSpecialEpisodes,
-      hideTBAEpisodes: this.hideTBAEpisodes,
-      searchLinks: this.searchLinks,
+      hideSpecialEpisodes: state.hideSpecialEpisodes,
+      hideTBAEpisodes: state.hideTBAEpisodes,
+      searchLinks: state.searchLinks,
     })
 
-    this._close()
+    close()
   }
 
-  _cancel = () => {
-    this.hideSpecialEpisodes = settingsStore.hideSpecialEpisodes
-    this.hideTBAEpisodes = settingsStore.hideTBAEpisodes
-    this.searchLinks = settingsStore.searchLinks
+  const cancel = () => {
+    state.reset()
 
-    this._close()
+    close()
   }
 
-  _close = () => {
-    this.props.navigate('/')
+  const close = () => {
+    navigate('/')
   }
-}
 
-export default withRouter(observer(Settings))
+  return (
+    <Modal className="settings">
+      <Modal.Header>
+        <h2>Settings</h2>
+      </Modal.Header>
+      <Modal.Content>
+        <form className="form" onSubmit={save}>
+          <section className="general">
+            <h3>Hide from Recent & Upcoming</h3>
+            <label>
+              <Checkbox isChecked={state.hideSpecialEpisodes} onChange={state.updateHideSpecialEpisodes} />
+              Special episodes
+            </label>
+            <label>
+              <Checkbox isChecked={state.hideTBAEpisodes === 'ALL'} onChange={state.updateHideTBAEpisodes} />
+              Episodes where date and title are TBA
+            </label>
+          </section>
+
+          <section className="search-links">
+            <h3>Search Links</h3>
+            <p>Search links that appear as <FontAwesomeIcon icon={faMagnifyingGlass} /> when hovering over a show or episode. The following placeholders can be used:</p>
+            <p><em>[show name]</em>: The <strong>Search Name</strong> of the show</p>
+            <p><em>[episode]</em>: The episode season and number (e.g. s01e12)</p>
+            {_.map(state.searchLinks, (link, i) => (
+              <SearchLinkEditor link={link} key={i} onRemove={state.removeSearchLink.bind(state, i)} />
+            ))}
+            <div className="controls">
+              <button type="button" className="add-link alt" onClick={state.addSearchLink}>
+                <FontAwesomeIcon icon={faPlus} /> Add Link
+              </button>
+            </div>
+          </section>
+        </form>
+      </Modal.Content>
+      <div className="spacer" />
+      <Modal.Footer okText="Save" onOk={save} onCancel={cancel}>
+        <p>
+          Shows & episodes last updated: {date.longString(settingsStore.lastUpdated)}
+          {settingsStore.showOutdatedWarning &&
+            <Tooltip className="settings-tooltip tooltip" title="Last update was over 24 hours ago">
+              <FontAwesomeIcon className="outdated-warning" icon={faTriangleExclamation} />
+            </Tooltip>
+          }
+        </p>
+        <div className="spacer" />
+      </Modal.Footer>
+    </Modal>
+  )
+})

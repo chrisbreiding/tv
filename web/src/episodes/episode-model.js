@@ -1,6 +1,6 @@
 import { computed, makeObservable, observable } from 'mobx'
 import dayjs from 'dayjs'
-import util from '../lib/util'
+import { pad } from '../lib/util'
 
 const recentDaysCutoff = localStorage.recentDaysCutoff || 5
 
@@ -80,11 +80,11 @@ export default class EpisodeModel {
   }
 
   get longEpisodeNumber () {
-    return `s${util.pad(this.season)}e${util.pad(this.number)}`
+    return `s${pad(this.season)}e${pad(this.number)}`
   }
 
   get shortEpisodeNumber () {
-    return `${this.season}${util.pad(this.number)}`
+    return `${this.season}${pad(this.number)}`
   }
 
   get fileSafeTitle () {

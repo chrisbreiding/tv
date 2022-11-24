@@ -1,39 +1,17 @@
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { Children, Component } from 'react'
+import React, { Children, useState } from 'react'
 
-export default class MoreLess extends Component {
-  constructor (props) {
-    super(props)
+const MoreLess = ({ children, className, threshold }) => {
+  const [collapsed, setCollapsed] = useState(true)
+  const isBeyondThreshold = threshold && Children.count(children) > threshold
 
-    this.state = { collapsed: true }
-  }
-
-  render () {
-    const { children, threshold } = this.props
-    const beyondThreshold = this._beyondThreshold()
-
-    return (
-      <ul className={this.props.className}>
-        {this._beyondThreshold() && this.state.collapsed ? Children.toArray(children).slice(0, threshold) : children}
-        {this._button(beyondThreshold)}
-      </ul>
-    )
-  }
-
-  _beyondThreshold () {
-    const { children, threshold } = this.props
-    return threshold && Children.count(children) > threshold
-  }
-
-  _button (beyondThreshold) {
-    if (!beyondThreshold) { return null }
-
-    const { collapsed } = this.state
+  const button = () => {
+    if (!isBeyondThreshold) { return null }
 
     return (
       <li className="more-less">
-        <a href="#" onClick={this._toggle}>
+        <a href="#" onClick={toggle}>
           <FontAwesomeIcon icon={collapsed ? faAngleDown : faAngleUp} />
           {collapsed ? 'more' : 'less'}
         </a>
@@ -41,13 +19,21 @@ export default class MoreLess extends Component {
     )
   }
 
-  _toggle = (e) => {
+  const toggle = (e) => {
     e.preventDefault()
-
-    this.setState({
-      collapsed: !this.state.collapsed,
-    })
-
+    setCollapsed(!collapsed)
     e.target.blur()
   }
+
+  return (
+    <ul className={className}>
+      {isBeyondThreshold && collapsed
+        ? Children.toArray(children).slice(0, threshold)
+        : children
+      }
+      {button(isBeyondThreshold)}
+    </ul>
+  )
 }
+
+export default MoreLess

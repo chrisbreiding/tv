@@ -8,6 +8,7 @@ import messagesStore from './messages-store'
 
 export default observer(() => {
   const messages = messagesStore.messages
+
   if (!messages.length) return null
 
   const remove = (id) => () => {

@@ -1,45 +1,45 @@
-import React, { Component } from 'react'
+import React, { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import stats from '../lib/stats'
 import cache from '../data/cache'
 import { getApiKey, setApiKey } from '../data/api'
 import { AutoFocusedInput } from '../lib/form'
-import { withRouter } from '../lib/with-router'
 
-class Auth extends Component {
-  componentDidMount () {
+export default () => {
+  useEffect(() => {
     stats.send('Visit Auth')
-  }
+  }, [true])
 
-  render () {
-    return (
-      <div className="auth">
-        <form className="form" onSubmit={this._submit.bind(this)}>
-          <p>Your API key is missing or invalid. Please authenticate.</p>
+  const navigate = useNavigate()
+  const apiKeyRef = useRef()
 
-          <fieldset>
-            <label>API Key</label>
-            <AutoFocusedInput ref="apiKey" defaultValue={getApiKey()} />
-          </fieldset>
-
-          <footer className="clearfix">
-            <button type="submit">Authenticate</button>
-          </footer>
-        </form>
-      </div>
-    )
-  }
-
-  _submit (e) {
+  const submit = (e) => {
     e.preventDefault()
 
-    const apiKey = this.refs.apiKey.value
+    const apiKey = apiKeyRef.current.value
     stats.send('Sign In', { apiKey })
     setApiKey(apiKey)
+
     cache.clear().then(() => {
-      this.props.navigate('/shows')
+      navigate('/')
     })
   }
-}
 
-export default withRouter(Auth)
+  return (
+    <div className="auth">
+      <form className="form" onSubmit={submit}>
+        <p>Your API key is missing or invalid. Please authenticate.</p>
+
+        <fieldset>
+          <label>API Key</label>
+          <AutoFocusedInput ref={apiKeyRef} defaultValue={getApiKey()} />
+        </fieldset>
+
+        <footer className="clearfix">
+          <button type="submit">Authenticate</button>
+        </footer>
+      </form>
+    </div>
+  )
+}

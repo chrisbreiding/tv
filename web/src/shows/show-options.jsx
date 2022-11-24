@@ -6,7 +6,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import stats from '../lib/stats'
-import util from '../lib/util'
+import { searchLink } from '../lib/util'
 
 export default observer(({ id, searchName, searchLinks }) => {
   const trackGoToSearch = (link) => () => {
@@ -21,19 +21,19 @@ export default observer(({ id, searchName, searchLinks }) => {
     <div className="options">
       <ul>
         <li>
-          <Link to={id} title="All Episodes">
+          <Link to={`/shows/${id}`} title="All Episodes">
             <FontAwesomeIcon icon={faListUl} />
           </Link>
         </li>
         <li>
-          <Link to={`${id}/edit`} title="Edit">
+          <Link to={`/shows/${id}/edit`} title="Edit">
             <FontAwesomeIcon icon={faPenToSquare} />
           </Link>
         </li>
         {_.map(searchLinks, (link) => (
           <li key={link.name}>
             <a
-              href={util.searchLink(link.showLink, searchName)}
+              href={searchLink(link.showLink, searchName)}
               onClick={trackGoToSearch(link.showLink)}
               title={`Search ${link.name}`}
               target="_blank" rel="noreferrer"

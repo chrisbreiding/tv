@@ -1,63 +1,59 @@
 import axios from 'axios'
 import { action } from 'mobx'
-import React, { Component } from 'react'
-import { Outlet } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import Messages from '../messages/messages'
-import Loader from '../loader/loader'
-import stats from '../lib/stats'
 import api from '../data/api'
 import migrate from '../data/migrate'
 import uiState from '../lib/ui-state'
+import { eventBus } from '../lib/util'
+
+import Loader from '../loader/loader'
+import Messages from '../messages/messages'
 import AppOptions from './app-options'
-import { withRouter } from '../lib/with-router'
+import TimePeriods from '../time-periods/time-periods'
 
-class App extends Component {
-  constructor (props) {
-    super(props)
+export default () => {
+  const [ready, setReady] = useState(false)
+  const navigate = useNavigate()
 
-    this.state = { ready: false }
-  }
-
-  componentDidMount () {
-    stats.send('Visit App')
-
-    axios.interceptors.response.use(null, (error) => {
+  useEffect(() => {
+    const redirectOn401 = axios.interceptors.response.use(null, (error) => {
       if (error.response?.status === 401) {
-        this.props.navigate('/auth')
+        navigate('/auth')
         return
       }
       return Promise.reject(error)
     })
 
-    migrate().then(() => this.setState({ ready: true }))
-
     api.pollDesktopConnection(action('ping:desktop', (desktopRunning) => {
       uiState.desktopRunning = desktopRunning
     }))
-  }
 
-  render () {
-    return this.state.ready ? this._container() : this._loading()
-  }
+    const handler = (e) => {
+      eventBus.emit('outside:click', e)
+    }
 
-  _container () {
-    return (
+    document.addEventListener('click', handler)
+
+    migrate().then(() => setReady(true))
+
+    return () => {
+      document.removeEventListener('click', handler)
+      axios.interceptors.request.eject(redirectOn401)
+    }
+  }, [true])
+
+  return ready ?
+    (
       <>
         <AppOptions />
-        <Outlet />
+        <TimePeriods />
         <Messages />
       </>
-    )
-  }
-
-  _loading () {
-    return (
+    ) : (
       <p className="full-screen-centered">
         <Loader>Updating...</Loader>
       </p>
     )
-  }
 }
-
-export default withRouter(App)

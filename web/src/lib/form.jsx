@@ -1,23 +1,18 @@
-import React, { Component } from 'react'
+import React, { forwardRef, useEffect } from 'react'
 
-export class Input extends Component {
-  render () {
-    return <input ref="input" {...this.props} />
-  }
+export const AutoFocusedInput = forwardRef((props, ref) => {
+  useEffect(() => {
+    const node = ref.current
 
-  get value () {
-    return this.refs.input.value
-  }
-}
+    if (!node) return
 
-export class AutoFocusedInput extends Input {
-  componentDidMount () {
-    this.refs.input.focus()
-    this._moveCursorToEnd(this.refs.input)
-  }
+    node.focus()
 
-  _moveCursorToEnd (domNode) {
-    if (!domNode.setSelectionRange) { return }
-    domNode.setSelectionRange(domNode.value.length, domNode.value.length)
-  }
-}
+    if (!node.setSelectionRange) return
+
+    // move cursor to end
+    node.setSelectionRange(node.value.length, node.value.length)
+  }, [true])
+
+  return <input ref={ref} {...props} />
+})
