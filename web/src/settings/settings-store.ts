@@ -1,6 +1,7 @@
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
 import dayjs from 'dayjs'
 import type { SettingsProps } from '../lib/types'
+import { now } from '../lib/date'
 
 interface SearchLink {
   name: string
@@ -38,7 +39,7 @@ class SettingsStore {
   }
 
   get showOutdatedWarning () {
-    const oneDayAgo = dayjs().subtract(1, 'day')
+    const oneDayAgo = now().subtract(1, 'day')
 
     return this.username === 'chris' && this.lastUpdated?.isBefore(oneDayAgo)
   }

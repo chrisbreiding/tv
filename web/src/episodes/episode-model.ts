@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { computed, makeObservable, observable } from 'mobx'
+import { now } from '../lib/date'
 
 import type { Airdate, EpisodeProps } from '../lib/types'
 import { pad } from '../lib/util'
@@ -68,14 +69,14 @@ export class EpisodeModel {
   }
 
   get isRecent () {
-    const startOfiveDaysAgo = dayjs().subtract(recentDaysCutoff, 'days').startOf('day')
-    const startOfToday = dayjs().startOf('day')
+    const startOfiveDaysAgo = now().subtract(recentDaysCutoff, 'days').startOf('day')
+    const startOfToday = now().startOf('day')
 
     return this.airdate.isBetween(startOfiveDaysAgo.subtract(1, 'second'), startOfToday)
   }
 
   get isUpcoming () {
-    const startOfToday = dayjs().startOf('day')
+    const startOfToday = now().startOf('day')
     return this.airdate.isAfter(startOfToday.subtract(1, 'second'))
   }
 

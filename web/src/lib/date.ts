@@ -2,36 +2,40 @@ import dayjs, { Dayjs } from 'dayjs'
 
 import type { Airdate } from './types'
 
+export function now () {
+  return dayjs(localStorage.now)
+}
+
 export function isFarPast (dayjsDate: Airdate | Dayjs) {
-  return dayjsDate.isBefore(dayjs().subtract(2, 'months'), 'day')
+  return dayjsDate.isBefore(now().subtract(2, 'months'), 'day')
 }
 
 export function isPast (dayjsDate: Airdate | Dayjs) {
-  return dayjsDate.isBefore(dayjs().subtract(5, 'days'), 'day')
+  return dayjsDate.isBefore(now().subtract(5, 'days'), 'day')
 }
 
 export function isRecent (dayjsDate: Airdate | Dayjs) {
-  return dayjsDate.isBefore(dayjs(), 'day')
+  return dayjsDate.isBefore(now(), 'day')
 }
 
 export function isYesterday (dayjsDate: Airdate | Dayjs) {
-  return dayjsDate.isSame(dayjs().subtract(1, 'day'), 'day')
+  return dayjsDate.isSame(now().subtract(1, 'day'), 'day')
 }
 
 export function isToday (dayjsDate: Airdate | Dayjs) {
-  return dayjsDate.isSame(dayjs(), 'day')
+  return dayjsDate.isSame(now(), 'day')
 }
 
 export function isUpcoming (dayjsDate: Airdate | Dayjs) {
-  return dayjsDate.isAfter(dayjs().subtract(1, 'day'), 'day')
+  return dayjsDate.isAfter(now().subtract(1, 'day'), 'day')
 }
 
 export function isFuture (dayjsDate: Airdate | Dayjs) {
-  return dayjsDate.isAfter(dayjs().add(1, 'month'), 'day')
+  return dayjsDate.isAfter(now().add(1, 'month'), 'day')
 }
 
 export function isFarFuture (dayjsDate: Airdate | Dayjs) {
-  return dayjsDate.isAfter(dayjs().add(2, 'months'), 'day')
+  return dayjsDate.isAfter(now().add(2, 'months'), 'day')
 }
 
 export function shortString (dayjsDate?: Airdate | Dayjs) {
@@ -57,5 +61,5 @@ export function status (dayjsDate: Airdate | Dayjs) {
 }
 
 export function todayObject () {
-  return { date: dayjs().toISOString() }
+  return { date: now().toISOString() }
 }
