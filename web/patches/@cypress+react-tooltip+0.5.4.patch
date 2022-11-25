@@ -1,3 +1,20 @@
+diff --git a/node_modules/@cypress/react-tooltip/dist/tooltip.d.ts b/node_modules/@cypress/react-tooltip/dist/tooltip.d.ts
+new file mode 100644
+index 0000000..a341f36
+--- /dev/null
++++ b/node_modules/@cypress/react-tooltip/dist/tooltip.d.ts
+@@ -0,0 +1,11 @@
++interface TooltipProps {
++  children: React.ReactNode
++  className?: string
++  placement?: 'bottom' | 'left' | 'right' | 'top'
++  title: string | React.ReactNode
++  wrapperClassName?: string
++}
++
++declare const Tooltip: (props: TooltipProps) => JSX.Element
++
++export default Tooltip
 diff --git a/node_modules/@cypress/react-tooltip/dist/tooltip.css b/node_modules/@cypress/react-tooltip/dist/tooltip.styl
 similarity index 100%
 rename from node_modules/@cypress/react-tooltip/dist/tooltip.css
