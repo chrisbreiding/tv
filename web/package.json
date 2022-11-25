@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rm -rf dist && vite build",
+    "ts-check": "tsc --noEmit",
     "postinstall": "patch-package",
     "preview": "vite preview --port 8080",
     "lint": "eslint 'src/*.+(js|jsx)' 'src/**/*.+(js|jsx)'",
@@ -12,12 +13,21 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.19.1",
+    "@types/axios": "^0.14.0",
+    "@types/events": "^3.0.0",
+    "@types/lodash": "^4.14.190",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.9",
+    "@types/react-router-dom": "^5.3.3",
+    "@typescript-eslint/eslint-plugin": "^5.44.0",
+    "@typescript-eslint/parser": "^5.44.0",
     "@vitejs/plugin-react": "^2.2.0",
     "eslint": "^8.28.0",
     "eslint-plugin-crb": "^2.0.7",
     "eslint-plugin-react": "^7.31.11",
     "patch-package": "^6.5.0",
     "stylus": "^0.59.0",
+    "typescript": "^4.9.3",
     "vite": "^3.2.4"
   },
   "dependencies": {
