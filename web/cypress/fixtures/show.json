@@ -1,0 +1,32 @@
+{
+  "displayName": "Result 2",
+  "episodes": [
+    {
+      "airdate": "2022-12-03T04:00:00.000Z",
+      "title": "Episode 1",
+      "season": 1,
+      "number": 1,
+      "id": "9319031"
+    },
+    {
+      "season": 1,
+      "number": 2,
+      "title": "Episode 2",
+      "airdate": "2022-12-10T04:00:00.000Z",
+      "id": "9342855"
+    },
+    {
+      "season": 1,
+      "airdate": "2022-12-17T04:00:00.000Z",
+      "id": "9342856",
+      "number": 3,
+      "title": "Episode 3"
+    }
+  ],
+  "id": "318009",
+  "network": "NRK1",
+  "poster": "https://artworks.thetvdb.com/banners/posters/318009-3.jpg",
+  "status": "Continuing",
+  "fileName": "Result 2",
+  "searchName": "Result 2"
+}

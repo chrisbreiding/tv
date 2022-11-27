@@ -13,6 +13,7 @@
     "importsNotUsedAsValues": "error",
     "jsx": "react",
     "module": "commonjs",
+    "noEmit": true,
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2018"

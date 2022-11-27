@@ -1,0 +1,18 @@
+{
+  "hideSpecialEpisodes": true,
+  "hideTBAEpisodes": "ALL",
+  "lastUpdated": "2022-10-10T07:00:11.562Z",
+  "searchLinks": [
+    {
+      "episodeLink": "https://finder.org/search?q=[show name] [episode]",
+      "name": "Finder",
+      "showLink": "https://finder.org/search?q=[show name]"
+    },
+    {
+      "episodeLink": "https://searcher.com/sort-search/[show name] [episode]/seeders/desc/1/",
+      "name": "Searcher",
+      "showLink": "https://searcher.com/sort-search/[show name]/time/desc/1/"
+    }
+  ],
+  "username": "chris"
+}

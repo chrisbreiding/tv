@@ -1,0 +1,792 @@
+[
+  {
+    "displayName": "His Dark Materials",
+    "episodes": [
+      {
+        "title": "Making His Dark Materials",
+        "id": "7716142",
+        "airdate": "2020-04-26T04:00:00.000Z",
+        "season": 0,
+        "number": 1
+      },
+      {
+        "title": "Lyra's Jordan",
+        "airdate": "2019-11-03T04:00:00.000Z",
+        "season": 1,
+        "id": "7345634",
+        "number": 1
+      },
+      {
+        "title": "The Idea of North",
+        "season": 1,
+        "airdate": "2019-11-10T05:00:00.000Z",
+        "id": "7427005",
+        "number": 2
+      },
+      {
+        "airdate": "2019-11-17T05:00:00.000Z",
+        "title": "The Spies",
+        "number": 3,
+        "id": "7432829",
+        "season": 1
+      },
+      {
+        "title": "Armour",
+        "season": 1,
+        "id": "7432830",
+        "airdate": "2019-11-24T05:00:00.000Z",
+        "number": 4
+      },
+      {
+        "season": 1,
+        "airdate": "2019-12-01T05:00:00.000Z",
+        "title": "The Lost Boy",
+        "id": "7432832",
+        "number": 5
+      },
+      {
+        "title": "The Dæmon-Cages",
+        "season": 1,
+        "number": 6,
+        "id": "7432833",
+        "airdate": "2019-12-08T05:00:00.000Z"
+      },
+      {
+        "title": "The Fight to the Death",
+        "airdate": "2019-12-15T05:00:00.000Z",
+        "id": "7432834",
+        "season": 1,
+        "number": 7
+      },
+      {
+        "airdate": "2019-12-22T05:00:00.000Z",
+        "id": "7432835",
+        "number": 8,
+        "title": "Betrayal",
+        "season": 1
+      },
+      {
+        "id": "7990688",
+        "number": 1,
+        "title": "The City of Magpies",
+        "airdate": "2020-11-08T05:00:00.000Z",
+        "season": 2
+      },
+      {
+        "id": "7997661",
+        "number": 2,
+        "title": "The Cave",
+        "season": 2,
+        "airdate": "2020-11-15T05:00:00.000Z"
+      },
+      {
+        "number": 3,
+        "id": "7997662",
+        "season": 2,
+        "title": "Theft",
+        "airdate": "2020-11-22T05:00:00.000Z"
+      },
+      {
+        "title": "Tower of the Angels",
+        "number": 4,
+        "id": "7997665",
+        "season": 2,
+        "airdate": "2020-11-29T05:00:00.000Z"
+      },
+      {
+        "id": "7997667",
+        "number": 5,
+        "season": 2,
+        "title": "The Scholar",
+        "airdate": "2020-12-06T05:00:00.000Z"
+      },
+      {
+        "id": "7997669",
+        "airdate": "2020-12-13T05:00:00.000Z",
+        "number": 6,
+        "season": 2,
+        "title": "Malice"
+      },
+      {
+        "id": "7997670",
+        "title": "Æsahættr",
+        "season": 2,
+        "airdate": "2020-12-20T05:00:00.000Z",
+        "number": 7
+      },
+      {
+        "id": "9389426",
+        "title": "TBA",
+        "season": 3,
+        "number": 1
+      },
+      {
+        "id": "9406867",
+        "number": 2,
+        "title": "TBA",
+        "season": 3
+      },
+      {
+        "title": "TBA",
+        "season": 3,
+        "number": 3,
+        "id": "9406876"
+      },
+      {
+        "title": "TBA",
+        "id": "9406877",
+        "number": 4,
+        "season": 3
+      },
+      {
+        "title": "TBA",
+        "season": 3,
+        "number": 5,
+        "id": "9406878"
+      },
+      {
+        "season": 3,
+        "id": "9406879",
+        "number": 6,
+        "title": "TBA"
+      },
+      {
+        "number": 7,
+        "season": 3,
+        "title": "TBA",
+        "id": "9406880"
+      },
+      {
+        "id": "9406881",
+        "number": 8,
+        "title": "TBA",
+        "season": 3
+      }
+    ],
+    "id": "360295",
+    "network": "BBC One",
+    "poster": "https://artworks.thetvdb.com/banners/posters/5dc14be37c2b5.jpg",
+    "status": "Continuing",
+    "fileName": "His Dark Materials",
+    "searchName": "His Dark Materials"
+  },
+  {
+    "displayName": "Avenue 5",
+    "episodes": [
+      {
+        "id": "7187593",
+        "airdate": "2020-01-19T05:00:00.000Z",
+        "title": "I Was Flying",
+        "season": 1,
+        "number": 1
+      },
+      {
+        "id": "7503421",
+        "airdate": "2020-01-26T05:00:00.000Z",
+        "season": 1,
+        "number": 2,
+        "title": "And Then He's Gonna Shoot Off…"
+      },
+      {
+        "id": "7503425",
+        "airdate": "2020-02-02T05:00:00.000Z",
+        "title": "I'm a Hand Model",
+        "season": 1,
+        "number": 3
+      },
+      {
+        "id": "7503427",
+        "season": 1,
+        "number": 4,
+        "title": "Wait a Minute, Then Who Was That on the Ladder?",
+        "airdate": "2020-02-09T05:00:00.000Z"
+      },
+      {
+        "title": "He's Only There To Stop His Skeleton From Falling Over",
+        "airdate": "2020-02-16T05:00:00.000Z",
+        "id": "7581993",
+        "season": 1,
+        "number": 5
+      },
+      {
+        "season": 1,
+        "title": "Was It Your Ears?",
+        "number": 6,
+        "id": "7583019",
+        "airdate": "2020-02-23T05:00:00.000Z"
+      },
+      {
+        "id": "7590841",
+        "season": 1,
+        "title": "Are You a Spider, Matt?",
+        "number": 7,
+        "airdate": "2020-03-01T05:00:00.000Z"
+      },
+      {
+        "id": "7601880",
+        "season": 1,
+        "title": "This Is Physically Hurting Me",
+        "airdate": "2020-03-08T05:00:00.000Z",
+        "number": 8
+      },
+      {
+        "id": "7601882",
+        "airdate": "2020-03-15T04:00:00.000Z",
+        "number": 9,
+        "season": 1,
+        "title": "Eight Arms But No Hands"
+      },
+      {
+        "id": "9350906",
+        "season": 2,
+        "number": 1,
+        "title": "No One Wants an Argument About Reality",
+        "airdate": "2022-10-10T04:00:00.000Z"
+      },
+      {
+        "number": 2,
+        "id": "9356223",
+        "season": 2,
+        "airdate": "2022-10-17T04:00:00.000Z",
+        "title": "What an Unseasonal Delight"
+      },
+      {
+        "id": "9356224",
+        "title": "Is It a Good Dot?",
+        "season": 2,
+        "airdate": "2022-10-24T04:00:00.000Z",
+        "number": 3
+      },
+      {
+        "season": 2,
+        "number": 4,
+        "title": "How It Ends: As a Starter and a Main",
+        "airdate": "2022-10-31T04:00:00.000Z",
+        "id": "9356225"
+      },
+      {
+        "id": "9356227",
+        "season": 2,
+        "number": 5,
+        "title": "Let's Play with Matches",
+        "airdate": "2022-11-07T05:00:00.000Z"
+      },
+      {
+        "title": "Intoxicating Clarity",
+        "season": 2,
+        "id": "9356228",
+        "number": 6,
+        "airdate": "2022-11-14T05:00:00.000Z"
+      },
+      {
+        "number": 7,
+        "airdate": "2022-11-21T05:00:00.000Z",
+        "title": "I Love Judging People",
+        "id": "9356229",
+        "season": 2
+      },
+      {
+        "airdate": "2022-11-28T05:00:00.000Z",
+        "id": "9356230",
+        "number": 8,
+        "season": 2,
+        "title": "That's Why They Call It a Missile"
+      }
+    ],
+    "id": "364106",
+    "network": "HBO",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/364106/posters/63395de7278a1.jpg",
+    "status": "Continuing",
+    "fileName": "Avenue 5 (file)",
+    "searchName": "Avenue 5 (search)"
+  },
+  {
+    "displayName": "Rings of Power",
+    "episodes": [
+      {
+        "airdate": "2022-08-03T04:00:00.000Z",
+        "title": "Stories from the Legendarium Featurette",
+        "season": 0,
+        "number": 1,
+        "id": "9319031"
+      },
+      {
+        "season": 0,
+        "number": 10,
+        "title": "Stories of the Second Age – Lindon",
+        "airdate": "2022-09-05T04:00:00.000Z",
+        "id": "9342855"
+      },
+      {
+        "season": 0,
+        "airdate": "2022-09-05T04:00:00.000Z",
+        "id": "9342856",
+        "number": 11,
+        "title": "Stories of the Second Age – Númenor"
+      },
+      {
+        "id": "9342857",
+        "number": 12,
+        "season": 0,
+        "airdate": "2022-09-05T04:00:00.000Z",
+        "title": "Stories of the Second Age – The Southlands"
+      },
+      {
+        "season": 0,
+        "title": "Stories of the Second Age – Harfoots",
+        "airdate": "2022-09-05T04:00:00.000Z",
+        "number": 13,
+        "id": "9342858"
+      },
+      {
+        "airdate": "2022-09-05T04:00:00.000Z",
+        "number": 14,
+        "id": "9342859",
+        "season": 0,
+        "title": "Stories of the Second Age – Khazad-dûm"
+      },
+      {
+        "title": "A Shadow of the Past",
+        "airdate": "2022-09-01T04:00:00.000Z",
+        "id": "8286853",
+        "season": 1,
+        "number": 1
+      },
+      {
+        "id": "8954345",
+        "airdate": "2022-09-01T04:00:00.000Z",
+        "number": 2,
+        "title": "Adrift",
+        "season": 1
+      },
+      {
+        "season": 1,
+        "id": "8954346",
+        "number": 3,
+        "title": "Adar",
+        "airdate": "2022-09-09T04:00:00.000Z"
+      },
+      {
+        "title": "The Great Wave",
+        "airdate": "2022-09-16T04:00:00.000Z",
+        "season": 1,
+        "id": "8954347",
+        "number": 4
+      },
+      {
+        "title": "Partings",
+        "id": "8954348",
+        "season": 1,
+        "number": 5,
+        "airdate": "2022-09-23T04:00:00.000Z"
+      },
+      {
+        "title": "Udûn",
+        "id": "8954349",
+        "number": 6,
+        "airdate": "2022-09-30T04:00:00.000Z",
+        "season": 1
+      },
+      {
+        "airdate": "2022-10-07T04:00:00.000Z",
+        "title": "The Eye",
+        "season": 1,
+        "id": "8954350",
+        "number": 7
+      },
+      {
+        "title": "Alloyed",
+        "airdate": "2022-10-14T04:00:00.000Z",
+        "season": 1,
+        "id": "8954351",
+        "number": 8
+      }
+    ],
+    "id": "367506",
+    "network": "Amazon Prime Video",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/367506/posters/633f2338e7e17.jpg",
+    "status": "Continuing",
+    "fileName": "Rings of Power",
+    "searchName": "Rings of Power"
+  },
+  {
+    "displayName": "House of the Dragon",
+    "episodes": [
+      {
+        "title": "Enter the House of the Dragon",
+        "id": "9420978",
+        "season": 0,
+        "number": 1,
+        "airdate": "2022-08-13T04:00:00.000Z"
+      },
+      {
+        "title": "Premiere Special",
+        "id": "9324838",
+        "airdate": "2022-08-20T04:00:00.000Z",
+        "season": 0,
+        "number": 2
+      },
+      {
+        "title": "Inside the Episode - The Heirs of the Dragon",
+        "airdate": "2022-08-21T04:00:00.000Z",
+        "id": "9343326",
+        "season": 0,
+        "number": 3
+      },
+      {
+        "season": 0,
+        "airdate": "2022-08-28T04:00:00.000Z",
+        "number": 4,
+        "title": "Inside the Episode - The Rogue Prince",
+        "id": "9343327"
+      },
+      {
+        "title": "Inside the Episode - Second of His Name",
+        "id": "9343328",
+        "airdate": "2022-09-04T04:00:00.000Z",
+        "number": 5,
+        "season": 0
+      },
+      {
+        "number": 6,
+        "season": 0,
+        "airdate": "2022-09-11T04:00:00.000Z",
+        "title": "Inside the Episode - King of the Narrow Sea",
+        "id": "9343329"
+      },
+      {
+        "id": "9343330",
+        "season": 0,
+        "airdate": "2022-09-18T04:00:00.000Z",
+        "number": 7,
+        "title": "Inside the Episode - We Light the Way"
+      },
+      {
+        "title": "Inside the Episode - The Princess and the Queen",
+        "season": 0,
+        "airdate": "2022-09-25T04:00:00.000Z",
+        "number": 8,
+        "id": "9343331"
+      },
+      {
+        "title": "Inside the Episode - Driftmark",
+        "airdate": "2022-10-02T04:00:00.000Z",
+        "season": 0,
+        "number": 9,
+        "id": "9343332"
+      },
+      {
+        "id": "9343333",
+        "title": "Inside the Episode - The Lord of the Tides",
+        "number": 10,
+        "season": 0,
+        "airdate": "2022-10-09T04:00:00.000Z"
+      },
+      {
+        "season": 0,
+        "title": "Inside the Episode - The Green Council",
+        "number": 11,
+        "id": "9343334",
+        "airdate": "2022-10-16T04:00:00.000Z"
+      },
+      {
+        "airdate": "2022-10-23T04:00:00.000Z",
+        "number": 12,
+        "season": 0,
+        "id": "9343335",
+        "title": "Inside the Episode - The Black Queen"
+      },
+      {
+        "number": 13,
+        "title": "Finale Special",
+        "id": "9420979",
+        "season": 0,
+        "airdate": "2022-10-24T04:00:00.000Z"
+      },
+      {
+        "number": 1,
+        "id": "8287133",
+        "airdate": "2022-08-21T04:00:00.000Z",
+        "season": 1,
+        "title": "The Heirs of the Dragon"
+      },
+      {
+        "title": "The Rogue Prince",
+        "id": "9082147",
+        "season": 1,
+        "airdate": "2022-08-28T04:00:00.000Z",
+        "number": 2
+      },
+      {
+        "number": 3,
+        "id": "9082148",
+        "airdate": "2022-09-04T04:00:00.000Z",
+        "title": "Second of His Name",
+        "season": 1
+      },
+      {
+        "airdate": "2022-09-11T04:00:00.000Z",
+        "title": "King of the Narrow Sea",
+        "number": 4,
+        "season": 1,
+        "id": "9082149"
+      },
+      {
+        "number": 5,
+        "airdate": "2022-09-18T04:00:00.000Z",
+        "id": "9082150",
+        "season": 1,
+        "title": "We Light the Way"
+      },
+      {
+        "id": "9082151",
+        "season": 1,
+        "title": "The Princess and the Queen",
+        "airdate": "2022-09-25T04:00:00.000Z",
+        "number": 6
+      },
+      {
+        "title": "Driftmark",
+        "number": 7,
+        "airdate": "2022-10-02T04:00:00.000Z",
+        "id": "9082152",
+        "season": 1
+      },
+      {
+        "season": 1,
+        "number": 8,
+        "title": "The Lord of the Tides",
+        "id": "9082153",
+        "airdate": "2022-10-09T04:00:00.000Z"
+      },
+      {
+        "airdate": "2022-10-16T04:00:00.000Z",
+        "number": 9,
+        "season": 1,
+        "title": "The Green Council",
+        "id": "9082154"
+      },
+      {
+        "title": "The Black Queen",
+        "number": 10,
+        "season": 1,
+        "id": "9082155",
+        "airdate": "2022-10-23T04:00:00.000Z"
+      },
+      {
+        "title": "The Yellow Bird",
+        "number": 11,
+        "season": 1,
+        "id": "9082156",
+        "airdate": "2022-10-30T04:00:00.000Z"
+      }
+    ],
+    "id": "371572",
+    "network": "HBO",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/371572/posters/624838567e159.jpg",
+    "status": "Continuing",
+    "fileName": "House of the Dragon",
+    "searchName": "House of the Dragon"
+  },
+  {
+    "displayName": "Severance",
+    "episodes": [
+      {
+        "season": 1,
+        "id": "8891221",
+        "airdate": "2022-02-18T05:00:00.000Z",
+        "number": 1,
+        "title": "Good News About Hell"
+      },
+      {
+        "id": "8891222",
+        "title": "Half Loop",
+        "season": 1,
+        "airdate": "2022-02-18T05:00:00.000Z",
+        "number": 2
+      },
+      {
+        "airdate": "2022-02-25T05:00:00.000Z",
+        "number": 3,
+        "season": 1,
+        "title": "In Perpetuity",
+        "id": "8891223"
+      },
+      {
+        "airdate": "2022-03-04T05:00:00.000Z",
+        "id": "8891224",
+        "number": 4,
+        "title": "The You You Are",
+        "season": 1
+      },
+      {
+        "title": "The Grim Barbarity of Optics and Design",
+        "id": "8891225",
+        "airdate": "2022-03-11T05:00:00.000Z",
+        "season": 1,
+        "number": 5
+      },
+      {
+        "title": "Hide and Seek",
+        "id": "8891226",
+        "airdate": "2022-03-18T04:00:00.000Z",
+        "season": 1,
+        "number": 6
+      },
+      {
+        "airdate": "2022-03-25T04:00:00.000Z",
+        "title": "Defiant Jazz",
+        "id": "8891227",
+        "season": 1,
+        "number": 7
+      },
+      {
+        "id": "8891228",
+        "number": 8,
+        "title": "What's for Dinner?",
+        "season": 1,
+        "airdate": "2022-04-01T04:00:00.000Z"
+      },
+      {
+        "id": "8891229",
+        "season": 1,
+        "airdate": "2022-04-08T04:00:00.000Z",
+        "title": "The We We Are",
+        "number": 9
+      }
+    ],
+    "id": "371980",
+    "network": "Apple TV+",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/371980/posters/61bc6bbbea3f4.jpg",
+    "status": "Continuing",
+    "fileName": "Severance",
+    "searchName": "Severance"
+  },
+  {
+    "displayName": "1899",
+    "episodes": [
+      {
+        "season": 0,
+        "airdate": "2022-11-17T05:00:00.000Z",
+        "title": "TBA",
+        "id": "9459098",
+        "number": 1
+      },
+      {
+        "number": 1,
+        "season": 1,
+        "title": "Das Schiff",
+        "id": "8405882",
+        "airdate": "2022-11-17T05:00:00.000Z"
+      },
+      {
+        "id": "9348587",
+        "title": "Der Junge",
+        "airdate": "2022-11-17T05:00:00.000Z",
+        "number": 2,
+        "season": 1
+      },
+      {
+        "id": "9348588",
+        "title": "Der Nebel",
+        "season": 1,
+        "number": 3,
+        "airdate": "2022-11-17T05:00:00.000Z"
+      },
+      {
+        "season": 1,
+        "title": "Der Kampf",
+        "id": "9348589",
+        "number": 4,
+        "airdate": "2022-11-17T05:00:00.000Z"
+      },
+      {
+        "title": "Der Ruf",
+        "number": 5,
+        "season": 1,
+        "id": "9348590",
+        "airdate": "2022-11-17T05:00:00.000Z"
+      },
+      {
+        "number": 6,
+        "id": "9348591",
+        "season": 1,
+        "title": "Die Pyramide",
+        "airdate": "2022-11-17T05:00:00.000Z"
+      },
+      {
+        "season": 1,
+        "id": "9348592",
+        "airdate": "2022-11-17T05:00:00.000Z",
+        "number": 7,
+        "title": "Der Sturm"
+      },
+      {
+        "season": 1,
+        "id": "9348593",
+        "title": "Der Schlüssel",
+        "airdate": "2022-11-17T05:00:00.000Z",
+        "number": 8
+      }
+    ],
+    "id": "384429",
+    "network": "Netflix",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/384429/posters/632080a001296.jpg",
+    "status": "Continuing",
+    "fileName": "1899",
+    "searchName": "1899"
+  },
+  {
+    "episodes": [
+      {
+        "title": "Orange Juice, No Pulp",
+        "id": "8521641",
+        "number": 1,
+        "season": 1,
+        "airdate": "2022-07-15T04:00:00.000Z"
+      },
+      {
+        "number": 2,
+        "airdate": "2022-07-22T04:00:00.000Z",
+        "title": "Scion",
+        "id": "9249106",
+        "season": 1
+      },
+      {
+        "title": "Gold Digger",
+        "airdate": "2022-07-29T04:00:00.000Z",
+        "number": 3,
+        "id": "9249107",
+        "season": 1
+      },
+      {
+        "season": 1,
+        "title": "The Fielder Method",
+        "id": "9249108",
+        "airdate": "2022-08-05T04:00:00.000Z",
+        "number": 4
+      },
+      {
+        "title": "Apocalypto",
+        "airdate": "2022-08-12T04:00:00.000Z",
+        "id": "9249109",
+        "season": 1,
+        "number": 5
+      },
+      {
+        "airdate": "2022-08-19T04:00:00.000Z",
+        "id": "9249110",
+        "number": 6,
+        "season": 1,
+        "title": "Pretend Daddy"
+      }
+    ],
+    "id": "405593",
+    "network": "HBO",
+    "poster": "https://artworks.thetvdb.com/banners/v4/series/405593/posters/62ad27e215caf.jpg",
+    "status": "Continuing",
+    "displayName": "The Rehearsal",
+    "fileName": "The Rehearsal",
+    "searchName": "The Rehearsal"
+  }
+]

@@ -30,16 +30,16 @@ export const App = () => {
       uiState.desktopRunning = desktopRunning
     }))
 
-    const handler = (e: MouseEvent) => {
+    const onOutsideClick = (e: MouseEvent) => {
       eventBus.emit('outside:click', e)
     }
 
-    document.addEventListener('click', handler)
+    document.addEventListener('click', onOutsideClick)
 
     migrate().then(() => setReady(true))
 
     return () => {
-      document.removeEventListener('click', handler)
+      document.removeEventListener('click', onOutsideClick)
       axios.interceptors.request.eject(redirectOn401)
     }
   }, [true])

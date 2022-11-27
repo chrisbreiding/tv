@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "build": "rm -rf dist && vite build",
-    "ts-check": "tsc --noEmit",
+    "cypress:open": "cypress open --e2e --browser firefox",
+    "cypress:run": "cypress run",
+    "lint-fix": "npm run lint -- --fix",
+    "lint": "eslint 'src/*.+(ts|tsx)' 'src/**/*.+(ts|tsx)' 'cypress/**/*.+(ts|tsx)'",
     "postinstall": "patch-package",
     "preview": "vite preview --port 8080",
-    "lint": "eslint 'src/*.+(js|jsx)' 'src/**/*.+(js|jsx)'",
-    "lint-fix": "npm run lint -- --fix",
-    "start": "vite"
+    "start": "vite",
+    "ts-check": "tsc"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.19.1",
@@ -22,6 +24,7 @@
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "@typescript-eslint/parser": "^5.44.0",
     "@vitejs/plugin-react": "^2.2.0",
+    "cypress": "^11.2.0",
     "eslint": "^8.28.0",
     "eslint-plugin-crb": "^2.0.7",
     "eslint-plugin-react": "^7.31.11",
