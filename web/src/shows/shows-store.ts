@@ -6,13 +6,13 @@ import type { SearchResultShowModel } from '../search/search-result-show-model'
 import { ShowModel } from './show-model'
 
 class ShowsStore {
-  isLoadingFromApi = true
+  isLoadingFromRemote = true
   isLoadingFromCache = true
   shows: ShowModel[] = []
 
   constructor () {
     makeObservable(this, {
-      isLoadingFromApi: observable,
+      isLoadingFromRemote: observable,
       isLoadingFromCache: observable,
       shows: observable,
 
@@ -20,8 +20,8 @@ class ShowsStore {
       upcoming: computed,
       offAir: computed,
 
-      setIsLoadingfromApi: action,
-      setIsLoadingfromCache: action,
+      setIsLoadingFromRemote: action,
+      setIsLoadingFromCache: action,
       setShows: action,
       addShow: action,
       updateShow: action,
@@ -47,11 +47,11 @@ class ShowsStore {
     return orderBy(filteredShows, ['displayName'], ['asc'])
   }
 
-  setIsLoadingfromApi (isLoading: boolean) {
-    this.isLoadingFromApi = isLoading
+  setIsLoadingFromRemote (isLoading: boolean) {
+    this.isLoadingFromRemote = isLoading
   }
 
-  setIsLoadingfromCache (isLoading: boolean) {
+  setIsLoadingFromCache (isLoading: boolean) {
     this.isLoadingFromCache = isLoading
   }
 

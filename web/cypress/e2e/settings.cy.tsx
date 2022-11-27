@@ -10,8 +10,16 @@ describe('settings', () => {
   it('displays hide options, search links, and last updated', () => {
     cy.contains('Hide from Recent & Upcoming')
     cy.contains('Search Links')
-    cy.get('.modal-dialog footer p').text().should('include', 'Shows & episodes last updated: Oct 10, 2022')
+    cy.get('.modal-dialog footer p').text().should('include', 'Shows & episodes last updated: Oct 8, 2022')
     cy.contains('Cancel').click()
+  })
+
+  it('shows warning when last updated was over a day ago and user is admin', () => {
+    cy.get('.modal-dialog footer .outdated-warning').should('be.visible')
+    cy.get('.modal-dialog footer .outdated-warning').trigger('mouseover')
+    cy.get('.tooltip').text().should('equal', 'Last update was over 24 hours ago')
+    cy.contains('Cancel').click()
+    cy.get('.app-options .outdated-warning').should('be.visible')
   })
 
   it('shows special episodes when they are unhidden', () => {
@@ -56,7 +64,7 @@ describe('settings', () => {
   })
 
   it('sends the settings on save', () => {
-    // ensure settings are reset to their original valuesf
+    // ensure settings are reset to their original values
     cy.load()
     cy.get('[title="Settings"]').click()
 

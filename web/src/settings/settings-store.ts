@@ -12,7 +12,9 @@ interface SearchLink {
 class SettingsStore {
   hideSpecialEpisodes = false
   hideTBAEpisodes: SettingsProps['hideTBAEpisodes'] = 'NONE'
-  isLoading = true
+  isAdmin = false
+  isLoadingFromRemote = true
+  isLoadingFromCache = true
   lastUpdated?: dayjs.Dayjs
   searchLinks: SearchLink[] = []
   username?: string
@@ -21,7 +23,9 @@ class SettingsStore {
     makeObservable(this, {
       hideSpecialEpisodes: observable,
       hideTBAEpisodes: observable,
-      isLoading: observable,
+      isAdmin: observable,
+      isLoadingFromRemote: observable,
+      isLoadingFromCache: observable,
       lastUpdated: observable.ref,
       searchLinks: observable,
       username: observable,
@@ -29,7 +33,8 @@ class SettingsStore {
       hideAllTBAEPisodes: computed,
       showOutdatedWarning: computed,
 
-      setIsLoading: action,
+      setIsLoadingFromRemote: action,
+      setIsLoadingFromCache: action,
       setSettings: action,
     })
   }
@@ -39,18 +44,25 @@ class SettingsStore {
   }
 
   get showOutdatedWarning () {
+    // if (this.isLoadingFromRemote) return false
+
     const oneDayAgo = now().subtract(1, 'day')
 
-    return this.username === 'chris' && this.lastUpdated?.isBefore(oneDayAgo)
+    return this.isAdmin && this.lastUpdated?.isBefore(oneDayAgo)
   }
 
-  setIsLoading = (isLoading: boolean) => {
-    this.isLoading = isLoading
+  setIsLoadingFromRemote (isLoading: boolean) {
+    this.isLoadingFromRemote = isLoading
+  }
+
+  setIsLoadingFromCache = (isLoading: boolean) => {
+    this.isLoadingFromCache = isLoading
   }
 
   setSettings = (settings: Partial<SettingsProps>) => {
     if (settings.hideSpecialEpisodes != null) this.hideSpecialEpisodes = settings.hideSpecialEpisodes
     if (settings.hideTBAEpisodes) this.hideTBAEpisodes = settings.hideTBAEpisodes
+    if (settings.isAdmin) this.isAdmin = settings.isAdmin
     if (settings.lastUpdated) this.lastUpdated = dayjs(settings.lastUpdated)
     if (settings.searchLinks) this.searchLinks = settings.searchLinks
     if (settings.username) this.username = settings.username
@@ -60,6 +72,7 @@ class SettingsStore {
     return {
       hideSpecialEpisodes: this.hideSpecialEpisodes,
       hideTBAEpisodes: this.hideTBAEpisodes,
+      isAdmin: this.isAdmin,
       lastUpdated: this.lastUpdated?.toISOString(),
       searchLinks: toJS(this.searchLinks),
       username: this.username,

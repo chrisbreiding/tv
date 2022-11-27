@@ -6,32 +6,27 @@ import {
 import type { SettingsProps, UpdateSettingsProps } from '../lib/types'
 import { settingsStore } from './settings-store'
 
-function getSettingsFromCache<T> () {
-  return cache.get<T>(SETTINGS_KEY)
-}
-
-async function getSettingsFromApi () {
+async function getSettingsFromRemote () {
   const settings = await getRemoteSettings()
 
   if (settings) {
+    settingsStore.setSettings(settings)
+    settingsStore.setIsLoadingFromRemote(false)
+    settingsStore.setIsLoadingFromCache(false)
     cache.set<SettingsProps>(SETTINGS_KEY, settings)
-    setSettings(settings)
   }
 }
 
-function setSettings (settings: UpdateSettingsProps) {
-  settingsStore.setSettings(settings)
-  settingsStore.setIsLoading(false)
-}
-
 export function loadSettings () {
-  settingsStore.setIsLoading(true)
+  settingsStore.setIsLoadingFromRemote(true)
+  settingsStore.setIsLoadingFromCache(true)
 
-  getSettingsFromCache<SettingsProps>().then((settings) => {
+  cache.get<SettingsProps>(SETTINGS_KEY).then((settings) => {
     if (settings) {
-      setSettings(settings)
+      settingsStore.setSettings(settings)
+      settingsStore.setIsLoadingFromCache(false)
     }
-    getSettingsFromApi()
+    getSettingsFromRemote()
   })
 }
 
@@ -45,7 +40,7 @@ export async function updateSettings (settings: UpdateSettingsProps) {
   const success = await updateRemoteSettings(settingsProps)
 
   if (success) {
-    setSettings(settingsProps)
+    settingsStore.setSettings(settings)
     cache.set<SettingsProps>(SETTINGS_KEY, settingsStore.serialize())
   }
 }

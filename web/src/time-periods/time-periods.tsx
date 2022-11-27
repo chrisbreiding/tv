@@ -15,7 +15,7 @@ export const TimePeriods = observer(() => {
     loadSettings()
   }, [true])
 
-  if (showsStore.isLoadingFromCache || settingsStore.isLoading) {
+  if (showsStore.isLoadingFromCache || settingsStore.isLoadingFromCache) {
     return (
       <div className="loading-container full-screen-centered">
         <Loader>Loading shows...</Loader>

@@ -1,7 +1,8 @@
 {
   "hideSpecialEpisodes": true,
   "hideTBAEpisodes": "ALL",
-  "lastUpdated": "2022-10-10T07:00:11.562Z",
+  "isAdmin": true,
+  "lastUpdated": "2022-10-08T07:00:11.562Z",
   "searchLinks": [
     {
       "episodeLink": "https://finder.org/search?q=[show name] [episode]",

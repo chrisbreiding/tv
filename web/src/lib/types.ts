@@ -58,6 +58,7 @@ export interface SearchLink {
 export interface SettingsProps {
   hideSpecialEpisodes: boolean
   hideTBAEpisodes: 'ALL' | 'NONE'
+  isAdmin: boolean
   lastUpdated: string
   searchLinks: SearchLink[]
   username: string

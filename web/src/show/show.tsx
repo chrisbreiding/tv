@@ -57,7 +57,7 @@ export const Show = observer(() => {
           <dt className={cs({ 'no-value': !show.status })}>Status:</dt>
           <dd>{show.status}</dd>
         </dl>
-        {showsStore.isLoadingFromApi
+        {showsStore.isLoadingFromRemote
           ? <Loader>Loading episodes...</Loader>
           : <EpisodesList show={show} />
         }

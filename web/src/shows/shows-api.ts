@@ -19,18 +19,18 @@ function saveShowsToCache () {
   cache.set<ShowProps[]>(SHOWS_KEY, showsStore.serialize())
 }
 
-async function getShowsFromApi () {
-  showsStore.setIsLoadingfromApi(true)
+async function getShowsFromRemote () {
+  showsStore.setIsLoadingFromRemote(true)
 
   const shows = await getRemoteShows()
 
   updateShows(shows, true)
-  showsStore.setIsLoadingfromApi(false)
+  showsStore.setIsLoadingFromRemote(false)
 }
 
 function updateShows (shows: ShowProps[], updateCache: boolean) {
   showsStore.setShows(shows)
-  showsStore.setIsLoadingfromCache(false)
+  showsStore.setIsLoadingFromCache(false)
 
   if (updateCache) {
     saveShowsToCache()
@@ -38,14 +38,14 @@ function updateShows (shows: ShowProps[], updateCache: boolean) {
 }
 
 export async function loadShows () {
-  showsStore.setIsLoadingfromCache(true)
+  showsStore.setIsLoadingFromCache(true)
 
   const shows = await getShowsFromCache()
 
   if (shows) {
     updateShows(shows, false)
   }
-  getShowsFromApi()
+  getShowsFromRemote()
 }
 
 export async function addShow (showToAdd: SearchResultShowModel) {
