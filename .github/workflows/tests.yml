@@ -11,17 +11,23 @@ jobs:
       # 1001 works because it matches permissions settings on the home folder
       options: --user 1001
 
+    defaults:
+      run:
+        working-directory: ./web
+
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies
       uses: cypress-io/github-action@v4
       with:
         runTests: false # just perform install
+        working-directory: ./web
     - run: npm run lint
     - name: Cypress tests
       uses: cypress-io/github-action@v4
       with:
         install: false # we have already installed all dependencies above
+        working-directory: ./web
         browser: firefox
         start: npm start
         wait-on: 'http://localhost:8080'
