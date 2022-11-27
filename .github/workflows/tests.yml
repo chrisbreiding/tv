@@ -16,6 +16,9 @@ jobs:
         working-directory: ./web
 
     steps:
+    - uses: szenius/set-timezone@v1.0
+      with:
+        timezoneLinux: "America/New_York"
     - uses: actions/checkout@v3
     - name: Install dependencies
       uses: cypress-io/github-action@v4
