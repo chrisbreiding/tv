@@ -10,7 +10,7 @@ describe('settings', () => {
   it('displays hide options, search links, and last updated', () => {
     cy.contains('Hide from Recent & Upcoming')
     cy.contains('Search Links')
-    cy.contains('Shows & episodes last updated: Oct 10, 2022 3:00am')
+    cy.get('.modal-dialog footer p').text().should('include', 'Shows & episodes last updated: Oct 10, 2022')
     cy.contains('Cancel').click()
   })
 
