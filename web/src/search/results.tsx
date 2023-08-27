@@ -32,7 +32,7 @@ export const Results = observer(() => {
     })
 
     addShow(show)
-    navigate('/')
+    navigate('../..')
   }
 
   const { isLoading, results } = searchStore

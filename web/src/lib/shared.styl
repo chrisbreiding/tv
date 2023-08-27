@@ -95,3 +95,30 @@ a.delete {
     color: darken(error-color, 20%);
   }
 }
+
+button[disabled] {
+  cursor: default;
+  opacity: 0.5;
+
+  &[disabled] {
+    background: primary-color;
+    border-color: primary-color;
+  }
+}
+
+button.cancel {
+  background: neutral-color;
+  border-color: neutral-color;
+  color: dark-color;
+
+  +hover() {
+    background: darken(neutral-color, 20%);
+    border-color: darken(neutral-color, 20%);
+    color: black;
+  }
+
+  &[disabled] {
+    background: neutral-color;
+    border-color: neutral-color;
+  }
+}

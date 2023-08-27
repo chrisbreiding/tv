@@ -7,13 +7,12 @@ import { ShowOptions } from './show-options'
 import type { ShowModel } from './show-model'
 import type { SearchLink } from '../lib/types'
 
-interface ShowProps {
+export interface ShowProps {
   show: ShowModel
-  type: 'recent' | 'upcoming' | 'offAir'
   searchLinks: SearchLink[]
 }
 
-export const Show = observer(({ show, type, searchLinks }: ShowProps) => (
+export const Show = observer(({ show, searchLinks }: ShowProps) => (
   <li key={show.id}>
     <h3>
       <Tooltip className="show-tooltip options-tooltip tooltip" placement="right" title={(
@@ -22,6 +21,6 @@ export const Show = observer(({ show, type, searchLinks }: ShowProps) => (
         <span>{show.displayName}</span>
       </Tooltip>
     </h3>
-    <Episodes show={show} episodes={show[`${type}Episodes`]} threshold={3} />
+    <Episodes show={show} episodes={show.episodes} threshold={3} />
   </li>
 ))

@@ -1,22 +1,22 @@
 import Tooltip from '@cypress/react-tooltip'
 import {
+  faCalendarAlt,
   faCheck,
   faCircleMinus,
+  faList,
   faMagnifyingGlass,
   faPlus,
   faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import cs from 'classnames'
-import { action, reaction } from 'mobx'
+import { action, reaction, toJS } from 'mobx'
 import { observer, useLocalObservable } from 'mobx-react'
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router'
 
 import { sendStats } from '../data/remote'
 import { longString } from '../lib/date'
-import type { SearchLink } from '../lib/types'
-import { Modal, ModalContent, ModalFooter, ModalHeader } from '../modal/modal'
+import type { SearchLink, SettingsProps } from '../lib/types'
 import { updateSettings } from './settings-api'
 import { settingsStore } from './settings-store'
 
@@ -31,7 +31,7 @@ const Checkbox = ({ isChecked, onChange }: CheckboxProps) => {
   }
 
   return (
-    <button className={cs({ 'is-checked': isChecked })} type="button" onClick={onClick}>
+    <button className={cs('checkbox', { 'is-checked': isChecked })} type="button" onClick={onClick}>
       <FontAwesomeIcon icon={faCheck} />
     </button>
   )
@@ -62,25 +62,37 @@ const SearchLinkEditor = observer(({ link, onRemove }: SearchLinkEditorProps) =>
       <input value={link.showLink} onChange={onChange('showLink')} />
       <label>Episode Link</label>
       <input value={link.episodeLink} onChange={onChange('episodeLink')} />
-      <a className="delete" onClick={_onRemove} href="#">
-        <FontAwesomeIcon icon={faCircleMinus} /> Delete
-      </a>
+      <div className='delete-container'>
+        <a className="delete" onClick={_onRemove} href="#">
+          <FontAwesomeIcon icon={faCircleMinus} /> Delete
+        </a>
+      </div>
     </fieldset>
   )
 })
 
 export const Settings = observer(() => {
-  const navigate = useNavigate()
   const state = useLocalObservable(() => ({
     hideSpecialEpisodes: settingsStore.hideSpecialEpisodes,
     hideTBAEpisodes: settingsStore.hideTBAEpisodes,
-    searchLinks: settingsStore.searchLinks,
+    preferredView: settingsStore.preferredView,
+    searchLinks: toJS(settingsStore.searchLinks),
+
+    get hasChanges () {
+      const originalSettings = JSON.stringify(settingsStore.serializeUserSettings(settingsStore))
+      const currentSettings = JSON.stringify(settingsStore.serializeUserSettings(this))
+
+      return originalSettings !== currentSettings
+    },
 
     updateHideSpecialEpisodes (hide: boolean) {
       this.hideSpecialEpisodes = hide
     },
     updateHideTBAEpisodes (hide: boolean) {
       this.hideTBAEpisodes = hide ? 'ALL' : 'NONE'
+    },
+    updatePreferredView (view: SettingsProps['preferredView']) {
+      this.preferredView = view
     },
     addSearchLink () {
       this.searchLinks.push({
@@ -98,7 +110,8 @@ export const Settings = observer(() => {
     reset () {
       this.hideSpecialEpisodes = settingsStore.hideSpecialEpisodes
       this.hideTBAEpisodes = settingsStore.hideTBAEpisodes
-      this.searchLinks = settingsStore.searchLinks
+      this.preferredView = settingsStore.preferredView
+      this.searchLinks = toJS(settingsStore.searchLinks)
     },
   }))
 
@@ -117,7 +130,7 @@ export const Settings = observer(() => {
       ),
       reaction(
         () => settingsStore.searchLinks,
-        action((searchLinks) => state.searchLinks = searchLinks),
+        action((searchLinks) => state.searchLinks = toJS(searchLinks)),
       ),
     ]
 
@@ -127,74 +140,98 @@ export const Settings = observer(() => {
   }, [true])
 
   const save = () => {
+    if (!state.hasChanges) return
+
     sendStats('Update Settings')
 
     updateSettings({
       hideSpecialEpisodes: state.hideSpecialEpisodes,
       hideTBAEpisodes: state.hideTBAEpisodes,
+      preferredView: state.preferredView,
       searchLinks: state.searchLinks,
     })
-
-    close()
-  }
-
-  const cancel = () => {
-    state.reset()
-
-    close()
-  }
-
-  const close = () => {
-    navigate('/')
   }
 
   return (
-    <Modal className="settings">
-      <ModalHeader>
-        <h2>Settings</h2>
-      </ModalHeader>
-      <ModalContent>
-        <form className="form" onSubmit={save}>
-          <section className="general">
-            <h3>Hide from Recent & Upcoming</h3>
+    <div className="settings">
+      <h2>Settings</h2>
+      <form className='form' onSubmit={save}>
+        <section className="general">
+          <h3>Preferred View</h3>
+          <div className='select'>
+            <button
+              type='button'
+              className={cs({ selected: state.preferredView === 'list' })}
+              onClick={() => state.updatePreferredView('list')}
+            >
+              <FontAwesomeIcon icon={faList} /> List
+            </button>
+            <button
+              type='button'
+              className={cs({ selected: state.preferredView === 'calendar' })}
+              onClick={() => state.updatePreferredView('calendar')}
+            >
+              <FontAwesomeIcon icon={faCalendarAlt} /> Calendar
+            </button>
+          </div>
+
+          <h3>Hide from Recent & Upcoming</h3>
+          <div>
             <label>
               <Checkbox isChecked={state.hideSpecialEpisodes} onChange={state.updateHideSpecialEpisodes} />
               Special episodes
             </label>
+          </div>
+          <div>
             <label>
               <Checkbox isChecked={state.hideTBAEpisodes === 'ALL'} onChange={state.updateHideTBAEpisodes} />
               Episodes where date and title are TBA
             </label>
-          </section>
+          </div>
+        </section>
 
-          <section className="search-links">
-            <h3>Search Links</h3>
-            <p>Search links that appear as <FontAwesomeIcon icon={faMagnifyingGlass} /> when hovering over a show or episode. The following placeholders can be used:</p>
-            <p><em>[show name]</em>: The <strong>Search Name</strong> of the show</p>
-            <p><em>[episode]</em>: The episode season and number (e.g. s01e12)</p>
-            {state.searchLinks.map((link, i) => (
-              <SearchLinkEditor link={link} key={i} onRemove={state.removeSearchLink.bind(state, i)} />
-            ))}
-            <div className="controls">
-              <button type="button" className="add-link alt" onClick={state.addSearchLink}>
-                <FontAwesomeIcon icon={faPlus} /> Add Link
-              </button>
-            </div>
-          </section>
-        </form>
-      </ModalContent>
-      <div className="spacer" />
-      <ModalFooter okText="Save" onOk={save} onCancel={cancel}>
+        <section className="search-links">
+          <h3>Search Links</h3>
+          <p>Search links that appear as <FontAwesomeIcon icon={faMagnifyingGlass} /> when hovering over a show or episode. The following placeholders can be used:</p>
+          <p><em>[show name]</em>: The <strong>Search Name</strong> of the show</p>
+          <p><em>[episode]</em>: The episode season and number (e.g. s01e12)</p>
+          {state.searchLinks.map((link, i) => (
+            <SearchLinkEditor link={link} key={i} onRemove={state.removeSearchLink.bind(state, i)} />
+          ))}
+          <div className="controls">
+            <button type="button" className="add-link" onClick={state.addSearchLink}>
+              <FontAwesomeIcon icon={faPlus} /> Add Link
+            </button>
+          </div>
+        </section>
+      </form>
+      <footer>
         <p>
           Shows & episodes last updated: {longString(settingsStore.lastUpdated)}
-          {settingsStore.showOutdatedWarning &&
+          {settingsStore.showOutdatedWarning && (
             <Tooltip className="settings-tooltip tooltip" title="Last update was over 24 hours ago">
               <FontAwesomeIcon className="outdated-warning" icon={faTriangleExclamation} />
             </Tooltip>
-          }
+          )}
         </p>
-        <div className="spacer" />
-      </ModalFooter>
-    </Modal>
+        <div className='spacer' />
+        <button
+          type='button'
+          className='cancel'
+          onClick={state.reset}
+          disabled={!state.hasChanges}
+        >
+          Cancel
+        </button>
+        <button
+          type='button'
+          className='save'
+          onClick={save}
+          disabled={!state.hasChanges}
+        >
+          Save
+        </button>
+      </footer>
+    </div>
   )
 })

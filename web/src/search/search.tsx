@@ -30,7 +30,7 @@ export const Search = observer(() => {
   }
 
   const close = () => {
-    navigate('/')
+    navigate('..')
   }
 
   return (

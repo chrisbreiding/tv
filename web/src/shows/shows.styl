@@ -5,8 +5,9 @@
   width: 100%;
 }
 
-.shows {
-  border: solid 0.4rem;
+.time-period-shows {
+  border-left: solid 0.4rem;
+  border-top: solid 0.4rem;
   padding: 1.1rem;
 
   &.recent,
@@ -65,7 +66,9 @@
       }
     }
   }
+}
 
+.shows {
   .empty-message {
     display: none;
   }
@@ -81,6 +84,12 @@
   }
 }
 
+.date-shows {
+  .modal-dialog {
+    min-width: 30rem;
+  }
+}
+
 .tooltip.show-tooltip {
-  z-index: 5;
+  z-index: 100;
 }

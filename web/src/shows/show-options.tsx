@@ -27,12 +27,12 @@ export const ShowOptions = observer(({ id, searchName, searchLinks }: ShowOption
     <div className="options">
       <ul>
         <li>
-          <Link to={`/shows/${id}`} title="All Episodes">
+          <Link to={`shows/${id}`} title="All Episodes">
             <FontAwesomeIcon icon={faListUl} />
           </Link>
         </li>
         <li>
-          <Link to={`/shows/${id}/edit`} title="Edit">
+          <Link to={`shows/${id}/edit`} title="Edit">
             <FontAwesomeIcon icon={faPenToSquare} />
           </Link>
         </li>

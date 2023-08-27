@@ -1,4 +1,5 @@
 import type { Dayjs, OpUnitType } from 'dayjs'
+import type { EpisodeModel } from '../episodes/episode-model'
 
 export type Status = 'Upcoming' | 'Continuing' | 'Ended'
 
@@ -14,7 +15,7 @@ export interface SearchResultShowProps {
 
 export interface ShowProps {
   displayName: string
-  episodes: EpisodeProps[]
+  episodes: (EpisodeProps | EpisodeModel)[]
   fileName: string
   id: string
   network: string
@@ -60,8 +61,9 @@ export interface SettingsProps {
   hideTBAEpisodes: 'ALL' | 'NONE'
   isAdmin: boolean
   lastUpdated: string
+  preferredView: 'list' | 'calendar'
   searchLinks: SearchLink[]
   username: string
 }
 
-export type UpdateSettingsProps = Pick<SettingsProps, 'hideSpecialEpisodes' | 'hideTBAEpisodes' | 'searchLinks'>
+export type UpdateSettingsProps = Pick<SettingsProps, 'hideSpecialEpisodes' | 'hideTBAEpisodes' | 'preferredView' | 'searchLinks'>

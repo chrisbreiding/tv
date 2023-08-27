@@ -9,6 +9,13 @@ interface SearchLink {
   episodeLink: string
 }
 
+interface UserSettingsShape {
+  hideSpecialEpisodes: boolean
+  hideTBAEpisodes: SettingsProps['hideTBAEpisodes']
+  preferredView: 'list' | 'calendar'
+  searchLinks: SearchLink[]
+}
+
 class SettingsStore {
   hideSpecialEpisodes = false
   hideTBAEpisodes: SettingsProps['hideTBAEpisodes'] = 'NONE'
@@ -16,6 +23,7 @@ class SettingsStore {
   isLoadingFromRemote = true
   isLoadingFromCache = true
   lastUpdated?: dayjs.Dayjs
+  preferredView: SettingsProps['preferredView'] = localStorage.preferredView || 'list'
   searchLinks: SearchLink[] = []
   username?: string
 
@@ -27,6 +35,7 @@ class SettingsStore {
       isLoadingFromRemote: observable,
       isLoadingFromCache: observable,
       lastUpdated: observable.ref,
+      preferredView: observable,
       searchLinks: observable,
       username: observable,
 
@@ -44,7 +53,7 @@ class SettingsStore {
   }
 
   get showOutdatedWarning () {
-    // if (this.isLoadingFromRemote) return false
+    if (this.isLoadingFromRemote) return false
 
     const oneDayAgo = now().subtract(1, 'day')
 
@@ -64,6 +73,7 @@ class SettingsStore {
     if (settings.hideTBAEpisodes) this.hideTBAEpisodes = settings.hideTBAEpisodes
     if (settings.isAdmin) this.isAdmin = settings.isAdmin
     if (settings.lastUpdated) this.lastUpdated = dayjs(settings.lastUpdated)
+    if (settings.preferredView) this.preferredView = settings.preferredView
     if (settings.searchLinks) this.searchLinks = settings.searchLinks
     if (settings.username) this.username = settings.username
   }
@@ -77,6 +87,15 @@ class SettingsStore {
       searchLinks: toJS(this.searchLinks),
       username: this.username,
     } as SettingsProps
+  }
+
+  serializeUserSettings (context: UserSettingsShape) {
+    return {
+      hideSpecialEpisodes: context.hideSpecialEpisodes,
+      hideTBAEpisodes: context.hideTBAEpisodes,
+      preferredView: context.preferredView,
+      searchLinks: toJS(context.searchLinks),
+    }
   }
 }
 

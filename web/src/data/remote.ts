@@ -137,7 +137,7 @@ export function getSettings () {
   })
 }
 
-export function updateSettings (settings: UpdateSettingsProps) {
+export function updateSettings (settings: Omit<UpdateSettingsProps, 'preferredView'>) {
   return remoteRequest('user', 'put', { data: settings })
   .then(() => true)
   .catch((error: AxiosError) => {

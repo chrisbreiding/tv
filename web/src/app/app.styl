@@ -1,46 +1,49 @@
 #app {
+  display: flex;
+  flex-direction: column;
   min-height: 100%;
   position: relative;
   width: 100%;
 }
 
-.app-options {
+.app-header {
   background: background-color;
-  border-bottom: solid 0.1rem tertiary-color;
-  border-left: solid 0.1rem tertiary-color;
-  border-bottom-left-radius: 3px;
-  font-size: 1.1em;
-  padding: 0.3rem 0.5rem;
-  position: absolute;
-  right: 0.4rem;
-  top: 0.4rem;
-  z-index: 1;
+  font-size: 1.2rem;
 
-  @media all and (max-width: 60em) {
-    border-bottom-color: secondary-color;
-    border-left-color: secondary-color;
-  }
-
-  @media all and (max-width: 40em) {
-    border-bottom-color: primary-color;
-    border-left-color: primary-color;
+  ul {
+    display: flex;
+    justify-content: space-between;
   }
 
   li {
-    display: inline-block;
-    margin-left: 0.6em;
     position: relative;
 
     .outdated-warning {
       color: warning-color;
-      font-size: 0.8em;
+      font-size: 0.8rem;
       position: absolute;
       right: -0.3rem;
       top: -0.2rem;
     }
 
-    &:first-child {
-      margin-left: 0;
+    a {
+      padding: 0.4rem 0.8rem;
     }
+
+    .active {
+      color: light-color;
+    }
+  }
+
+  .nav-list .active {
+    background: primary-color;
+  }
+
+  .nav-calendar .active {
+    background: secondary-color;
+  }
+
+  .nav-settings .active {
+    background: tertiary-color;
   }
 }

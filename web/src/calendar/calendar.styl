@@ -1,0 +1,143 @@
+border = solid 1px rgba(255, 255, 255, 0.2);
+
+.calendar {
+  border-left: solid 0.4rem secondary-color;
+  border-top: solid 0.4rem secondary-color;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 2;
+  min-width: 40rem;
+
+  &-navigation {
+    background: secondary-color-contrast;
+    display: flex;
+    justify-content: center;
+    padding: 0.3rem 0.5rem;
+
+    .calendar-month {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      min-width: 10em;
+    }
+
+    button {
+      background: none;
+      border: none;
+      color: secondary-color;
+      font-weight: bold;
+
+      +hover() {
+        color: primary-color;
+      }
+    }
+
+    .calendar-today {
+      border: solid 1px secondary-color;
+      font-size: 0.8rem;
+      font-weight: normal;
+      margin: 0.2rem 0;
+      padding: 0.1rem 0.4rem;
+
+      +hover() {
+        border-color: primary-color;
+      }
+    }
+  }
+
+  .calendar-today-balancer,
+  &.is-this-month .calendar-today  {
+    visibility: hidden;
+  }
+
+  &-weekdays {
+    border-top: border;
+    display: flex;
+  }
+
+  &-weekday {
+    flex-grow: 2;
+    padding: 0.2rem 0.4rem;
+    text-align: right;
+    width: calc(100% / 7);
+  }
+
+  &-dates {
+    background: primary-color-contrast;
+    border-top: border;
+    display: flex;
+    flex-grow: 2;
+    flex-wrap: wrap;
+  }
+
+  &-date {
+    border-top: border;
+    border-left: border;
+    min-height: 7rem;
+    width: calc(100% / 7);
+
+    &:link,
+    &:visited {
+      color: light-color;
+      text-decoration: none;
+    }
+
+    &:nth-child(7n+1) {
+      border-left: none;
+    }
+
+    &.is-weekend {
+      background: tertiary-color-contrast;
+    }
+
+    .calendar-date-number {
+      border-radius: 0 0 0 3px;
+      float: right;
+      padding: 0.2rem 0.4rem;
+    }
+
+    &.now.calendar-date-number {
+      background: primary-color;
+    }
+
+    &.is-weekend.now .calendar-date-number {
+      background: tertiary-color;
+    }
+
+    &.is-neighboring-month {
+      cursor: default;
+
+      .calendar-date-number,
+      ul {
+        opacity: 0.3;
+      }
+    }
+
+    ul {
+      clear: both;
+      font-size: 0.8rem;
+      padding: 0.3rem 0.5rem;
+
+      li {
+        list-style: disc;
+        margin: 0.3rem 0 0.3rem 0.8rem;
+
+        &::marker {
+          color: secondary-color;
+        }
+
+        &:first-child {
+          margin-top: 0;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    &.past li::marker {
+      color: primary-color;
+    }
+  }
+}

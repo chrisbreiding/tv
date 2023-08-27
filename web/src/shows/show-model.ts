@@ -38,7 +38,9 @@ export class ShowModel {
     })
 
     this.displayName = show.displayName
-    this.episodes = show.episodes.map((episode) => new EpisodeModel(episode))
+    this.episodes = show.episodes.map((episode) => {
+      return episode instanceof EpisodeModel ? episode : new EpisodeModel(episode)
+    })
     this.fileName = show.fileName
     this.id = show.id
     this.network = show.network
@@ -93,14 +95,28 @@ export class ShowModel {
     return this.recentEpisodes[0]
   }
 
-  serialize () {
-    const episodes = this.episodes
-    .filter((episode) => episode.isRecent || episode.isUpcoming)
-    .map((episode) => episode.serialize())
+  getEpisodesForDate (date: dayjs.Dayjs) {
+    return this.episodes.filter((episode) => {
+      return episode.airdate.isSame(date, 'date')
+    })
+  }
 
+  serialize () {
     return {
       displayName: this.displayName,
-      episodes,
+      episodes: this.episodes.map((episode) => episode.serialize()),
+      fileName: this.fileName,
+      id: this.id,
+      network: this.network,
+      poster: this.poster,
+      searchName: this.searchName,
+      status: this.status,
+    }
+  }
+
+  serializeWithoutEpisodes () {
+    return {
+      displayName: this.displayName,
       fileName: this.fileName,
       id: this.id,
       network: this.network,

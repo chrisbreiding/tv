@@ -55,7 +55,7 @@ export const EditShow = observer(() => {
   }
 
   const close = () => {
-    navigate('/')
+    navigate('..')
   }
 
   return (

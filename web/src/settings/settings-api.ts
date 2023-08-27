@@ -37,6 +37,8 @@ export async function updateSettings (settings: UpdateSettingsProps) {
     searchLinks: settings.searchLinks,
   }
 
+  localStorage.preferredView = settings.preferredView
+
   const success = await updateRemoteSettings(settingsProps)
 
   if (success) {

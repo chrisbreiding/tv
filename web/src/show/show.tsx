@@ -46,7 +46,7 @@ export const Show = observer(() => {
 
   return (
     <Modal className="all-episodes">
-      <ModalHeader onClose={() => navigate('/')}>
+      <ModalHeader onClose={() => navigate('..')}>
         <h2>{show.displayName}</h2>
       </ModalHeader>
       <ModalContent>

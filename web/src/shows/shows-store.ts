@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import orderBy from 'lodash/orderBy'
 import { action, computed, makeObservable, observable } from 'mobx'
 
@@ -33,18 +34,36 @@ class ShowsStore {
     const filteredShows = this.shows.filter(({ hasRecent }) => hasRecent)
 
     return orderBy(filteredShows, ['lastEpisode.airdate', 'displayName'], ['desc', 'asc'])
+    .map((show) => {
+      return new ShowModel({
+        ...show.serializeWithoutEpisodes(),
+        episodes: show.recentEpisodes,
+      })
+    })
   }
 
   get upcoming () {
     const filteredShows = this.shows.filter(({ hasUpcoming }) => hasUpcoming)
 
     return orderBy(filteredShows, ['nextEpisode.airdate', 'displayName'], ['asc', 'asc'])
+    .map((show) => {
+      return new ShowModel({
+        ...show.serializeWithoutEpisodes(),
+        episodes: show.upcomingEpisodes,
+      })
+    })
   }
 
   get offAir () {
     const filteredShows = this.shows.filter(({ isOffAir }) => isOffAir)
 
     return orderBy(filteredShows, ['displayName'], ['asc'])
+    .map((show) => {
+      return new ShowModel({
+        ...show.serializeWithoutEpisodes(),
+        episodes: show.offAirEpisodes,
+      })
+    })
   }
 
   setIsLoadingFromRemote (isLoading: boolean) {
@@ -57,6 +76,21 @@ class ShowsStore {
 
   getShowById (id: string) {
     return this.shows.find((show) => show.id === id)
+  }
+
+  getShowsForDate (date: dayjs.Dayjs) {
+    return this.shows.reduce((memo, show) => {
+      const episodes = show.getEpisodesForDate(date)
+
+      if (episodes.length) {
+        memo.push(new ShowModel({
+          ...show.serializeWithoutEpisodes(),
+          episodes,
+        }))
+      }
+
+      return memo
+    }, [] as ShowModel[])
   }
 
   hasShow (searchResultShow: SearchResultShowModel) {
