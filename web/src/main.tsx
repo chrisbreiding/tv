@@ -15,7 +15,7 @@ import { Settings } from './settings/settings'
 import { settingsStore } from './settings/settings-store'
 import { EditShow } from './show/edit'
 import { Show } from './show/show'
-import { TimePeriods } from './time-periods/time-periods'
+import { TimePeriods } from './app/time-periods'
 import { observer } from 'mobx-react'
 
 dayjs.extend(isBetween)
