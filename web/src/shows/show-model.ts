@@ -5,6 +5,7 @@ import { EpisodeModel } from '../episodes/episode-model'
 import { sortAscending } from '../episodes/util'
 import type { ShowProps, Status } from '../lib/types'
 import { settingsStore } from '../settings/settings-store'
+import type dayjs from 'dayjs'
 
 export class ShowModel {
   displayName: string
@@ -27,6 +28,7 @@ export class ShowModel {
       searchName: observable,
       status: observable,
 
+      filteredEpisodes: computed,
       hasRecent: computed,
       recentEpisodes: computed,
       hasUpcoming: computed,
@@ -49,19 +51,23 @@ export class ShowModel {
     this.status = show.status
   }
 
-  get hasRecent () {
-    return this.recentEpisodes.length > 0
-  }
-
-  get recentEpisodes () {
+  get filteredEpisodes () {
     return this.episodes
     .filter((episode) => {
       const specialFilter = settingsStore.hideSpecialEpisodes ? !episode.isSpecial : true
       const tbaFilter = settingsStore.hideAllTBAEPisodes ? !episode.isTBA : true
 
-      return episode.isRecent && specialFilter && tbaFilter
+      return specialFilter && tbaFilter
     })
     .sort(sortAscending)
+  }
+
+  get hasRecent () {
+    return this.recentEpisodes.length > 0
+  }
+
+  get recentEpisodes () {
+    return this.filteredEpisodes.filter((episode) => episode.isRecent)
   }
 
   get hasUpcoming () {
@@ -69,14 +75,7 @@ export class ShowModel {
   }
 
   get upcomingEpisodes () {
-    return this.episodes
-    .filter((episode) => {
-      const specialFilter = settingsStore.hideSpecialEpisodes ? !episode.isSpecial : true
-      const tbaFilter = settingsStore.hideAllTBAEPisodes ? !episode.isTBA : true
-
-      return episode.isUpcoming && specialFilter && tbaFilter
-    })
-    .sort(sortAscending)
+    return this.filteredEpisodes.filter((episode) => episode.isUpcoming)
   }
 
   get isOffAir () {
@@ -96,7 +95,7 @@ export class ShowModel {
   }
 
   getEpisodesForDate (date: dayjs.Dayjs) {
-    return this.episodes.filter((episode) => {
+    return this.filteredEpisodes.filter((episode) => {
       return episode.airdate.isSame(date, 'date')
     })
   }
