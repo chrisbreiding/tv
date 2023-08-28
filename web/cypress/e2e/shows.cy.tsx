@@ -30,8 +30,6 @@ describe('shows', () => {
     it('clicking X closes the dialog', () => {
       cy.get('.modal-dialog .close button').click()
       cy.get('.modal-dialog').should('not.exist')
-      // ensure show options are gone before next test
-      cy.get('.off-air h3').first().find('span span').trigger('mouseout')
     })
   })
 
