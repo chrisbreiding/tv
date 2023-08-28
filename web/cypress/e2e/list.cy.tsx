@@ -1,6 +1,6 @@
-describe('index', () => {
-  before(() => {
-    cy.load()
+describe('list view', () => {
+  beforeEach(() => {
+    cy.load('/list')
   })
 
   it('displays recent, upcoming, and off air shows', () => {
@@ -50,7 +50,7 @@ describe('index', () => {
       'Alloyed',
       'The Green Council',
       'The Black Queen',
-      'The Yellow Bird',
+      'The Red Queen',
       'Das Schiff',
       'Der Junge',
       'Der Nebel',

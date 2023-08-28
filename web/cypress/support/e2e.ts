@@ -15,13 +15,13 @@ Cypress.Commands.add('interceptApi', (method: Method, path: string, reply?: Rout
   return cy.intercept(method, `${apiUrl}/${path}` as StringMatcher, reply)
 })
 
-Cypress.Commands.add('load', () => {
+Cypress.Commands.add('load', (path = '/') => {
   cy.interceptApi('POST', 'stats', { statusCode: 204 })
   cy.interceptApi('GET', 'shows', { fixture: 'shows.json' }).as('getShows')
   cy.interceptApi('GET', 'user', { fixture: 'user.json' }).as('getUser')
 
   cy.clearLocalStorage()
-  cy.visit('/', {
+  cy.visit(path, {
     onBeforeLoad (win) {
       win.localStorage.now = '2022-10-10'
       win.localStorage.apiKey = apiKey

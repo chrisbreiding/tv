@@ -7,27 +7,29 @@ import React, { useState } from 'react'
 
 import { showsStore } from '../shows/shows-store'
 import { Link, Outlet } from 'react-router-dom'
+import { now } from '../lib/date'
 
 const Date = observer(({ activeDate, date }: { activeDate: dayjs.Dayjs, date: dayjs.Dayjs }) => {
-  const today = dayjs()
+  const today = now()
   const shows = showsStore.getShowsForDate(date)
   const className = cs('calendar-date', {
     'is-neighboring-month': !activeDate.isSame(date, 'month'),
     'is-weekend': date.day() === 0 || date.day() === 6,
-    now: today.isSame(date, 'date'),
-    past: today.add(1, 'day').isAfter(date, 'date'),
+    'is-now': today.isSame(date, 'date'),
+    'is-past': today.add(1, 'day').isAfter(date, 'date'),
   })
+  const formattedDate = date.format('YYYY-MM-DD')
 
   if (!shows.length) {
     return (
-      <div className={className}>
+      <div className={className} data-date={formattedDate}>
         <div className='calendar-date-number'>{date.date()}</div>
       </div>
     )
   }
 
   return (
-    <Link to={date.format('YYYY-MM-DD')} className={className}>
+    <Link to={formattedDate} className={className} data-date={formattedDate}>
       <div className='calendar-date-number'>{date.date()}</div>
       <ul>
         {shows.map((show) => (
@@ -70,7 +72,7 @@ const getMonthDates = (date: dayjs.Dayjs) => {
 }
 
 export const Calendar = observer(() => {
-  const today = dayjs()
+  const today = now()
   const [activeDate, setDate] = useState(today)
   const monthDates = getMonthDates(activeDate)
 

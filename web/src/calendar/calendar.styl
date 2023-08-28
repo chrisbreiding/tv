@@ -96,17 +96,15 @@ border = solid 1px rgba(255, 255, 255, 0.2);
       padding: 0.2rem 0.4rem;
     }
 
-    &.now.calendar-date-number {
+    &.is-now .calendar-date-number {
       background: primary-color;
     }
 
-    &.is-weekend.now .calendar-date-number {
+    &.is-weekend.is-now .calendar-date-number {
       background: tertiary-color;
     }
 
     &.is-neighboring-month {
-      cursor: default;
-
       .calendar-date-number,
       ul {
         opacity: 0.3;
@@ -136,7 +134,7 @@ border = solid 1px rgba(255, 255, 255, 0.2);
       }
     }
 
-    &.past li::marker {
+    &.is-past li::marker {
       color: primary-color;
     }
   }

@@ -11,7 +11,7 @@ describe('search', () => {
     cy.wait('@searchShows')
   }
 
-  before(() => {
+  beforeEach(() => {
     cy.load()
   })
 

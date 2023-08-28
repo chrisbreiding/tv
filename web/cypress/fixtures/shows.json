@@ -498,9 +498,9 @@
       },
       {
         "number": 13,
-        "title": "Finale Special",
+        "title": "Finale Schminale",
         "id": "9420979",
-        "season": 0,
+        "season": 2,
         "airdate": "2022-10-24T04:00:00.000Z"
       },
       {
@@ -574,11 +574,32 @@
         "airdate": "2022-10-23T04:00:00.000Z"
       },
       {
-        "title": "The Yellow Bird",
+        "title": "The Red Queen",
         "number": 11,
         "season": 1,
         "id": "9082156",
-        "airdate": "2022-10-30T04:00:00.000Z"
+        "airdate": "2022-10-23T04:00:00.000Z"
+      },
+      {
+        "title": "The Blue Queen",
+        "number": 12,
+        "season": 1,
+        "id": "9082157",
+        "airdate": "2022-10-23T04:00:00.000Z"
+      },
+      {
+        "title": "The Green Queen",
+        "number": 13,
+        "season": 1,
+        "id": "9082158",
+        "airdate": "2022-10-23T04:00:00.000Z"
+      },
+      {
+        "title": "The Aquamarine Queen",
+        "number": 14,
+        "season": 1,
+        "id": "9082159",
+        "airdate": "2022-10-23T04:00:00.000Z"
       }
     ],
     "id": "371572",

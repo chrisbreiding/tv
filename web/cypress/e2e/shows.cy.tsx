@@ -1,10 +1,10 @@
 describe('shows', () => {
-  before(() => {
-    cy.load()
+  beforeEach(() => {
+    cy.load('/list')
   })
 
   describe('all shows', () => {
-    before(() => {
+    beforeEach(() => {
       cy.get('.off-air h3').first().find('span span').trigger('mouseover')
       cy.get('[title="All Episodes"]').click()
     })
