@@ -93,17 +93,18 @@ export const Calendar = observer(() => {
   return (
     <div className={cs('calendar', { 'is-this-month': isThisMonth })}>
       <div className='calendar-navigation'>
-        <button className='calendar-today' onClick={onToday}>Today</button>
+        <h2>
+          <span className='calendar-month'>{activeDate.format('MMMM')}</span>
+          <span className='calendar-year'>{activeDate.format('YYYY')}</span>
+        </h2>
         <div className='spacer' />
         <button className='calendar-previous' onClick={onPrevious}>
           <FontAwesomeIcon icon={faChevronLeft} />
         </button>
-        <div className='calendar-month'>{activeDate.format('MMMM')}</div>
+        <button className='calendar-today' onClick={onToday}>Today</button>
         <button className='calendar-next' onClick={onNext}>
           <FontAwesomeIcon icon={faChevronRight} />
         </button>
-        <div className='spacer' />
-        <button className='calendar-today-balancer'>Today</button>
       </div>
       <div className='calendar-weekdays'>
         {([0, 1, 2, 3, 4, 5, 6]).map((index) => (

@@ -56,12 +56,22 @@ interface ModalProps {
   className?: string
 }
 
+let modalCount = 0
+
 export const Modal = ({ children, className }: ModalProps) => {
   useEffect(() => {
-    document.body.className += 'modal-dialog-present'
+    modalCount++
+
+    if (modalCount === 1) {
+      document.body.className += ' modal-dialog-present'
+    }
 
     return () => {
-      document.body.className = ''
+      modalCount--
+
+      if (modalCount === 0) {
+        document.body.className = ''
+      }
     }
   }, [true])
 

@@ -59,7 +59,7 @@ export const EditShow = observer(() => {
   }
 
   return (
-    <div className="show-edit">
+    <>
       <Modal className="show-edit-modal">
         <ModalHeader />
         <ModalContent>
@@ -92,11 +92,11 @@ export const EditShow = observer(() => {
       {confirmingDeletion && (
         <Modal className='confirm-delete-modal'>
           <ModalContent>
-            <p>Delete {show.displayName}?</p>
+            <p>Delete <em>{show.displayName}</em>?</p>
           </ModalContent>
           <ModalFooter okText="Delete" onOk={confirmDelete} onCancel={cancelDelete} />
         </Modal>
       )}
-    </div>
+    </>
   )
 })

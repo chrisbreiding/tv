@@ -13,17 +13,19 @@ export const Date = observer(() => {
   const date = dayjs(dateString)
 
   return (
-    <Modal className='date-shows'>
-      <ModalHeader onClose={() => navigate('..')}>
-        <h2>{date.format('MMMM D, YYYY')}</h2>
-      </ModalHeader>
-      <ModalContent>
-        <Shows
-          emptyMessage='No shows for date'
-          shows={showsStore.getShowsForDate(date)}
-        />
-        <Outlet />
-      </ModalContent>
-    </Modal>
+    <>
+      <Modal className='date-shows'>
+        <ModalHeader onClose={() => navigate('..')}>
+          <h2>{date.format('MMMM D, YYYY')}</h2>
+        </ModalHeader>
+        <ModalContent>
+          <Shows
+            emptyMessage='No shows for date'
+            shows={showsStore.getShowsForDate(date)}
+          />
+        </ModalContent>
+      </Modal>
+      <Outlet />
+    </>
   )
 })
