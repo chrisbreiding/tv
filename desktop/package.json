@@ -55,7 +55,7 @@
     "glob": "^7.1.1",
     "homedir": "^0.6.0",
     "lodash": "^4.17.4",
-    "markdown-it": "^8.2.2",
+    "markdown-it": "^12.3.2",
     "mkdirp": "^0.5.1",
     "mobx": "^3.0.2",
     "mobx-react": "^4.1.0",
